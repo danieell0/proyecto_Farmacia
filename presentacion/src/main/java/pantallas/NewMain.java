@@ -16,6 +16,7 @@ public class NewMain {
     public static void main(String[] args) {
         menuFrame mf=new menuFrame();
         mf.setVisible(true);
+        //Hola jorge gei
     }
     
 }
