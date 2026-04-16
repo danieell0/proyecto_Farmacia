@@ -35,7 +35,7 @@ public class menuFrame extends JFrame {
     private double total = 0;
 
     public menuFrame() {
-        setTitle("Sistema farmacia");
+        setTitle("Sistema Farmacia");
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
