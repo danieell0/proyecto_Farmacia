@@ -7,7 +7,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>presentacion</module>
-        <module>subsistemas</module>
+        <module>dto_negocios</module>
+        <module>objetos_negocio</module>
+        <module>negocios_ventas</module>
+        <module>negocios_sesion</module>
+        <module>negocios_receta</module>
+        <module>negocios_catalogo</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
