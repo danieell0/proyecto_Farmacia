@@ -8,6 +8,7 @@ public class ProductoDTO {
     private Long id;
     private String nombre;
     private Double precio;
+    private Integer stock;
 
     /**
      * Contructor vacio.
@@ -21,8 +22,9 @@ public class ProductoDTO {
      * @param id Id del producto.
      * @param nombre Nombre del producto.
      * @param precio Precio del producto.
+     * @param stock Stock del producto.
      */
-    public ProductoDTO(Long id, String nombre, Double precio) {
+    public ProductoDTO(Long id, String nombre, Double precio, Integer stock) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -56,6 +58,16 @@ public class ProductoDTO {
     /** @param precio El precio a asignar al producto. */
     public void setPrecio(Double precio) {
         this.precio = precio;
+    }
+
+    /** @return Obtiene el stock del producto. */
+    public Integer getStock() {
+        return stock;
+    }
+
+    /** @param stock El stock a asignar al producto. */
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
     
 }

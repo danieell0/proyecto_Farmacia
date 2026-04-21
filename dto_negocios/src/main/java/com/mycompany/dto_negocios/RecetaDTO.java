@@ -1,5 +1,7 @@
 package com.mycompany.dto_negocios;
 
+import com.mycompany.dto_negocios.enums.Estado;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -9,6 +11,9 @@ import java.util.List;
 public class RecetaDTO {
     private Long folio;
     private String cedulaMedico;
+    private Integer usos;
+    private Estado estado;
+    private LocalDate fechaCaducidad;
     private List<DetalleRecetaDTO> detalles;
 
     /**
@@ -22,11 +27,17 @@ public class RecetaDTO {
      * Contructor con todos los atributos.
      * @param folio Folio de la receta.
      * @param cedulaMedico Cedula del medico que dio la receta.
+     * @param usos Numero de usos de la receta.
+     * @param estado Estado de la receta.
+     * @param fechaCaducidad Fecha de caducidad de la receta.
      * @param detalles Lista de medicamentos recetados.
      */
-    public RecetaDTO(Long folio, String cedulaMedico, List<DetalleRecetaDTO> detalles) {
+    public RecetaDTO(Long folio, String cedulaMedico, Integer usos, Estado estado, LocalDate fechaCaducidad, List<DetalleRecetaDTO> detalles) {
         this.folio = folio;
         this.cedulaMedico = cedulaMedico;
+        this.usos = usos;
+        this.estado = estado;
+        this.fechaCaducidad = fechaCaducidad;
         this.detalles = detalles;
     }
     
@@ -48,6 +59,36 @@ public class RecetaDTO {
     /** @param cedulaMedico La cedula del medico a asignar a la receta. */
     public void setCedulaMedico(String cedulaMedico) {
         this.cedulaMedico = cedulaMedico;
+    }
+
+    /** @return Obtiene el numero de usos receta. */
+    public Integer getUsos() {
+        return usos;
+    }
+
+    /** @param usos El numero de usos a asignar a la receta. */
+    public void setUsos(Integer usos) {
+        this.usos = usos;
+    }
+
+    /** @return Obtiene el estado de la receta. */
+    public Estado getEstado() {
+        return estado;
+    }
+
+    /** @param estado El estado a asignar a la receta. */
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    /** @return Obtiene la fecha de caducidad de la receta. */
+    public LocalDate getFechaCaducidad() {
+        return fechaCaducidad;
+    }
+
+    /** @param fechaCaducidad La fecha de caducidad a asignar a la receta. */
+    public void setFechaCaducidad(LocalDate fechaCaducidad) {
+        this.fechaCaducidad = fechaCaducidad;
     }
 
     /** @return Obtiene la lista de medicamentos recetados. */
