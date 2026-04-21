@@ -9,6 +9,7 @@ public class ProductoDTO {
     private String nombre;
     private Double precio;
     private Integer stock;
+    private String imagen;
 
     /**
      * Contructor vacio.
@@ -23,13 +24,30 @@ public class ProductoDTO {
      * @param nombre Nombre del producto.
      * @param precio Precio del producto.
      * @param stock Stock del producto.
+     * @param imagen Imagen del producto
      */
-    public ProductoDTO(Long id, String nombre, Double precio, Integer stock) {
+    public ProductoDTO(Long id, String nombre, Double precio, Integer stock, String imagen) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
+        this.stock = stock;
+        this.imagen = imagen;
     }
 
+    public ProductoDTO(String nombre, Double precio, String imagen) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.imagen = imagen;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+    
     /** @return Obtiene el Id del producto. */
     public Long getId() {
         return id;
