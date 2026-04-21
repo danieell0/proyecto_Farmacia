@@ -74,7 +74,8 @@ public class menuFrame extends JFrame {
 
         return panel;
     }
-
+    
+    //panel de contenido
     public JPanel crearContenido() {
         //creo un panel y le asigno un border layout
         JPanel panel = new JPanel(new BorderLayout());
