@@ -1,6 +1,8 @@
 package pantallas;
 
+import com.mycompany.dto_negocios.RecetaDTO;
 import javax.swing.JOptionPane;
+import pantallas.control.Coordinador;
 
 /**
  * JDialog donde se validara el folio de la receta.
@@ -9,13 +11,16 @@ import javax.swing.JOptionPane;
 public class validarRecetaDlg extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(validarRecetaDlg.class.getName());
+    private Coordinador coordinador;
 
     /**
      * Contructor del JDialog.
      */
-    public validarRecetaDlg(java.awt.Frame parent, boolean modal) {
+    public validarRecetaDlg(java.awt.Frame parent, boolean modal, Coordinador coordinador) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(parent);
+        this.coordinador = coordinador;
     }
 
     @SuppressWarnings("unchecked")
@@ -44,6 +49,7 @@ public class validarRecetaDlg extends javax.swing.JDialog {
         btnIngresarReceta.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnIngresarReceta.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresarReceta.setText("Ingresar Receta");
+        btnIngresarReceta.addActionListener(this::btnIngresarRecetaActionPerformed);
 
         javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
         pnlPrincipal.setLayout(pnlPrincipalLayout);
@@ -92,6 +98,28 @@ public class validarRecetaDlg extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnIngresarRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarRecetaActionPerformed
+        ingresarReceta();
+    }//GEN-LAST:event_btnIngresarRecetaActionPerformed
+
+    public void ingresarReceta(){
+        String folio = txtFolio.getText().trim();
+
+        if (folio.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un folio.");
+            return;
+        }
+
+        RecetaDTO recetaEncontrada = coordinador.buscarReceta(folio);
+
+        if (recetaEncontrada != null) {
+            if (coordinador.validarReceta(recetaEncontrada)) {
+                JOptionPane.showMessageDialog(this, "Receta validada correctamente.");
+                this.dispose();
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresarReceta;
     private javax.swing.JLabel lbl1;

@@ -2,6 +2,11 @@ package pantallas.control;
 
 import com.mycompany.objetos_negocio.VentaBO;
 import com.mycompany.dto_negocios.ProductoDTO;
+import com.mycompany.dto_negocios.RecetaDTO;
+import com.mycompany.dto_negocios.enums.Estado;
+import com.mycompany.negocios_receta.FReceta;
+import com.mycompany.negocios_receta.IReceta;
+import com.mycompany.negocios_receta.RecetaException;
 import com.mycompany.negocios_ventas.FVentas;
 import com.mycompany.negocios_ventas.IVenta;
 import com.mycompany.negocios_ventas.VentaException;
@@ -10,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JOptionPane;
 import pantallas.VentaFrame;
+import pantallas.validarRecetaDlg;
 
 /**
  *
@@ -19,12 +25,16 @@ public class Coordinador {
     private IVenta fVentas; 
     private VentaFrame ventaFrame;
 
+    private IReceta recetaSub;
+    private validarRecetaDlg recetaDlg;
+
     /**
      * Constructor del coordinador.
      * Inicializa el acceso al subsistema de ventas a través de la fachada.
      */
     public Coordinador() {
         this.fVentas = new FVentas();
+        this.recetaSub = new FReceta();
     }
 
     /**
@@ -34,6 +44,11 @@ public class Coordinador {
     public void setVentaFrame(VentaFrame ventaFrame) {
         this.ventaFrame = ventaFrame;
     }
+    
+    public void setRecetaDlg(validarRecetaDlg recetaDlg) {
+        this.recetaDlg = recetaDlg;
+    }
+
 
     /**
      * Busca un producto por nombre y solicita a la vista agregarlo a la tabla.
@@ -80,4 +95,44 @@ public class Coordinador {
             JOptionPane.showMessageDialog(ventaFrame, "Error: No se pudo procesar la venta. Verifique la lista.");
         }
     }
+    
+    public RecetaDTO buscarReceta(String folio) {
+        try {
+            return recetaSub.buscarPorFolio(folio);
+        } catch (RecetaException ex){
+            JOptionPane.showMessageDialog(recetaDlg, "La receta no ha sido encontrada.",
+                    "Advertencia de Validacion", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+    }
+
+    public boolean validarReceta(RecetaDTO recetaDTO) {
+        try {
+            return recetaSub.validarUsoReceta(recetaDTO);
+        } catch (RecetaException ex) {
+            JOptionPane.showMessageDialog(recetaDlg, "La receta es ivalida.",
+                    "Error de receta", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    public void registrarUsoReceta(String folio) {
+        try {
+            recetaSub.registrarUsoDeReceta(folio);
+        } catch (RecetaException ex) {
+            JOptionPane.showMessageDialog(recetaDlg, "Hubo un error al registrar el uso de la receta.",
+                    "Error de receta", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public Estado obtenerEstado(String folio) {
+        try {
+            return recetaSub.obtenerEstadoDeReceta(folio);
+        } catch (RecetaException ex) {
+            JOptionPane.showMessageDialog(recetaDlg, "Hubo un error al obtener el estado de la receta.",
+                    "Error de receta", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
 }
