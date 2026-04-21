@@ -11,5 +11,4 @@ public enum Medida {
     gr,
     //mililitros
     ml,
-    
 }
