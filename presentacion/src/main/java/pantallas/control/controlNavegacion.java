@@ -1,6 +1,7 @@
 package pantallas.control;
 
 import javax.swing.JFrame;
+import pantallas.VentaFrame;
 import pantallas.menuFrame;
 
 /**
@@ -8,15 +9,9 @@ import pantallas.menuFrame;
  * @author Dario
  */
 public class controlNavegacion {
+    
     private static controlNavegacion ControlNavegacion;
     private JFrame frameActual;
-
-    public static controlNavegacion getControlNavegacion() {
-        if(ControlNavegacion==null){
-           ControlNavegacion =new controlNavegacion();
-        }
-        return ControlNavegacion;
-    }
     
     /**
      * Cierra la pantalla actual y abre no se como le pongas a la pantalla.
@@ -25,17 +20,25 @@ public class controlNavegacion {
         cambiarPantalla(new menuFrame());
     }
     
-    /**
-     * Realiza el cambio de pantallas, cierra el frame actual y centra el nuevo.
-     * @param nuevo El nuevo JFrame a mostrar.
-     */
-    public void cambiarPantalla(JFrame nuevo){
+    public void abrirVentaFrame(){
+        cambiarPantalla(new VentaFrame());
+    }
+    
+    public static controlNavegacion getcontrolNavegacion() {
+        if (ControlNavegacion == null) {
+            ControlNavegacion = new controlNavegacion();
+        }
+        return ControlNavegacion;
+    }
+    public void cambiarPantalla(JFrame nuevoFrame) {
         if (frameActual != null) {
             frameActual.dispose();
         }
-        this.frameActual = nuevo;
-        this.frameActual.setVisible(true);
-        this.frameActual.setLocationRelativeTo(null);
+
+        frameActual = nuevoFrame;
+
+        nuevoFrame.setVisible(true);
+        nuevoFrame.setLocationRelativeTo(null);
     }
     
 }

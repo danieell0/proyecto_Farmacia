@@ -9,7 +9,7 @@
     <artifactId>dto_negocios</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.dto_negocios.Dto_negocios</exec.mainClass>
     </properties>
 </project>

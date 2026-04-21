@@ -1,4 +1,4 @@
-package com.mycompany.objetos_negocio;
+package Bo;
 
 /**
  * Excepcion personalizada del paquete de objetos de negocio.
