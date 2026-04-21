@@ -8,19 +8,20 @@ import pantallas.menuFrame;
  * @author Dario
  */
 public class controlNavegacion {
+    private static controlNavegacion ControlNavegacion;
     private JFrame frameActual;
-    
-    /**
-     * Cierra la pantalla actual y abre menuFrame.
-     */
-    public void abrirClientesForm(){
-        cambiarPantalla(new menuFrame());
+
+    public static controlNavegacion getControlNavegacion() {
+        if(ControlNavegacion==null){
+           ControlNavegacion =new controlNavegacion();
+        }
+        return ControlNavegacion;
     }
     
     /**
      * Cierra la pantalla actual y abre no se como le pongas a la pantalla.
      */
-    public void abrirFrame(){
+    public void abrirMenuFrame(){
         cambiarPantalla(new menuFrame());
     }
     
@@ -36,4 +37,5 @@ public class controlNavegacion {
         this.frameActual.setVisible(true);
         this.frameActual.setLocationRelativeTo(null);
     }
+    
 }
