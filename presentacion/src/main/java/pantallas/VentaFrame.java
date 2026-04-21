@@ -4,6 +4,7 @@
  */
 package pantallas;
 
+import com.mycompany.dto_negocios.ProductoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -11,6 +12,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import pantallas.control.Coordinador;
 
 /**
  *
@@ -36,6 +40,7 @@ public class VentaFrame extends JFrame {
     private JTextField txtPago;
     private JLabel lblCambio;
     private double total = 0;
+    private Coordinador coordinador;
 
     private final Color colorFondo = new Color(245, 245, 245);
     private final Color colorAzul = new Color(52, 152, 219);
@@ -86,7 +91,7 @@ public class VentaFrame extends JFrame {
         JLabel lblPagoPrompt = new JLabel("CANTIDAD RECIBIDA:");
         lblPagoPrompt.setFont(new Font("SansSerif", Font.BOLD, 14));
 
-        txtPago = new JTextField(12); // El tamaño '12' controla el ancho visual
+        txtPago = new JTextField(12);
         txtPago.setFont(new Font("SansSerif", Font.PLAIN, 18));
         txtPago.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, colorAzul));
         txtPago.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -125,9 +130,10 @@ public class VentaFrame extends JFrame {
 
         add(panelContenedorInferior, BorderLayout.SOUTH);
 
-        agregarProducto("Paracetamol del grande", 2, 50.0);
-        agregarProducto("Jarabe", 1, 120.0);
-        agregarProducto("Ibuprofeno", 3, 85.0);
+    }
+
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
     }
 
     private void configurarEstiloTabla() {
@@ -162,16 +168,20 @@ public class VentaFrame extends JFrame {
     }
 
     private void calcularCambio() {
+        if (coordinador == null) return;    
+
         try {
             String texto = txtPago.getText().trim();
             if (texto.isEmpty()) {
                 lblCambio.setText("CAMBIO: $0.00");
+                lblCambio.setForeground(colorVerde);
                 return;
             }
             double pago = Double.parseDouble(texto);
-            double cambio = pago - total;
             
-            if (cambio < 0) {
+            double cambio = coordinador.procesarCalculoCambio(total, pago);
+            
+            if (cambio == -1) { 
                 lblCambio.setText("CAMBIO: $0.00 (Falta dinero)");
                 lblCambio.setForeground(Color.RED);
             } else {
@@ -197,7 +207,18 @@ public class VentaFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "La lista de productos está vacía.");
             return;
         }
-        JOptionPane.showMessageDialog(this, "¡Venta completada exitosamente!");
-        limpiarVenta();
+
+        List<ProductoDTO> productosParaVenta = new ArrayList<>();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            ProductoDTO p = new ProductoDTO();
+            p.setNombre(modelo.getValueAt(i, 0).toString());
+            p.setStock((Integer)modelo.getValueAt(i, 1)); // Enviamos la cantidad vendida como stock
+            p.setPrecio((Double)modelo.getValueAt(i, 2));
+            productosParaVenta.add(p);
+        }
+
+        if (coordinador != null) {
+            coordinador.ejecutarFinalizarVenta(productosParaVenta);
+        }
     }
 }
