@@ -1,5 +1,7 @@
 package pantallas.control;
 
+import FCatalogo.FCatalogo;
+import ICatalogo.ICatalogo;
 import com.mycompany.objetos_negocio.VentaBO;
 import com.mycompany.dto_negocios.ProductoDTO;
 import com.mycompany.dto_negocios.RecetaDTO;
@@ -22,8 +24,10 @@ import pantallas.validarRecetaDlg;
  * @author Dario
  */
 public class Coordinador {
+    private static Coordinador cordinador;
     private IVenta fVentas; 
     private VentaFrame ventaFrame;
+    private ICatalogo catalogo;
 
     private IReceta recetaSub;
     private validarRecetaDlg recetaDlg;
@@ -33,6 +37,7 @@ public class Coordinador {
      * Inicializa el acceso al subsistema de ventas a través de la fachada.
      */
     public Coordinador() {
+        this.catalogo=new FCatalogo();
         this.fVentas = new FVentas();
         this.recetaSub = new FReceta();
     }
@@ -49,7 +54,13 @@ public class Coordinador {
         this.recetaDlg = recetaDlg;
     }
 
-
+    public static Coordinador getCoordinador() {
+    if (cordinador == null) {
+        cordinador = new Coordinador();
+    }
+    return cordinador;
+}
+    
     /**
      * Busca un producto por nombre y solicita a la vista agregarlo a la tabla.
      * @param nombreProducto Nombre ingresado por el usuario.
@@ -133,6 +144,18 @@ public class Coordinador {
                     "Error de receta", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+    
+    public List<ProductoDTO> ObtenerProductos() {
+        return catalogo.obtenerProductos();
+    }
+    
+    public List<ProductoDTO> ObtenerProductosPorNombre(String nombre){
+        return catalogo.buscarProductosNombre(nombre);
+    }
+    
+    public ProductoDTO ObtenerProductoConId(Long id){
+        return catalogo.obtenerProductoId(id);
     }
 
 }

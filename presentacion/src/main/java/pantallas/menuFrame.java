@@ -29,6 +29,9 @@ import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import pantallas.control.Coordinador;
 
 /**
  *
@@ -40,6 +43,8 @@ public class menuFrame extends JFrame {
     private JList<String> listaCarrito;
     private JLabel lblTotal;
     private double total = 0;
+    private JTextField txtBuscar;
+    private JPanel grid;
 
     public menuFrame() {
         //agregamos un titulo
@@ -74,7 +79,7 @@ public class menuFrame extends JFrame {
 
         return panel;
     }
-    
+
     //panel de contenido
     public JPanel crearContenido() {
         //creo un panel y le asigno un border layout
@@ -101,14 +106,32 @@ public class menuFrame extends JFrame {
         panel.setBorder(new EmptyBorder(10, 0, 10, 0));
         panel.setOpaque(false);
 
-        JTextField buscar = new JTextField("Buscar medicamento...");
-        buscar.setPreferredSize(new Dimension(300, 40));
-        buscar.setBorder(new CompoundBorder(
+        txtBuscar = new JTextField("Buscar Producto...");
+        txtBuscar.setPreferredSize(new Dimension(300, 40));
+        txtBuscar.setBorder(new CompoundBorder(
                 new LineBorder(Color.LIGHT_GRAY, 1, true),
                 new EmptyBorder(5, 10, 5, 10)
         ));
 
-        panel.add(buscar, BorderLayout.CENTER);
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+        });
+
+        panel.add(txtBuscar, BorderLayout.CENTER);
 
         return panel;
     }
@@ -126,7 +149,7 @@ public class menuFrame extends JFrame {
 
         panel.add(header, BorderLayout.NORTH);
 
-        JPanel grid = new JPanel(new GridLayout(0, 4, 15, 15));
+        grid = new JPanel(new GridLayout(0, 4, 15, 15));
         grid.setOpaque(false);
 
         List<ProductoDTO> lista = obtenerProductos();
@@ -172,11 +195,11 @@ public class menuFrame extends JFrame {
         btnAgregar.setForeground(Color.WHITE);
         btnAgregar.setFocusPainted(false);
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        btnAgregar.addActionListener(e->{
-            modeloCarrito.addElement(p.getNombre() +"- $" + p.getPrecio());
-            total+=p.getPrecio();
-            lblTotal.setText("Total: $ " + String.format("%.2f",total));
+
+        btnAgregar.addActionListener(e -> {
+            modeloCarrito.addElement(p.getNombre() + "- $" + p.getPrecio());
+            total += p.getPrecio();
+            lblTotal.setText("Total: $ " + String.format("%.2f", total));
         });
 
         card.add(lblImg);
@@ -204,7 +227,7 @@ public class menuFrame extends JFrame {
 
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(10));
-        
+
         modeloCarrito = new DefaultListModel<>();
         listaCarrito = new JList<>(modeloCarrito);
 
@@ -230,22 +253,33 @@ public class menuFrame extends JFrame {
     }
 
     private List<ProductoDTO> obtenerProductos() {
-        List<ProductoDTO> lista = new ArrayList<>();
+        return Coordinador.getCoordinador().ObtenerProductos();
+    }
 
-        lista.add(new ProductoDTO("Paracetamol", 50.0, "/imagenes/paracetamol.png"));
-        lista.add(new ProductoDTO("Ibuprofeno", 80.0, "/imagenes/ibuprofeno.png"));
-        lista.add(new ProductoDTO("Omeprazol", 120.0, "/imagenes/omeprazol.png"));
-        lista.add(new ProductoDTO("Paracetamol", 50.0, "/imagenes/paracetamol.png"));
-        lista.add(new ProductoDTO("Ibuprofeno", 80.0, "/imagenes/ibuprofeno.png"));
-        lista.add(new ProductoDTO("Omeprazol", 120.0, "/imagenes/omeprazol.png"));
-        lista.add(new ProductoDTO("Paracetamol", 50.0, "/imagenes/paracetamol.png"));
-        lista.add(new ProductoDTO("Ibuprofeno", 80.0, "/imagenes/ibuprofeno.png"));
-        lista.add(new ProductoDTO("Omeprazol", 120.0, "/imagenes/omeprazol.png"));
-        lista.add(new ProductoDTO("Paracetamol", 50.0, "/imagenes/paracetamol.png"));
-        lista.add(new ProductoDTO("Ibuprofeno", 80.0, "/imagenes/ibuprofeno.png"));
-        lista.add(new ProductoDTO("Omeprazol", 120.0, "/imagenes/omeprazol.png"));
+    private void filtrar() {
+        String texto = txtBuscar.getText();
 
-        return lista;
+        List<ProductoDTO> lista;
+
+        if (texto.isEmpty() || "Buscar Producto...".equals(texto)) {
+            lista = Coordinador.getCoordinador().ObtenerProductos();
+        } else {
+            lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
+        }
+        actualizarProductos(lista);
+    }
+
+    private void actualizarProductos(List<ProductoDTO> productos) {
+        grid.removeAll();
+
+        // Volver a agregar los productos filtrados
+        for (ProductoDTO p : productos) {
+            grid.add(crearCard(p));
+        }
+
+        // Refrescar la vista
+        grid.revalidate();
+        grid.repaint();
     }
 
 }
