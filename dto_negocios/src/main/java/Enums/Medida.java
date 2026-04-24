@@ -1,4 +1,4 @@
-package com.mycompany.dto_negocios.enums;
+package Enums;
 
 /**
  * Enumerador que define las medidas de los medicamentos.

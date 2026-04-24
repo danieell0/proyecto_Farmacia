@@ -1,6 +1,6 @@
-package com.mycompany.dto_negocios;
+package DTO;
 
-import com.mycompany.dto_negocios.enums.Estado;
+import Enums.Estado;
 import java.time.LocalDate;
 import java.util.List;
 

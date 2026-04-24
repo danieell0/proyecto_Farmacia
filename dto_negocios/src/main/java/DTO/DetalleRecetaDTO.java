@@ -1,4 +1,4 @@
-package com.mycompany.dto_negocios;
+package DTO;
 
 /**
  * DTO que representa la lista de productos de una receta.

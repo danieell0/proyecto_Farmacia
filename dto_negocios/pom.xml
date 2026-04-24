@@ -12,4 +12,5 @@
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.dto_negocios.Dto_negocios</exec.mainClass>
     </properties>
+    <name>DTO_negocios</name>
 </project>

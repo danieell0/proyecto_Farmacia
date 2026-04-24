@@ -1,4 +1,4 @@
-package com.mycompany.dto_negocios.enums;
+package Enums;
 
 /**
  * Enumerador que define los estados de las recetas.

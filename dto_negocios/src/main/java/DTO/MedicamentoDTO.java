@@ -1,6 +1,6 @@
-package com.mycompany.dto_negocios;
+package DTO;
 
-import com.mycompany.dto_negocios.enums.Medida;
+import Enums.Medida;
 import java.time.LocalDate;
 
 /**
