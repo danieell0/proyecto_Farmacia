@@ -9,7 +9,7 @@
     <artifactId>objetos_negocio</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.objetos_negocio.Objetos_negocio</exec.mainClass>
     </properties>
 </project>

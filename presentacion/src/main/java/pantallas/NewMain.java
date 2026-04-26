@@ -10,13 +10,13 @@ package pantallas;
  */
 public class NewMain {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        menuFrame mf=new menuFrame();
-        mf.setVisible(true);
-        //Hola jorge gei
+    /** 
+     * @param args the command line arguments 
+     */ 
+    public static void main(String[] args) { 
+        menuFrame mf=new menuFrame(); 
+        mf.setVisible(true); 
+        
     }
     
 }

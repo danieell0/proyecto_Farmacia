@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import pantallas.control.controlNavegacion;
 
 /**
  *
@@ -33,6 +34,8 @@ public class menuFrame extends JFrame {
     private JList<String> listaCarrito;
     private JLabel lblTotal;
     private double total = 0;
+    
+    private JButton btnUsuario;
 
     public menuFrame() {
         setTitle("Sistema Farmacia");
@@ -41,11 +44,22 @@ public class menuFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel panelSuperior = new JPanel();
+        //le agregamos border layout para acomodar el nuevo boton
+        JPanel panelSuperior = new JPanel(new BorderLayout(10,10));
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
         txtBuscar = new JTextField("Buscar medicamento");
         panelSuperior.add(txtBuscar, BorderLayout.CENTER);
 
+        //nueva configuracion del boton de inicio de sesion
+        btnUsuario = new JButton("Iniciar Sesion");
+        btnUsuario.addActionListener(e -> {
+            controlNavegacion navegador = new controlNavegacion();
+            //le pasamos this para que el popup se centre en el frame y lo boquee
+            navegador.solicitarLogin(this);
+        });
+        panelSuperior.add(btnUsuario, BorderLayout.EAST);
+        
         add(panelSuperior, BorderLayout.NORTH);
 
         panelProductos = new JPanel();
