@@ -88,45 +88,40 @@ public class Coordinador {
     public void agregarProductoAlCarrito(ProductoDTO producto, int cantidad) {
         if (producto == null || cantidad <= 0) return;
 
-        // 1. Verificamos si el producto es en realidad un Medicamento
         if (producto instanceof MedicamentoDTO) {
-            // Convertimos la referencia de Producto a Medicamento para acceder a sus atributos únicos
             MedicamentoDTO med = (MedicamentoDTO) producto;
 
-            // 2. Ahora sí podemos preguntar si es controlado
             if (med.isEsControlado()) {
-
-                // Si no hay folio activo, lo pedimos
                 if (folioRecetaActual == null) {
-                    JOptionPane.showMessageDialog(ventaFrame, 
+                    java.awt.Component parent = (ventaFrame != null) ? ventaFrame : menuJFrame;
+                    JOptionPane.showMessageDialog(parent, 
                         "El medicamento '" + med.getNombre() + "' es controlado. Ingrese el folio.");
 
-                    validarRecetaDlg dlg = new validarRecetaDlg(ventaFrame, true, this);
+                    validarRecetaDlg dlg = new validarRecetaDlg(null, true, this);
                     dlg.setVisible(true);
 
-                    // Si después del diálogo sigue sin haber folio, abortamos
                     if (folioRecetaActual == null) return;
                 }
 
-                // 3. Validamos contra la receta
                 if (!validarProductoConReceta(med.getId(), cantidad)) {
                     return; 
                 }
             }
         }
 
-        // 4. Proceso normal de agregar al carrito de ventas
         DetalleVentaDTO detalle = new DetalleVentaDTO();
         detalle.setProducto(producto);
         detalle.setCantidad(cantidad);
 
         fVentas.agregarAlCarrito(detalle);
 
-        // Actualizamos la vista
-        ventaFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
+        if (ventaFrame != null) {
+            ventaFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
+        }
+        if (menuJFrame != null) {
+            menuJFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
+        }
     }
-        
-
     /**
      * Manda la orden de borrar un producto del carrito y actualiza la pantalla.
      */
@@ -138,9 +133,14 @@ public class Coordinador {
             recetaSub.cancelarReserva(folioRecetaActual, idProducto, cantidad);
         }
         
-        // 2. Refrescamos visualmente
+        // 2. Refrescamos visualmente la pantalla que esté abierta
         CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
-        ventaFrame.actualizarTablaCarrito(carritoActualizado);
+        if (ventaFrame != null) {
+            ventaFrame.actualizarTablaCarrito(carritoActualizado);
+        }
+        if (menuJFrame != null) {
+            menuJFrame.actualizarTablaCarrito(carritoActualizado); // ¡Faltaba esto!
+        }
     }
 
     /**
@@ -239,5 +239,13 @@ public class Coordinador {
         }
         
         return esValido;
+    }  
+   public void mostrarPantallaVenta() {
+        if (ventaFrame == null) {
+            ventaFrame = new VentaFrame();
+            ventaFrame.setCoordinador(this);
+        }
+        ventaFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
+        ventaFrame.setVisible(true);
     }
 }

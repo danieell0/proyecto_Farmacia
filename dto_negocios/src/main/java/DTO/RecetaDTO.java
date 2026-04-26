@@ -9,7 +9,7 @@ import java.util.List;
  * @author Dario
  */
 public class RecetaDTO {
-    private Long folio;
+    private String folio;
     private String cedulaMedico;
     private Integer usos;
     private EstadoReceta estado;
@@ -32,7 +32,7 @@ public class RecetaDTO {
      * @param fechaCaducidad Fecha de caducidad de la receta.
      * @param detalles Lista de medicamentos recetados.
      */
-    public RecetaDTO(Long folio, String cedulaMedico, Integer usos, EstadoReceta estado, LocalDate fechaCaducidad, List<DetalleRecetaDTO> detalles) {
+    public RecetaDTO(String folio, String cedulaMedico, Integer usos, EstadoReceta estado, LocalDate fechaCaducidad, List<DetalleRecetaDTO> detalles) {
         this.folio = folio;
         this.cedulaMedico = cedulaMedico;
         this.usos = usos;
@@ -42,12 +42,12 @@ public class RecetaDTO {
     }
     
     /** @return Obtiene el folio de la receta. */
-    public Long getFolio() {
+    public String getFolio() {
         return folio;
     }
 
     /** @param folio El folio a asignar a la receta. */    
-    public void setFolio(Long folio) {
+    public void setFolio(String folio) {
         this.folio = folio;
     }
 

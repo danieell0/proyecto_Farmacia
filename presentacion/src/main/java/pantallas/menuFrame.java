@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -56,6 +57,8 @@ public class menuFrame extends JFrame {
         setLayout(new BorderLayout());
         //le ponemos al frame un color
         getContentPane().setBackground(new Color(245, 245, 245));
+        
+        Coordinador.getCoordinador().setMenuFrame(this);
 
         add(crearHeader(), BorderLayout.NORTH);
         add(crearContenido(), BorderLayout.CENTER);
@@ -197,12 +200,21 @@ public class menuFrame extends JFrame {
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnAgregar.addActionListener(e -> {
-//            modeloCarrito.addElement(p.getNombre() + "- $" + p.getPrecio());
-//            total += p.getPrecio();
-//            lblTotal.setText("Total: $ " + String.format("%.2f", total));
-            Coordinador.getCoordinador().agregarProductoAlCarrito(p, 1);
+            String input = JOptionPane.showInputDialog(this, "¿Cuantas unidades de " + p.getNombre() + 
+                    " deseas agregar?", "Ingresar Cantidad",JOptionPane.QUESTION_MESSAGE);            
+            if (input != null && !input.trim().isEmpty()) {
+                try {
+                    int cantidad = Integer.parseInt(input);
+                    if (cantidad > 0) {
+                        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);                   
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Por favor ingresa un número válido.");
+                }
+            }
         });
-
         card.add(lblImg);
         card.add(Box.createVerticalStrut(10));
         card.add(nombreLbl);
@@ -225,31 +237,58 @@ public class menuFrame extends JFrame {
 
         JLabel titulo = new JLabel("Carrito");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(10));
 
         modeloCarrito = new DefaultListModel<>();
         listaCarrito = new JList<>(modeloCarrito);
-
         JScrollPane scroll = new JScrollPane(listaCarrito);
         scroll.setPreferredSize(new Dimension(200, 200));
-
         panel.add(scroll);
+        panel.add(Box.createVerticalStrut(10));
 
+        JButton btnQuitar = new JButton("Quitar seleccionado");
+        btnQuitar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnQuitar.addActionListener(e -> {
+            int index = listaCarrito.getSelectedIndex();
+            if (index != -1) { 
+                CarritoDTO carrito = Coordinador.getCoordinador().obtenerCarritoActual();
+                if (carrito != null && index < carrito.getListaProductos().size()) {
+                    DetalleVentaDTO detalle = carrito.getListaProductos().get(index);
+                    
+                    Coordinador.getCoordinador().eliminarProductoDelCarrito(
+                            detalle.getProducto().getId(), 
+                            detalle.getCantidad()
+                    );
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecciona un producto de la lista para quitarlo.");
+            }
+        });
+        panel.add(btnQuitar);
         panel.add(Box.createVerticalStrut(10));
 
         lblTotal = new JLabel("Total: $0.00");
+        lblTotal.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(lblTotal);
-
         panel.add(Box.createVerticalStrut(10));
 
         JButton pagar = new JButton("Pagar");
         pagar.setBackground(new Color(80, 140, 100));
         pagar.setForeground(Color.WHITE);
-
+        pagar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        pagar.addActionListener(e -> {
+            CarritoDTO carrito = Coordinador.getCoordinador().obtenerCarritoActual();
+            if (carrito == null || carrito.getListaProductos().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El carrito está vacío, agrega productos primero.");
+            } else {
+                Coordinador.getCoordinador().mostrarPantallaVenta();
+            }
+        });
         panel.add(pagar);
-
         return panel;
     }
 
