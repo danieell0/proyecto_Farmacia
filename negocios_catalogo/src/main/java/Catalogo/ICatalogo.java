@@ -1,5 +1,6 @@
-package ICatalogo;
+package Catalogo;
 
+import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import java.util.List;
 
@@ -14,5 +15,7 @@ public interface ICatalogo {
     public List<ProductoDTO> buscarProductosNombre(String nombre);
 
     public ProductoDTO obtenerProductoId(Long id);
+    
+    public void agregarCarrito(DetalleVentaDTO detalle);
     
 }
