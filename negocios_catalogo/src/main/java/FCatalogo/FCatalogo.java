@@ -1,11 +1,12 @@
 package FCatalogo;
 
-import Control.ControlCariito;
+
 import DTO.DetalleVentaDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 import Enums.Medida;
 import ICatalogo.ICatalogo;
+import fachada.ControlCariito;
 import java.util.ArrayList;
 import java.util.List;
 

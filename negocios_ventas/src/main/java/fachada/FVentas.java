@@ -4,10 +4,6 @@
  */
 package fachada;
 
-import Control.ControlCalculos;
-import Control.ControlCariito;
-import Control.ControlFinalizarVenta;
-import Control.ControlRegisitrarVenta;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import DTO.VentaDTO;

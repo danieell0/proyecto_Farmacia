@@ -4,7 +4,7 @@
  */
 package Catalogo;
 
-import Control.ControlCariito;
+import fachada.ControlCariito;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import com.mycompany.objetos_negocio.ProductoBO;
@@ -19,7 +19,7 @@ public class ControlObtenerProductos {
     protected ProductoBO catalogoBO;
     protected ControlCariito carrito;
 
-    public ControlObtenerProductos() {
+    protected ControlObtenerProductos() {
         this.catalogoBO = new ProductoBO();
     }
 

@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Control;
+package fachada;
 
+import fachada.ControlCalculos;
 import DTO.DetalleVentaDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
 import java.time.LocalDate;
@@ -14,10 +15,10 @@ import java.time.LocalDate;
  */
 public class ControlCariito {
 
-    private CarritoDTO carritoActual;
-    private ControlCalculos controlCalculos;
+    protected CarritoDTO carritoActual;
+    protected ControlCalculos controlCalculos;
 
-    public ControlCariito() {
+    protected ControlCariito() {
         this.controlCalculos = new ControlCalculos();
         this.carritoActual = new CarritoDTO();
         this.carritoActual.setFecha(LocalDate.now());
@@ -36,7 +37,7 @@ public class ControlCariito {
         controlCalculos.actualizarTotalesCarrito(this.carritoActual);
     }
 
-    public void eliminarProductoDelCarrito(Long idProductoAEliminar) {
+    protected void eliminarProductoDelCarrito(Long idProductoAEliminar) {
 
         this.carritoActual.getListaProductos().removeIf(
                 detalle -> detalle.getProducto().getId().equals(idProductoAEliminar)
@@ -44,11 +45,11 @@ public class ControlCariito {
         controlCalculos.actualizarTotalesCarrito(this.carritoActual);
     }
 
-    public CarritoDTO obtenerCarrito() {
+    protected CarritoDTO obtenerCarrito() {
         return this.carritoActual;
     }
 
-    public void limpiarCarrito() {
+    protected void limpiarCarrito() {
         this.carritoActual = new CarritoDTO();
         this.carritoActual.setFecha(LocalDate.now());
     }

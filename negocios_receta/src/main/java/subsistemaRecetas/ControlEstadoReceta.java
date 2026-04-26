@@ -1,4 +1,4 @@
-package subsistemaRecetas.control;
+package subsistemaRecetas;
 
 import DTO.RecetaDTO;
 import Enums.EstadoReceta;
@@ -14,7 +14,7 @@ public class ControlEstadoReceta {
      * @param receta Receta de la cual se obtendra el estado.
      * @return El estado de la receta o null.
      */
-    public EstadoReceta obtenerEstadoDeReceta(RecetaDTO receta) {
+    protected EstadoReceta obtenerEstadoDeReceta(RecetaDTO receta) {
         if (receta != null){
             return receta.getEstado();
         }
@@ -26,7 +26,7 @@ public class ControlEstadoReceta {
      * @param receta Receta de la cual se actualizara el estado.
      * @param nuevoEstado Estado que nuevo que se seteara en la receta.
      */
-    public void actualizarEstadoReceta(RecetaDTO receta, EstadoReceta nuevoEstado) {
+    protected void actualizarEstadoReceta(RecetaDTO receta, EstadoReceta nuevoEstado) {
         if (receta != null) {
             receta.setEstado(nuevoEstado);
         }

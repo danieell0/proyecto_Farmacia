@@ -1,4 +1,4 @@
-package subsistemaRecetas.control;
+package subsistemaRecetas;
 
 import DTO.RecetaDTO;
 import DTO.DetalleRecetaDTO;
@@ -16,7 +16,7 @@ public class ControlValidarReceta {
      * @param receta Receta a las que se la validara.
      * @return Si la receta es valida o invalida.
      */
-    public boolean validarFechaReceta(RecetaDTO receta) {
+    protected boolean validarFechaReceta(RecetaDTO receta) {
         if (receta == null || receta.getFechaCaducidad() == null){
             return false;
         } 
@@ -29,7 +29,7 @@ public class ControlValidarReceta {
      * @param idProducto Producto que se busca en la receta.
      * @return Si el producto se encontro en la receta.
      */
-    public boolean validarExistenciaEnReceta(RecetaDTO receta, Long idProducto) {
+    protected boolean validarExistenciaEnReceta(RecetaDTO receta, Long idProducto) {
         if (receta == null || receta.getFechaCaducidad() == null){
             return false;
         }
@@ -48,7 +48,7 @@ public class ControlValidarReceta {
      * @param cantidadSolicitada Cantidad solicitada del producto.
      * @return Si la cantidad es valida o invalida.
      */
-    public boolean validarMedicamentosReceta(RecetaDTO receta, Long idProducto, Integer cantidadSolicitada) {
+    protected boolean validarMedicamentosReceta(RecetaDTO receta, Long idProducto, Integer cantidadSolicitada) {
         if (receta == null || receta.getDetalles() == null) {
             return false;
         }
