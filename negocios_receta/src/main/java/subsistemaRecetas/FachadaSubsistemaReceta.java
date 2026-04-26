@@ -21,9 +21,6 @@ public class FachadaSubsistemaReceta implements IControlRecetas{
     private final ControlOperacionesReceta controlOperaciones = new ControlOperacionesReceta();
     private final ControlEstadoReceta controlEstado = new ControlEstadoReceta();
 
-    /**
-     * Lista donde se guardaran temporalmente recetas.
-     */
     private final List<RecetaDTO> recetasActivas = new ArrayList<>();
 
     /**
@@ -42,9 +39,6 @@ public class FachadaSubsistemaReceta implements IControlRecetas{
         RecetaDTO receta = obtenerRecetaInterna(folio);
         if (receta == null) {
             receta = controlBuscar.obtenerRecetaPorFolio(folio);
-            if (receta != null) {
-                recetasActivas.add(receta);
-            }
         }
         if (receta != null) {
             boolean esValida = controlValidar.validarFechaReceta(receta) &&
@@ -52,6 +46,9 @@ public class FachadaSubsistemaReceta implements IControlRecetas{
                                controlValidar.validarExistenciaEnReceta(receta, idProducto) &&
                                controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad);
             if (esValida) {
+                if (obtenerRecetaInterna(folio) == null) {
+                    recetasActivas.add(receta);
+                }
                 controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
                 return true;
             }
@@ -117,6 +114,39 @@ public class FachadaSubsistemaReceta implements IControlRecetas{
             String folioDTO = String.valueOf(receta.getFolio());
             if (folioDTO.equals(folio)) {
                 return receta;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Verifica si la receta existe.
+     * @param folio Folio de la receta.
+     * @return Si la receta existe.
+     */
+    @Override
+    public boolean existeReceta(String folio) {
+        RecetaDTO receta = controlBuscar.obtenerRecetaPorFolio(folio);
+        if (receta != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Busca las productos en recetas activas.
+     * @param idProducto ID de la receta activa a buscar.
+     * @param cantidad La cantidad de productos en la receta.
+     * @return Si se encontro o no.
+     */
+    @Override
+    public String buscarEnRecetasActivas(Long idProducto, Integer cantidad) {
+        for (RecetaDTO receta : recetasActivas) {
+            if (controlValidar.validarExistenciaEnReceta(receta, idProducto) && 
+                controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad)) {
+                controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
+                return receta.getFolio();
             }
         }
         return null;

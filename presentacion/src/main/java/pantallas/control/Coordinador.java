@@ -307,5 +307,37 @@ public class Coordinador implements ICoordinador{
         }
     }
     
+    /**
+     *
+     * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
+     */
+    public void cancelarVenta() {
+        if (fVentas.obtenerCarritoActual() != null) {
+            fVentas.obtenerCarritoActual().getListaProductos().clear();
+            fVentas.obtenerCarritoActual().setTotalAPagar(0.0);
+        }
+        if (menuJFrame != null) {
+            menuJFrame.limpiarVenta();
+        }
+        if (ventaFrame != null) {
+            ventaFrame.limpiarVenta();
+            ventaFrame.setVisible(false);
+        }
+        if (menuJFrame != null) {
+            menuJFrame.setVisible(true);
+        }
+    }
+    
+    /**
+     *
+     * Verifica la existencia de una receta.
+     *
+     * @param folio Folio de la receta a verificar.
+     * @return El resultado de la busqueda.
+     */
+    public boolean existeReceta(String folio) {
+        boolean resultado = recetaSub.existeReceta(folio);
+        return resultado;
+    }
     
 }

@@ -14,8 +14,6 @@ import presentacion.InicioSesionFrm;
  */
 public class controlNavegacion {
     
-    
-    
     private static controlNavegacion ControlNavegacion;
     private JFrame frameActual;
     private Coordinador coordinador;

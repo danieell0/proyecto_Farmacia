@@ -269,12 +269,12 @@ public class menuFrame extends JFrame {
 
         modeloCarrito = new DefaultListModel<>();
         listaCarrito = new JList<>(modeloCarrito);
-
+        
         JScrollPane scroll = new JScrollPane(listaCarrito);
         scroll.setPreferredSize(new Dimension(200, 200));
-
+        
+        // Lo agregamos una sola vez
         panel.add(scroll);
-
         panel.add(Box.createVerticalStrut(10));
 
         lblTotal = new JLabel("Total: $0.00");
@@ -287,7 +287,6 @@ public class menuFrame extends JFrame {
         pagar.setForeground(Color.WHITE);
         
         pagar.addActionListener(e -> {
-            
             // validacion de carrito vacio
             if (modeloCarrito.isEmpty()) {
                 JOptionPane.showMessageDialog(this, 
