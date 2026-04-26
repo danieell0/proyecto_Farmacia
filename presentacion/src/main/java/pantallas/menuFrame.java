@@ -60,6 +60,8 @@ public class menuFrame extends JFrame {
         setLayout(new BorderLayout());
         //le ponemos al frame un color
         getContentPane().setBackground(new Color(245, 245, 245));
+        
+        Coordinador.getCoordinador().setMenuFrame(this);
 
         pantallas.control.Coordinador.getCoordinador().setMenuFrame(this);
         
@@ -269,16 +271,36 @@ public class menuFrame extends JFrame {
 
         modeloCarrito = new DefaultListModel<>();
         listaCarrito = new JList<>(modeloCarrito);
-        
         JScrollPane scroll = new JScrollPane(listaCarrito);
         scroll.setPreferredSize(new Dimension(200, 200));
-        
-        // Lo agregamos una sola vez
         panel.add(scroll);
         panel.add(Box.createVerticalStrut(10));
 
+        JButton btnQuitar = new JButton("Quitar seleccionado");
+        btnQuitar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnQuitar.addActionListener(e -> {
+            int index = listaCarrito.getSelectedIndex();
+            if (index != -1) { 
+                CarritoDTO carrito = Coordinador.getCoordinador().obtenerCarritoActual();
+                if (carrito != null && index < carrito.getListaProductos().size()) {
+                    DetalleVentaDTO detalle = carrito.getListaProductos().get(index);
+                    
+                    Coordinador.getCoordinador().eliminarProductoDelCarrito(
+                            detalle.getProducto().getId(), 
+                            detalle.getCantidad()
+                    );
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecciona un producto de la lista para quitarlo.");
+            }
+        });
+        panel.add(btnQuitar);
+        panel.add(Box.createVerticalStrut(10));
+
         lblTotal = new JLabel("Total: $0.00");
+        lblTotal.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(lblTotal);
+        panel.add(Box.createVerticalStrut(10));
 
         panel.add(Box.createVerticalStrut(10));
 

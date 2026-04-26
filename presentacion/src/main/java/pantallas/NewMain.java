@@ -15,6 +15,7 @@ public class NewMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
         //se supone que es buena practica el hilo ese?
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -30,6 +31,7 @@ public class NewMain {
                 
             }
         });
+
     }
     
 }
