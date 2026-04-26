@@ -39,7 +39,6 @@ public class VentaFrame extends JFrame {
     private JTextField txtPago;
     private JLabel lblCambio;
     
-    // ELIMINAMOS la variable local 'total' porque ahora el carritoDTO maneja eso.
     private Coordinador coordinador;
 
     private final Color colorFondo = new Color(245, 245, 245);
@@ -119,9 +118,16 @@ public class VentaFrame extends JFrame {
         JButton btnCancelar = crearBotonEstilizado("CANCELAR VENTA", new Color(231, 76, 60));
         JButton btnFinalizar = crearBotonEstilizado("FINALIZAR COMPRA", colorAzul);
 
-        // BOTONES CONECTADOS
-        btnCancelar.addActionListener(e -> limpiarVenta());
-        btnFinalizar.addActionListener(e -> finalizarCompra());
+        btnCancelar.addActionListener(e -> {
+            int confirmacion = JOptionPane.showConfirmDialog(this, 
+                "¿Estas seguro de cancelar la venta? Se vaciara el carrito.", 
+                "Cancelar Venta", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                coordinador.cancelarVenta();
+            }
+        });        btnFinalizar.addActionListener(e -> finalizarCompra());
 
         panelBotones.add(btnCancelar);
         panelBotones.add(btnFinalizar);
@@ -164,11 +170,9 @@ public class VentaFrame extends JFrame {
      * MÉTODO NUEVO: Toma el carrito actualizado desde el coordinador y repinta la tabla.
      */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
-        // 1. Limpiamos las filas actuales visualmente
         modelo.setRowCount(0);
 
         if (carrito != null && carrito.getListaProductos() != null) {
-            // 2. Volvemos a llenar la tabla con la lista real que nos mandó la fachada
             for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
                 modelo.addRow(new Object[]{
                     detalle.getProducto().getNombre(),
@@ -178,10 +182,8 @@ public class VentaFrame extends JFrame {
                 });
             }
             
-            // 3. Actualizamos la etiqueta del total a pagar leyendo del CarritoDTO
             lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", carrito.getTotalAPagar()));
             
-            // Recalculamos el cambio por si el cliente ya había escrito un billete en la caja de texto
             calcularCambio();
         }
     }
@@ -198,7 +200,6 @@ public class VentaFrame extends JFrame {
             }
             double pago = Double.parseDouble(texto);
             
-            // Ahora sacamos el total real preguntándole al coordinador por el carrito
             double totalReal = coordinador.obtenerCarritoActual().getTotalAPagar();
             
             double cambio = coordinador.procesarCalculoCambio(totalReal, pago);
@@ -221,8 +222,7 @@ public class VentaFrame extends JFrame {
         lblCambio.setText("CAMBIO: $0.00");
         lblCambio.setForeground(colorVerde);
         txtPago.setText("");
-        // Nota: Si implementas limpiarCarrito en tu Fachada, también puedes llamarlo aquí:
-        // coordinador.limpiarCarrito();
+        
     }
 
     private void finalizarCompra() {
@@ -232,8 +232,6 @@ public class VentaFrame extends JFrame {
         }
 
         if (coordinador != null) {
-            // Ya no construimos los DTOs aquí, solo damos la orden de cobrar.
-            // Mandamos 1L y 1L asumiendo el ID del empleado y del cliente por defecto.
             coordinador.ejecutarFinalizarVenta(1L, 1L);
         }
     }

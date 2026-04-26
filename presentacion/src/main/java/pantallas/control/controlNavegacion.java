@@ -20,9 +20,6 @@ public class controlNavegacion {
         this.coordinador = coordinador;
     }
     
-    /**
-     * Cierra la pantalla actual y abre no se como le pongas a la pantalla.
-     */
     public void abrirMenuFrame(){
         cambiarPantalla(new menuFrame());
     }

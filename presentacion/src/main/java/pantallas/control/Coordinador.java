@@ -126,14 +126,12 @@ public class Coordinador {
      * Manda la orden de borrar un producto del carrito y actualiza la pantalla.
      */
     public void eliminarProductoDelCarrito(Long idProducto, Integer cantidad) {
-        // 1. Borramos lógicamente
         fVentas.eliminarDelCarrito(idProducto);
         
         if (folioRecetaActual != null) {
             recetaSub.cancelarReserva(folioRecetaActual, idProducto, cantidad);
         }
         
-        // 2. Refrescamos visualmente la pantalla que esté abierta
         CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
         if (ventaFrame != null) {
             ventaFrame.actualizarTablaCarrito(carritoActualizado);
@@ -155,31 +153,24 @@ public class Coordinador {
      */
     public void ejecutarFinalizarVenta(Long idEmpleado, Long idCliente) {
         
-        // 1. Obtenemos el carrito que está guardado en memoria
         CarritoDTO carrito = fVentas.obtenerCarritoActual();
         
-        // 2. Validamos que no esté vacío antes de molestar al backend
         if (carrito == null || carrito.getListaProductos().isEmpty()) {
             JOptionPane.showMessageDialog(ventaFrame, "El carrito está vacío. Agregue productos para vender.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 3. Mandamos el carrito entero a la fachada para que registre la venta
         VentaDTO ventaRegistrada = fVentas.registrarVenta(carrito);
         
-        // 4. Comprobamos el resultado
         if (ventaRegistrada != null) {
             if (folioRecetaActual != null) {
                 recetaSub.confirmarDescuentoReceta();
-                folioRecetaActual = null; // Limpiamos para la siguiente venta
+                folioRecetaActual = null; 
             }
             JOptionPane.showMessageDialog(ventaFrame, 
-                "¡Venta #" + ventaRegistrada.getIdVenta() + " registrada con éxito!\nTotal cobrado: $" + ventaRegistrada.getTotal(), 
+                "¡Venta #" + ventaRegistrada.getIdVenta() + " registrada con exito!\nTotal cobrado: $" + ventaRegistrada.getTotal(), 
                 "Venta Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            
-                
-            // Limpiamos la pantalla porque ya se cobró
-            ventaFrame.limpiarVenta(); 
+                    ventaFrame.limpiarVenta(); 
         } else {
             JOptionPane.showMessageDialog(ventaFrame, "Error: No se pudo procesar la venta en la Base de Datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -190,8 +181,7 @@ public class Coordinador {
      */
     public double procesarCalculoCambio(double total, double pago) {
         if (pago < total) {
-            JOptionPane.showMessageDialog(ventaFrame, "El pago es insuficiente. Faltan $" + (total - pago), "Aviso", JOptionPane.WARNING_MESSAGE);
-            return -1;
+            return -1; 
         }
         return pago - total; 
     }
@@ -223,13 +213,9 @@ public class Coordinador {
      * Valida si un producto requiere receta y si hay disponibilidad en la misma.
      */
     public boolean validarProductoConReceta(Long idProducto, Integer cantidad) {
-        // Si no hay folio capturado, asumimos que es venta libre 
-        // (A menos que tu lógica obligue a tener folio para ciertos productos)
         if (folioRecetaActual == null || folioRecetaActual.isEmpty()) {
             return true; 
         }
-
-        // Llamamos a la fachada del subsistema de recetas
         boolean esValido = recetaSub.validarYReservar(folioRecetaActual, idProducto, cantidad);
         
         if (!esValido) {
@@ -247,5 +233,24 @@ public class Coordinador {
         }
         ventaFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
         ventaFrame.setVisible(true);
+    }
+   /**
+     * Cancela la venta en curso, limpia el carrito y regresa al catálogo.
+     */
+    public void cancelarVenta() {
+        if (fVentas.obtenerCarritoActual() != null) {
+            fVentas.obtenerCarritoActual().getListaProductos().clear();
+            fVentas.obtenerCarritoActual().setTotalAPagar(0.0);
+        }
+        if (menuJFrame != null) {
+            menuJFrame.limpiarVenta(); 
+        }
+        if (ventaFrame != null) {
+            ventaFrame.limpiarVenta();
+            ventaFrame.setVisible(false); 
+        }
+        if (menuJFrame != null) {
+            menuJFrame.setVisible(true);
+        }
     }
 }
