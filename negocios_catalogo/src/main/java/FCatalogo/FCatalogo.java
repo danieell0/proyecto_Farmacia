@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package FCatalogo;
 
+import DTO.MedicamentoDTO;
+import DTO.ProductoDTO;
+import Enums.Medida;
 import ICatalogo.ICatalogo;
-import com.mycompany.dto_negocios.MedicamentoDTO;
-import com.mycompany.dto_negocios.ProductoDTO;
-import com.mycompany.dto_negocios.enums.Medida;
 import java.util.ArrayList;
 import java.util.List;
 

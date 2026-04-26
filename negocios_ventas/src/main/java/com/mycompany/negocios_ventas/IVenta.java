@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.negocios_ventas;
 
-import com.mycompany.dto_negocios.ProductoDTO;
+import DTO.ProductoDTO;
 import java.util.List;
 
 /**
@@ -18,5 +14,5 @@ public interface IVenta {
     
     public double calcularCambio(double total, double pago) throws VentaException;
     
-    public boolean finalizarVenta(List<ProductoDTO> productosVendidos);
+//    public boolean finalizarVenta(List<ProductoDTO> productosVendidos);
 }

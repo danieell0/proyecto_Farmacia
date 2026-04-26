@@ -4,7 +4,7 @@
  */
 package com.mycompany.negocios_ventas;
 
-import com.mycompany.dto_negocios.ProductoDTO;
+import DTO.ProductoDTO;
 import com.mycompany.objetos_negocio.VentaBO;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,12 +74,12 @@ public class FVentas implements IVenta {
      * @param productosVendidos Lista de productos a procesar.
      * @return true si la venta se realizó con éxito, false si la lista está vacía.
      */
-    @Override
-    public boolean finalizarVenta(List<ProductoDTO> productosVendidos) {
-        if (productosVendidos == null || productosVendidos.isEmpty()) {
-            return false;
-        }
-        // Delega la persistencia o lógica de cierre a la BO
-        return ventaBO.finalizarVenta(productosVendidos);
-    }
+//    @Override
+//    public boolean finalizarVenta(List<ProductoDTO> productosVendidos) {
+//        if (productosVendidos == null || productosVendidos.isEmpty()) {
+//            return false;
+//        }
+//        // Delega la persistencia o lógica de cierre a la BO
+//        return ventaBO.finalizarVenta(productosVendidos);
+//    }
 }

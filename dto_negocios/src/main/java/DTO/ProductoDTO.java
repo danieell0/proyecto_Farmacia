@@ -1,12 +1,7 @@
 package DTO;
 
-import Enums.Medida;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * DTO que representa un producto.
- *
  * @author Dario
  */
 public class ProductoDTO {
@@ -26,7 +21,6 @@ public class ProductoDTO {
 
     /**
      * Constructor con todos los atributos del producto.
-     *
      * @param id Id del producto.
      * @param nombre Nombre del producto.
      * @param precio Precio del producto.
@@ -41,17 +35,15 @@ public class ProductoDTO {
         this.imagen = imagen;
     }
 
+    /**
+     * Contructor del jorge webon.
+     * @param nombre
+     * @param precio
+     * @param imagen 
+     */
     public ProductoDTO(String nombre, Double precio, String imagen) {
         this.nombre = nombre;
         this.precio = precio;
-        this.imagen = imagen;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 
@@ -109,6 +101,21 @@ public class ProductoDTO {
      */
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+    
+    /**
+     * @return La imagen del producto.
+     */
+    public String getImagen() {
+        return imagen;
+    }
+
+    /**
+     * La imagen a asignar al producto.
+     * @param imagen 
+     */
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
 }

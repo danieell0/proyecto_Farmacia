@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pantallas;
 
-import com.mycompany.dto_negocios.ProductoDTO;
+import DTO.ProductoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -97,7 +93,7 @@ public class VentaFrame extends JFrame {
         txtPago.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                calcularCambio();
+//                calcularCambio();
             }
         });
 
@@ -167,31 +163,31 @@ public class VentaFrame extends JFrame {
         lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", total));
     }
 
-    private void calcularCambio() {
-        if (coordinador == null) return;    
-
-        try {
-            String texto = txtPago.getText().trim();
-            if (texto.isEmpty()) {
-                lblCambio.setText("CAMBIO: $0.00");
-                lblCambio.setForeground(colorVerde);
-                return;
-            }
-            double pago = Double.parseDouble(texto);
-            
-            double cambio = coordinador.procesarCalculoCambio(total, pago);
-            
-            if (cambio == -1) { 
-                lblCambio.setText("CAMBIO: $0.00 (Falta dinero)");
-                lblCambio.setForeground(Color.RED);
-            } else {
-                lblCambio.setText("CAMBIO: $" + String.format("%.2f", cambio));
-                lblCambio.setForeground(colorVerde);
-            }
-        } catch (NumberFormatException e) {
-            lblCambio.setText("CAMBIO: Error");
-        }
-    }
+//    private void calcularCambio() {
+//        if (coordinador == null) return;    
+//
+//        try {
+//            String texto = txtPago.getText().trim();
+//            if (texto.isEmpty()) {
+//                lblCambio.setText("CAMBIO: $0.00");
+//                lblCambio.setForeground(colorVerde);
+//                return;
+//            }
+//            double pago = Double.parseDouble(texto);
+//            
+//////            double cambio = coordinador.procesarCalculoCambio(total, pago);
+//            
+//            if (cambio == -1) { 
+//                lblCambio.setText("CAMBIO: $0.00 (Falta dinero)");
+//                lblCambio.setForeground(Color.RED);
+//            } else {
+//                lblCambio.setText("CAMBIO: $" + String.format("%.2f", cambio));
+//                lblCambio.setForeground(colorVerde);
+//            }
+//        } catch (NumberFormatException e) {
+//            lblCambio.setText("CAMBIO: Error");
+//        }
+//    } muevele a tu mamada
 
     public void limpiarVenta() {
         modelo.setRowCount(0);
@@ -217,8 +213,8 @@ public class VentaFrame extends JFrame {
             productosParaVenta.add(p);
         }
 
-        if (coordinador != null) {
-            coordinador.ejecutarFinalizarVenta(productosParaVenta);
-        }
+//        if (coordinador != null) {
+//            coordinador.ejecutarFinalizarVenta(productosParaVenta);
+//        } Error de cordinador checalo
     }
 }

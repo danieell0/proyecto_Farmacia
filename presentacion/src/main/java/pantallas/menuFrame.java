@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pantallas;
 
-import com.mycompany.dto_negocios.ProductoDTO;
+import DTO.ProductoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -31,7 +27,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import pantallas.control.Coordinador;
+//import pantallas.control.Coordinador;
 
 /**
  *
@@ -89,7 +85,7 @@ public class menuFrame extends JFrame {
         //agrego un color de background
         panel.setBackground(new Color(245, 245, 245));
         //agrego la barra buscadora 
-        panel.add(crearBuscador(), BorderLayout.NORTH);
+//        panel.add(crearBuscador(), BorderLayout.NORTH); coordinador
 
         JPanel panelCentro = new JPanel(new BorderLayout());
         panelCentro.setOpaque(false);
@@ -101,40 +97,40 @@ public class menuFrame extends JFrame {
         return panel;
     }
 
-    private JPanel crearBuscador() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10, 0, 10, 0));
-        panel.setOpaque(false);
-
-        txtBuscar = new JTextField("Buscar Producto...");
-        txtBuscar.setPreferredSize(new Dimension(300, 40));
-        txtBuscar.setBorder(new CompoundBorder(
-                new LineBorder(Color.LIGHT_GRAY, 1, true),
-                new EmptyBorder(5, 10, 5, 10)
-        ));
-
-        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                filtrar();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                filtrar();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                filtrar();
-            }
-
-        });
-
-        panel.add(txtBuscar, BorderLayout.CENTER);
-
-        return panel;
-    }
+//    private JPanel crearBuscador() {
+//        JPanel panel = new JPanel(new BorderLayout());
+//        panel.setBorder(new EmptyBorder(10, 0, 10, 0));
+//        panel.setOpaque(false);
+//
+//        txtBuscar = new JTextField("Buscar Producto...");
+//        txtBuscar.setPreferredSize(new Dimension(300, 40));
+//        txtBuscar.setBorder(new CompoundBorder(
+//                new LineBorder(Color.LIGHT_GRAY, 1, true),
+//                new EmptyBorder(5, 10, 5, 10)
+//        ));
+//
+//        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                filtrar();
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                filtrar();
+//            }
+//
+//            @Override
+//            public void changedUpdate(DocumentEvent e) {
+//                filtrar();
+//            }
+//
+//        });
+//
+//        panel.add(txtBuscar, BorderLayout.CENTER);
+//
+//        return panel;
+//    } coordinador
 
     private JPanel crearProductos() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -152,11 +148,11 @@ public class menuFrame extends JFrame {
         grid = new JPanel(new GridLayout(0, 4, 15, 15));
         grid.setOpaque(false);
 
-        List<ProductoDTO> lista = obtenerProductos();
-
-        for (ProductoDTO p : lista) {
-            grid.add(crearCard(p));
-        }
+////        List<ProductoDTO> lista = obtenerProductos();
+//
+//        for (ProductoDTO p : lista) {
+//            grid.add(crearCard(p));
+//        } coordinador
 
         JPanel contenedor = new JPanel(new BorderLayout());
         contenedor.setOpaque(false);
@@ -252,22 +248,22 @@ public class menuFrame extends JFrame {
         return panel;
     }
 
-    private List<ProductoDTO> obtenerProductos() {
-        return Coordinador.getCoordinador().ObtenerProductos();
-    }
-
-    private void filtrar() {
-        String texto = txtBuscar.getText();
-
-        List<ProductoDTO> lista;
-
-        if (texto.isEmpty() || "Buscar Producto...".equals(texto)) {
-            lista = Coordinador.getCoordinador().ObtenerProductos();
-        } else {
-            lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
-        }
-        actualizarProductos(lista);
-    }
+//    private List<ProductoDTO> obtenerProductos() {
+//        return Coordinador.getCoordinador().ObtenerProductos();
+//    }
+//
+//    private void filtrar() {
+//        String texto = txtBuscar.getText();
+//
+//        List<ProductoDTO> lista;
+//
+//        if (texto.isEmpty() || "Buscar Producto...".equals(texto)) {
+//            lista = Coordinador.getCoordinador().ObtenerProductos();
+//        } else {
+//            lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
+//        }
+//        actualizarProductos(lista);
+//    } Error de cordinador 
 
     private void actualizarProductos(List<ProductoDTO> productos) {
         grid.removeAll();

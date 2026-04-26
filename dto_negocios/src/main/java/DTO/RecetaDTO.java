@@ -1,6 +1,6 @@
 package DTO;
 
-import Enums.Estado;
+import Enums.EstadoReceta;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class RecetaDTO {
     private Long folio;
     private String cedulaMedico;
     private Integer usos;
-    private Estado estado;
+    private EstadoReceta estado;
     private LocalDate fechaCaducidad;
     private List<DetalleRecetaDTO> detalles;
 
@@ -32,7 +32,7 @@ public class RecetaDTO {
      * @param fechaCaducidad Fecha de caducidad de la receta.
      * @param detalles Lista de medicamentos recetados.
      */
-    public RecetaDTO(Long folio, String cedulaMedico, Integer usos, Estado estado, LocalDate fechaCaducidad, List<DetalleRecetaDTO> detalles) {
+    public RecetaDTO(Long folio, String cedulaMedico, Integer usos, EstadoReceta estado, LocalDate fechaCaducidad, List<DetalleRecetaDTO> detalles) {
         this.folio = folio;
         this.cedulaMedico = cedulaMedico;
         this.usos = usos;
@@ -72,12 +72,12 @@ public class RecetaDTO {
     }
 
     /** @return Obtiene el estado de la receta. */
-    public Estado getEstado() {
+    public EstadoReceta getEstado() {
         return estado;
     }
 
     /** @param estado El estado a asignar a la receta. */
-    public void setEstado(Estado estado) {
+    public void setEstado(EstadoReceta estado) {
         this.estado = estado;
     }
 

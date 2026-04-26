@@ -4,9 +4,10 @@ package DTO;
  * DTO que representa la lista de productos de una receta.
  * @author Dario
  */
-class DetalleRecetaDTO {
+public class DetalleRecetaDTO {
     private Long idMedicamento;
     private Integer cantidadRecetada;
+    private Integer cantidadSurtida = 0;
 
     /**
      * Contructor vacio.
@@ -19,8 +20,9 @@ class DetalleRecetaDTO {
      * Contructor con todos los atributos.
      * @param idMedicamento Id del medicamento agregado a la receta.
      * @param cantidadPermitida Cantidad recetada del medicamento.
+     * @param cantidadSurtida Cantidad surtida del producto (inicialmente es 0);
      */
-    public DetalleRecetaDTO(Long idMedicamento, Integer cantidadPermitida) {
+    public DetalleRecetaDTO(Long idMedicamento, Integer cantidadPermitida, Integer cantidadSurtida) {
         this.idMedicamento = idMedicamento;
         this.cantidadRecetada = cantidadPermitida;
     }
@@ -43,6 +45,16 @@ class DetalleRecetaDTO {
     /** @param cantidadRecetada La cantidad recetada del medicamento a asignar a la receta. */
     public void setCantidadRecetada(Integer cantidadRecetada) {
         this.cantidadRecetada = cantidadRecetada;
+    }
+
+    /** @return Obtiene la cantidad surtida del medicamento relaccionado a la receta. */
+    public Integer getCantidadSurtida() {
+        return cantidadSurtida;
+    }
+    
+    /** @param cantidadSurtida La cantidad surtida del medicamento a asignar a la receta. */
+    public void setCantidadSurtida(Integer cantidadSurtida) {
+        this.cantidadSurtida = cantidadSurtida;
     }
     
 }
