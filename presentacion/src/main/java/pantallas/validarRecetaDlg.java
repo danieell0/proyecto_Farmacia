@@ -97,24 +97,29 @@ public class validarRecetaDlg extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Boton que ejecuta el metedo de ingresarReceta.
+     * @param evt Evento accion del boton.
+     */
     private void btnIngresarRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarRecetaActionPerformed
         ingresarReceta();
     }//GEN-LAST:event_btnIngresarRecetaActionPerformed
 
+    /**
+     * Metodo que para validar el folio ingresado en el txtFolio.
+     */
     public void ingresarReceta() {
         String folio = txtFolio.getText().trim();
-
         if (folio.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese un folio válido.");
+            JOptionPane.showMessageDialog(this, "Ingrese un folio valido.");
             return;
         }
-
-        // Le enviamos el folio al coordinador para que lo guarde en la sesión
+        if (!coordinador.existeReceta(folio)) {
+            JOptionPane.showMessageDialog(this, "El folio ingresado no existe en el sistema.");
+            return;
+        }
         coordinador.setFolioRecetaActual(folio);
-
         JOptionPane.showMessageDialog(this, "Folio vinculado correctamente.");
-
-        // Cerramos el diálogo para que el Coordinador siga con la ejecución
         this.dispose();
     }
     

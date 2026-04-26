@@ -27,9 +27,10 @@ public class RecetaBO {
         
         List<DetalleRecetaDTO> detalles1 = new ArrayList<>();
         detalles1.add(new DetalleRecetaDTO(8L, 10, 0)); // Amoxicilina (ID 8)
+        detalles1.add(new DetalleRecetaDTO(6L, 10, 0)); 
         r1.setDetalles(detalles1);
-        
         recetas.add(r1);
+        
 
         // --- RECETA 2: CADUCADA ---
         RecetaDTO r2 = new RecetaDTO();
@@ -39,7 +40,7 @@ public class RecetaBO {
         r2.setFechaCaducidad(LocalDate.of(2023, 01, 01)); // Ya venció
         
         List<DetalleRecetaDTO> detalles2 = new ArrayList<>();
-        detalles2.add(new DetalleRecetaDTO(8L, 10, 0)); // Amoxicilina (ID 8)
+        detalles2.add(new DetalleRecetaDTO(7L, 10, 0)); // Amoxicilina (ID 8)
         r2.setDetalles(detalles2);
         
         recetas.add(r2);
@@ -52,10 +53,21 @@ public class RecetaBO {
         r3.setFechaCaducidad(LocalDate.of(2026, 06, 15));
         
         List<DetalleRecetaDTO> detalles3 = new ArrayList<>();
-        detalles3.add(new DetalleRecetaDTO(8L, 2, 0)); // Pide 2 Amoxicilinas
+        detalles3.add(new DetalleRecetaDTO(7L, 2, 0)); // Pide 2 Amoxicilinas
         r3.setDetalles(detalles3);
         
         recetas.add(r3);
+        
+        RecetaDTO r4 = new RecetaDTO();
+        r4.setFolio("104L");
+        r4.setCedulaMedico("55556666");
+        r4.setEstado(EstadoReceta.ACTIVA);
+        r4.setFechaCaducidad(LocalDate.of(2026, 12, 31));
+        List<DetalleRecetaDTO> detalles4 = new ArrayList<>();
+        detalles4.add(new DetalleRecetaDTO(7L, 10, 0));
+        r4.setDetalles(detalles4);
+        
+        recetas.add(r4);
     }
     
     public List<RecetaDTO> getRecetas() {

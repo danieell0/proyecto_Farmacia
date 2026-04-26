@@ -52,4 +52,20 @@ public interface IControlRecetas {
      * @return La receta o nada si no lo encontro.
      */
     public abstract RecetaDTO obtenerRecetaInterna(String folio);
+
+    /**
+     * Verifica si la receta existe.
+     * @param folio Folio de la receta.
+     * @return Si la receta existe.
+     */
+    public abstract boolean existeReceta(String folio);
+    
+    /**
+     * Busca las productos en recetas activas.
+     * @param idProducto ID de la receta activa a buscar.
+     * @param cantidad La cantidad de productos en la receta.
+     * @return Si se encontro o no.
+     */
+    public abstract String buscarEnRecetasActivas(Long idProducto, Integer cantidad);
+
 }
