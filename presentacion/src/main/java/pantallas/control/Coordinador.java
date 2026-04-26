@@ -1,12 +1,12 @@
 package pantallas.control;
 
+import Catalogo.Fachada;
+import Catalogo.ICatalogo;
 import DTO.DetalleVentaDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 
 import DTO.VentaDTO;
-import FCatalogo.FCatalogo;
-import ICatalogo.ICatalogo;
 import com.mycompany.dto_negocios.CarritoDTO;
 import dtos.EmpleadoDTO;
 
@@ -52,10 +52,10 @@ public class Coordinador implements ICoordinador{
      * Inicializa el acceso al subsistema de ventas a través de la fachada.
      */
     public Coordinador() {
-        this.catalogo=new FCatalogo();
+        this.catalogo=new Fachada();
         this.fVentas = new FVentas();
         this.recetaSub = new FachadaSubsistemaReceta();
-        this.controlSesion = new FachadaSesion(); //
+        this.controlSesion = new FachadaSesion(); 
     }
 
     /**

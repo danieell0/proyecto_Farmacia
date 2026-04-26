@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package pantallas.control;
+package interfaces;
 
 import DTO.ProductoDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
@@ -13,7 +13,9 @@ import java.util.List;
  * @author Jorge
  */
 public interface ICoordinadorAplicacion {
-
+    
+    public void setCoordinador();
+    
     public List<ProductoDTO> ObtenerProductos();
 
     public List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
