@@ -119,7 +119,7 @@ public class menuFrame extends JFrame {
 
         return panel;
     }
-    
+
     //panel de contenido
     public JPanel crearContenido() {
         //creo un panel y le asigno un border layout
@@ -237,12 +237,21 @@ public class menuFrame extends JFrame {
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnAgregar.addActionListener(e -> {
-//            modeloCarrito.addElement(p.getNombre() + "- $" + p.getPrecio());
-//            total += p.getPrecio();
-//            lblTotal.setText("Total: $ " + String.format("%.2f", total));
-            Coordinador.getCoordinador().agregarProductoAlCarrito(p, 1);
+            String input = JOptionPane.showInputDialog(this, "¿Cuantas unidades de " + p.getNombre() + 
+                    " deseas agregar?", "Ingresar Cantidad",JOptionPane.QUESTION_MESSAGE);            
+            if (input != null && !input.trim().isEmpty()) {
+                try {
+                    int cantidad = Integer.parseInt(input);
+                    if (cantidad > 0) {
+                        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);                   
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Por favor ingresa un número válido.");
+                }
+            }
         });
-
         card.add(lblImg);
         card.add(Box.createVerticalStrut(10));
         card.add(nombreLbl);
@@ -265,6 +274,7 @@ public class menuFrame extends JFrame {
 
         JLabel titulo = new JLabel("Carrito");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(10));
@@ -320,9 +330,7 @@ public class menuFrame extends JFrame {
             // Usamos tu Singleton de navegación para cambiar a la pantalla de ventas
             pantallas.control.controlNavegacion.getcontrolNavegacion().abrirVentaFrame();
         });
-
         panel.add(pagar);
-
         return panel;
     }
 

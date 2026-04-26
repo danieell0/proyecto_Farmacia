@@ -1,0 +1,45 @@
+package Catalogo;
+
+import Control.ControlCariito;
+import DTO.DetalleVentaDTO;
+import DTO.MedicamentoDTO;
+import DTO.ProductoDTO;
+import Enums.Medida;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Jorge
+ */
+public class Fachada implements ICatalogo {
+    
+    private ControlObtenerProductos control;
+
+    public Fachada() {
+        this.control = new ControlObtenerProductos();
+    }
+
+    @Override
+    public List<ProductoDTO> obtenerProductos() {
+        return control.obtenerProductos();
+    }
+
+    @Override
+    public List<ProductoDTO> buscarProductosNombre(String nombre) {
+        return control.obtenerProductoPorNombre(nombre);
+    }
+
+    @Override
+    public ProductoDTO obtenerProductoId(Long id) {
+        return control.obtenerProductoId(id);
+    }
+
+    @Override
+    public void agregarCarrito(DetalleVentaDTO detalle) {
+        control.agregarCarrito(detalle);
+    }
+
+  
+
+}
