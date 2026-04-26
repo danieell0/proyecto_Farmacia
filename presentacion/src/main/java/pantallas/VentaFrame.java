@@ -167,23 +167,38 @@ public class VentaFrame extends JFrame {
     }
 
     /**
-     * MÉTODO NUEVO: Toma el carrito actualizado desde el coordinador y repinta la tabla.
+     * Este método actualiza la JTable de la pantalla final de cobro.
      */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
-        modelo.setRowCount(0);
+        // 1. Limpiamos las filas de la tabla obligando a Java a reconocer el DefaultTableModel
+        ((javax.swing.table.DefaultTableModel) tabla.getModel()).setRowCount(0);
+        
+        // Variable segura para acumular el total
+        double totalSeguro = 0.0;
 
         if (carrito != null && carrito.getListaProductos() != null) {
+            // 2. Volvemos a llenar la tabla
             for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
-                modelo.addRow(new Object[]{
+                
+                double precio = detalle.getProducto().getPrecio();
+                int cantidad = detalle.getCantidad();
+                double subtotal = precio * cantidad;
+                
+                totalSeguro += subtotal; 
+
+                // Obligamos a reconocer el DefaultTableModel para agregar la fila
+                ((javax.swing.table.DefaultTableModel) tabla.getModel()).addRow(new Object[]{
                     detalle.getProducto().getNombre(),
-                    detalle.getCantidad(),
-                    detalle.getProducto().getPrecio(),
-                    detalle.getSubtotal()
+                    cantidad,
+                    precio,
+                    subtotal 
                 });
             }
             
-            lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", carrito.getTotalAPagar()));
+            // 3. Actualizamos la etiqueta del total
+            lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", totalSeguro));
             
+            // Recalculamos el cambio
             calcularCambio();
         }
     }

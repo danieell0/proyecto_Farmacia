@@ -26,26 +26,20 @@ public class ControlBuscarReceta {
      * @return La receta si el folio coincide, null si no.
      */
     public RecetaDTO obtenerRecetaPorFolio(String folioTexto) {
-        // se valida que no llegue vacio
+        // Se valida que no llegue vacío
         if (folioTexto == null || folioTexto.trim().isEmpty()) {
             return null;
         }
 
-        try {
-            //se convierte el texto string a long
-            Long folioNumerico = Long.parseLong(folioTexto.trim());
-            
-            // se busca en la lista mockeada
-            List<RecetaDTO> recetas = recetaBO.getRecetas();
-            for (RecetaDTO receta : recetas) {
-                // se compara  Long con Long
-                if (Objects.equals(receta.getFolio(), folioNumerico)) {
-                    return receta;
-                }
+        String folioLimpio = folioTexto.trim();
+
+        // Se busca en la lista mockeada
+        List<RecetaDTO> recetas = recetaBO.getRecetas();
+        for (RecetaDTO receta : recetas) {
+            // Se compara String con String directamente
+            if (Objects.equals(receta.getFolio(), folioLimpio)) {
+                return receta;
             }
-        } catch (NumberFormatException e) {
-            //
-            System.err.println("El folio ingresado no es numérico: " + folioTexto);
         }
         
         return null;

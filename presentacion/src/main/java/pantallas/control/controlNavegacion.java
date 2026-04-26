@@ -26,8 +26,26 @@ public class controlNavegacion {
         cambiarPantalla(new menuFrame());
     }
     
-    public void abrirVentaFrame(){
-        cambiarPantalla(new VentaFrame());
+    public void abrirVentaFrame() {
+        // 1. Creamos la nueva ventana
+        VentaFrame nuevaVenta = new VentaFrame();
+        
+        // 2. Le presentamos el coordinador a la nueva ventana
+        nuevaVenta.setCoordinador(Coordinador.getCoordinador());
+        
+        // 3. Le decimos al coordinador que esta es su nueva pantalla activa
+        Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
+        
+        // 4. ¡EL PASO CLAVE! Obtenemos el carrito que llenamos en el menú
+        com.mycompany.dto_negocios.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
+        
+        // Y se lo pasamos a la tabla
+        if (carritoGuardado != null) {
+            nuevaVenta.actualizarTablaCarrito(carritoGuardado);
+        }
+        
+        // 5. Finalmente, hacemos el cambio visual
+        cambiarPantalla(nuevaVenta);
     }
     
     public void abrirRecetaDialog(){
