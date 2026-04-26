@@ -1,4 +1,4 @@
-package subsistemaRecetas.control;
+package subsistemaRecetas;
 
 import DTO.DetalleRecetaDTO;
 import DTO.RecetaDTO;
@@ -17,7 +17,7 @@ public class ControlOperacionesReceta {
      * @param idMedicamento El medicamento al que se aplicara el cambio temporalmente.
      * @param cantidad La cantidad del cambio.
      */
-    public void restarMedicamentos(RecetaDTO receta, Long idMedicamento, Integer cantidad) {
+    protected void restarMedicamentos(RecetaDTO receta, Long idMedicamento, Integer cantidad) {
         if (receta == null || receta.getDetalles() == null) {
             return;
         }
@@ -38,7 +38,7 @@ public class ControlOperacionesReceta {
      * @param idMedicamento
      * @param cantidad 
      */
-    public void sumarMedicamentos(RecetaDTO receta, Long idMedicamento, Integer cantidad) {
+    protected void sumarMedicamentos(RecetaDTO receta, Long idMedicamento, Integer cantidad) {
         if (receta == null || receta.getDetalles() == null) {
             return;
         }

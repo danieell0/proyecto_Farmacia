@@ -19,7 +19,7 @@ public class ControlObtenerProductos {
     protected ProductoBO catalogoBO;
     protected ControlCariito carrito;
 
-    public ControlObtenerProductos() {
+    protected ControlObtenerProductos() {
         this.catalogoBO = new ProductoBO();
     }
 

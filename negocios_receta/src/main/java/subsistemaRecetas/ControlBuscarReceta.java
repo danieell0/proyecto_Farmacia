@@ -1,4 +1,4 @@
-package subsistemaRecetas.control;
+package subsistemaRecetas;
 
 import DTO.RecetaDTO;
 import com.mycompany.objetos_negocio.RecetaBO;
@@ -11,12 +11,12 @@ import java.util.Objects;
  */
 public class ControlBuscarReceta {
     
-    private RecetaBO recetaBO;
+    protected RecetaBO recetaBO;
     
     /**
      * Contructor de la clase ControlBuscarReceta.
      */
-    public ControlBuscarReceta(){
+    protected ControlBuscarReceta(){
         this.recetaBO = new RecetaBO();
     }
     
@@ -25,7 +25,7 @@ public class ControlBuscarReceta {
      * @param folio El folio que el usuario ingresa.
      * @return La receta si el folio coincide, null si no.
      */
-    public RecetaDTO obtenerRecetaPorFolio(String folio) {
+    protected RecetaDTO obtenerRecetaPorFolio(String folio) {
         List<RecetaDTO> recetas = recetaBO.getRecetas();
         for (RecetaDTO receta : recetas) {
             if (Objects.equals(receta.getFolio(), folio)) {

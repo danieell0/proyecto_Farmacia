@@ -5,10 +5,6 @@ import DTO.RecetaDTO;
 import Enums.EstadoReceta;
 import java.util.ArrayList;
 import java.util.List;
-import subsistemaRecetas.control.ControlBuscarReceta;
-import subsistemaRecetas.control.ControlEstadoReceta;
-import subsistemaRecetas.control.ControlOperacionesReceta;
-import subsistemaRecetas.control.ControlValidarReceta;
 
 /**
  * Fachada del subsistema de receta.
