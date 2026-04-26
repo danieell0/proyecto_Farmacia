@@ -1,5 +1,6 @@
 package pantallas;
 
+import javax.swing.JOptionPane;
 import pantallas.control.Coordinador;
 
 /**
@@ -97,26 +98,25 @@ public class validarRecetaDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarRecetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarRecetaActionPerformed
-//        ingresarReceta();
+        ingresarReceta();
     }//GEN-LAST:event_btnIngresarRecetaActionPerformed
 
-//    public void ingresarReceta(){
-//        String folio = txtFolio.getText().trim();
-//
-//        if (folio.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Por favor, ingrese un folio.");
-//            return;
-//        }
-//
-//        RecetaDTO recetaEncontrada = coordinador.buscarReceta(folio);
-//
-//        if (recetaEncontrada != null) {
-//            if (coordinador.validarReceta(recetaEncontrada)) {
-//                JOptionPane.showMessageDialog(this, "Receta validada correctamente.");
-//                this.dispose();
-//            }
-//        }
-//    }
+    public void ingresarReceta() {
+        String folio = txtFolio.getText().trim();
+
+        if (folio.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese un folio válido.");
+            return;
+        }
+
+        // Le enviamos el folio al coordinador para que lo guarde en la sesión
+        coordinador.setFolioRecetaActual(folio);
+
+        JOptionPane.showMessageDialog(this, "Folio vinculado correctamente.");
+
+        // Cerramos el diálogo para que el Coordinador siga con la ejecución
+        this.dispose();
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresarReceta;

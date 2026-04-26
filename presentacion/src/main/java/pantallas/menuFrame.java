@@ -1,6 +1,8 @@
 package pantallas;
 
+import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
+import com.mycompany.dto_negocios.CarritoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import pantallas.control.Coordinador;
 //import pantallas.control.Coordinador;
 
 /**
@@ -56,6 +59,7 @@ public class menuFrame extends JFrame {
 
         add(crearHeader(), BorderLayout.NORTH);
         add(crearContenido(), BorderLayout.CENTER);
+        
     }
 
     //Este es el header 
@@ -85,7 +89,7 @@ public class menuFrame extends JFrame {
         //agrego un color de background
         panel.setBackground(new Color(245, 245, 245));
         //agrego la barra buscadora 
-//        panel.add(crearBuscador(), BorderLayout.NORTH); coordinador
+        panel.add(crearBuscador(), BorderLayout.NORTH);
 
         JPanel panelCentro = new JPanel(new BorderLayout());
         panelCentro.setOpaque(false);
@@ -97,40 +101,40 @@ public class menuFrame extends JFrame {
         return panel;
     }
 
-//    private JPanel crearBuscador() {
-//        JPanel panel = new JPanel(new BorderLayout());
-//        panel.setBorder(new EmptyBorder(10, 0, 10, 0));
-//        panel.setOpaque(false);
-//
-//        txtBuscar = new JTextField("Buscar Producto...");
-//        txtBuscar.setPreferredSize(new Dimension(300, 40));
-//        txtBuscar.setBorder(new CompoundBorder(
-//                new LineBorder(Color.LIGHT_GRAY, 1, true),
-//                new EmptyBorder(5, 10, 5, 10)
-//        ));
-//
-//        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
-//            @Override
-//            public void insertUpdate(DocumentEvent e) {
-//                filtrar();
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent e) {
-//                filtrar();
-//            }
-//
-//            @Override
-//            public void changedUpdate(DocumentEvent e) {
-//                filtrar();
-//            }
-//
-//        });
-//
-//        panel.add(txtBuscar, BorderLayout.CENTER);
-//
-//        return panel;
-//    } coordinador
+    private JPanel crearBuscador() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        panel.setOpaque(false);
+
+        txtBuscar = new JTextField("Buscar Producto...");
+        txtBuscar.setPreferredSize(new Dimension(300, 40));
+        txtBuscar.setBorder(new CompoundBorder(
+                new LineBorder(Color.LIGHT_GRAY, 1, true),
+                new EmptyBorder(5, 10, 5, 10)
+        ));
+
+        txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filtrar();
+            }
+
+        });
+
+        panel.add(txtBuscar, BorderLayout.CENTER);
+
+        return panel;
+    }
 
     private JPanel crearProductos() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -148,11 +152,11 @@ public class menuFrame extends JFrame {
         grid = new JPanel(new GridLayout(0, 4, 15, 15));
         grid.setOpaque(false);
 
-////        List<ProductoDTO> lista = obtenerProductos();
-//
-//        for (ProductoDTO p : lista) {
-//            grid.add(crearCard(p));
-//        } coordinador
+        List<ProductoDTO> lista = obtenerProductos();
+
+        for (ProductoDTO p : lista) {
+            grid.add(crearCard(p));
+        }
 
         JPanel contenedor = new JPanel(new BorderLayout());
         contenedor.setOpaque(false);
@@ -193,9 +197,10 @@ public class menuFrame extends JFrame {
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnAgregar.addActionListener(e -> {
-            modeloCarrito.addElement(p.getNombre() + "- $" + p.getPrecio());
-            total += p.getPrecio();
-            lblTotal.setText("Total: $ " + String.format("%.2f", total));
+//            modeloCarrito.addElement(p.getNombre() + "- $" + p.getPrecio());
+//            total += p.getPrecio();
+//            lblTotal.setText("Total: $ " + String.format("%.2f", total));
+            Coordinador.getCoordinador().agregarProductoAlCarrito(p, 1);
         });
 
         card.add(lblImg);
@@ -248,22 +253,22 @@ public class menuFrame extends JFrame {
         return panel;
     }
 
-//    private List<ProductoDTO> obtenerProductos() {
-//        return Coordinador.getCoordinador().ObtenerProductos();
-//    }
-//
-//    private void filtrar() {
-//        String texto = txtBuscar.getText();
-//
-//        List<ProductoDTO> lista;
-//
-//        if (texto.isEmpty() || "Buscar Producto...".equals(texto)) {
-//            lista = Coordinador.getCoordinador().ObtenerProductos();
-//        } else {
-//            lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
-//        }
-//        actualizarProductos(lista);
-//    } Error de cordinador 
+    private List<ProductoDTO> obtenerProductos() {
+        return Coordinador.getCoordinador().ObtenerProductos();
+    }
+
+    private void filtrar() {
+        String texto = txtBuscar.getText();
+
+        List<ProductoDTO> lista;
+
+        if (texto.isEmpty() || "Buscar Producto...".equals(texto)) {
+            lista = Coordinador.getCoordinador().ObtenerProductos();
+        } else {
+            lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
+        }
+        actualizarProductos(lista);
+    }
 
     private void actualizarProductos(List<ProductoDTO> productos) {
         grid.removeAll();
@@ -278,4 +283,33 @@ public class menuFrame extends JFrame {
         grid.repaint();
     }
 
+    /**
+    * Este método lo llama el Coordinador después de validar la receta.
+    */
+   public void actualizarTablaCarrito(CarritoDTO carrito) {
+       modeloCarrito.clear(); // Limpiamos la JList visual
+       total = 0;
+
+       for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
+           // Creamos el texto para la lista: "Nombre xCantidad - $Subtotal"
+           String item = detalle.getProducto().getNombre() + " x" + detalle.getCantidad() + 
+                         " - $" + (detalle.getProducto().getPrecio() * detalle.getCantidad());
+
+           modeloCarrito.addElement(item);
+           total += (detalle.getProducto().getPrecio() * detalle.getCantidad());
+       }
+
+       // Actualizamos el label del total con formato de 2 decimales
+       lblTotal.setText("Total: $ " + String.format("%.2f", total));
+   }
+
+   /**
+    * Limpia la vista después de una venta exitosa.
+    */
+    public void limpiarVenta() {
+       modeloCarrito.clear();
+       total = 0;
+       lblTotal.setText("Total: $0.00");
+       txtBuscar.setText("Buscar Producto...");
+   }
 }

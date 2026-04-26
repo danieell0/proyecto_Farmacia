@@ -1,5 +1,7 @@
 package FCatalogo;
 
+import Control.ControlCariito;
+import DTO.DetalleVentaDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 import Enums.Medida;
@@ -14,6 +16,7 @@ import java.util.List;
 public class FCatalogo implements ICatalogo {
 
     private List<ProductoDTO> productos;
+    private ControlCariito carrito;
 
     public FCatalogo() {
         productos = new ArrayList();
@@ -43,6 +46,10 @@ public class FCatalogo implements ICatalogo {
     @Override
     public ProductoDTO obtenerProductoId(Long id) {
         return productos.stream().filter(p-> id!=null && p.getId()!=null&& p.getId()==id).findFirst().orElse(null);
+    }
+    
+    public void agregarCarrito(DetalleVentaDTO detalle){
+        this.carrito.agregarProductoAlCarrito(detalle);
     }
 
 }

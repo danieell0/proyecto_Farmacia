@@ -1,6 +1,7 @@
 package pantallas.control;
 
 import DTO.DetalleVentaDTO;
+import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 import DTO.RecetaDTO;
 import DTO.VentaDTO;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JOptionPane;
 import pantallas.VentaFrame;
+import pantallas.menuFrame;
 import pantallas.validarRecetaDlg;
 import subsistemaRecetas.IControlRecetas;
 
@@ -28,10 +30,11 @@ public class Coordinador {
     private IVenta fVentas; 
     private VentaFrame ventaFrame;
     private ICatalogo catalogo;
-
     private IControlRecetas recetaSub;
+    private String folioRecetaActual;
     private validarRecetaDlg recetaDlg;
-
+    private menuFrame menuJFrame; 
+    
     /**
      * Constructor del coordinador.
      * Inicializa el acceso al subsistema de ventas a través de la fachada.
@@ -48,6 +51,10 @@ public class Coordinador {
      */
     public void setVentaFrame(VentaFrame ventaFrame) {
         this.ventaFrame = ventaFrame;
+    }
+    
+    public void setMenuFrame(menuFrame menuJFrame) {
+        this.menuJFrame = menuJFrame;
     }
     
     public void setRecetaDlg(validarRecetaDlg recetaDlg) {
@@ -79,30 +86,57 @@ public class Coordinador {
      * @param cantidad Cantidad ingresada por el usuario.
      */
     public void agregarProductoAlCarrito(ProductoDTO producto, int cantidad) {
-        if (producto == null || cantidad <= 0) {
-            JOptionPane.showMessageDialog(ventaFrame, "Producto inválido o cantidad incorrecta.");
-            return;
+        if (producto == null || cantidad <= 0) return;
+
+        // 1. Verificamos si el producto es en realidad un Medicamento
+        if (producto instanceof MedicamentoDTO) {
+            // Convertimos la referencia de Producto a Medicamento para acceder a sus atributos únicos
+            MedicamentoDTO med = (MedicamentoDTO) producto;
+
+            // 2. Ahora sí podemos preguntar si es controlado
+            if (med.isEsControlado()) {
+
+                // Si no hay folio activo, lo pedimos
+                if (folioRecetaActual == null) {
+                    JOptionPane.showMessageDialog(ventaFrame, 
+                        "El medicamento '" + med.getNombre() + "' es controlado. Ingrese el folio.");
+
+                    validarRecetaDlg dlg = new validarRecetaDlg(ventaFrame, true, this);
+                    dlg.setVisible(true);
+
+                    // Si después del diálogo sigue sin haber folio, abortamos
+                    if (folioRecetaActual == null) return;
+                }
+
+                // 3. Validamos contra la receta
+                if (!validarProductoConReceta(med.getId(), cantidad)) {
+                    return; 
+                }
+            }
         }
-        
-        // 1. Armamos el DTO del renglón
+
+        // 4. Proceso normal de agregar al carrito de ventas
         DetalleVentaDTO detalle = new DetalleVentaDTO();
         detalle.setProducto(producto);
         detalle.setCantidad(cantidad);
-        
-        // 2. Lo mandamos al subsistema de ventas
+
         fVentas.agregarAlCarrito(detalle);
-        
-        // 3. Obtenemos el carrito actualizado y refrescamos la pantalla
-        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
-        ventaFrame.actualizarTablaCarrito(carritoActualizado); // Ocuparás crear este método en tu VentaFrame
+
+        // Actualizamos la vista
+        ventaFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
     }
+        
 
     /**
      * Manda la orden de borrar un producto del carrito y actualiza la pantalla.
      */
-    public void eliminarProductoDelCarrito(Long idProducto) {
+    public void eliminarProductoDelCarrito(Long idProducto, Integer cantidad) {
         // 1. Borramos lógicamente
         fVentas.eliminarDelCarrito(idProducto);
+        
+        if (folioRecetaActual != null) {
+            recetaSub.cancelarReserva(folioRecetaActual, idProducto, cantidad);
+        }
         
         // 2. Refrescamos visualmente
         CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
@@ -135,9 +169,14 @@ public class Coordinador {
         
         // 4. Comprobamos el resultado
         if (ventaRegistrada != null) {
+            if (folioRecetaActual != null) {
+                recetaSub.confirmarDescuentoReceta();
+                folioRecetaActual = null; // Limpiamos para la siguiente venta
+            }
             JOptionPane.showMessageDialog(ventaFrame, 
                 "¡Venta #" + ventaRegistrada.getIdVenta() + " registrada con éxito!\nTotal cobrado: $" + ventaRegistrada.getTotal(), 
                 "Venta Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
                 
             // Limpiamos la pantalla porque ya se cobró
             ventaFrame.limpiarVenta(); 
@@ -155,5 +194,50 @@ public class Coordinador {
             return -1;
         }
         return pago - total; 
+    }
+    
+    /**
+     * Establece el folio de la receta que se usará para la venta actual.
+     * Se llama desde el cuadro de diálogo de recetas o desde la pantalla principal.
+     */
+    public void setFolioRecetaActual(String folio) {
+        this.folioRecetaActual = folio;
+    }
+
+    /**
+     * Limpia el folio actual (por ejemplo, si se cancela el uso de receta).
+     */
+    public void limpiarFolioReceta() {
+        this.folioRecetaActual = null;
+        recetaSub.limpiarRecetasGuardadas();
+    }
+
+    /**
+     * Método para obtener el folio que se está trabajando.
+     */
+    public String getFolioRecetaActual() {
+        return folioRecetaActual;
+    }
+
+    /**
+     * Valida si un producto requiere receta y si hay disponibilidad en la misma.
+     */
+    public boolean validarProductoConReceta(Long idProducto, Integer cantidad) {
+        // Si no hay folio capturado, asumimos que es venta libre 
+        // (A menos que tu lógica obligue a tener folio para ciertos productos)
+        if (folioRecetaActual == null || folioRecetaActual.isEmpty()) {
+            return true; 
+        }
+
+        // Llamamos a la fachada del subsistema de recetas
+        boolean esValido = recetaSub.validarYReservar(folioRecetaActual, idProducto, cantidad);
+        
+        if (!esValido) {
+            JOptionPane.showMessageDialog(ventaFrame, 
+                "El producto no está en la receta o la cantidad excede lo recetado.", 
+                "Validación de Receta", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        return esValido;
     }
 }
