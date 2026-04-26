@@ -1,6 +1,6 @@
 package Catalogo;
 
-import Control.ControlCariito;
+import fachada.ControlCariito;
 import DTO.DetalleVentaDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;

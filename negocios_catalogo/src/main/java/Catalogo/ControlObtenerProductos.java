@@ -4,7 +4,7 @@
  */
 package Catalogo;
 
-import Control.ControlCariito;
+import fachada.ControlCariito;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import com.mycompany.objetos_negocio.ProductoBO;
