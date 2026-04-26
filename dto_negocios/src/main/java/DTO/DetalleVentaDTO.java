@@ -4,43 +4,45 @@
  */
 package DTO;
 
+import DTO.ProductoDTO;
+
 /**
  *
  * @author munos
  */
 public class DetalleVentaDTO {
-    private long idDetalle;
-    private long idVenta;
-    private long idProducto;
+    private Long idDetalle;
+    private Long idVenta; 
+    private ProductoDTO producto; 
     private Integer cantidad;
-    private double precioUnitario;
-    private double subtotal;
+    private Double precioUnitario;
+    private Double subtotal;
 
     public DetalleVentaDTO() {
     }
 
-    public long getIdDetalle() {
+    public Long getIdDetalle() {
         return idDetalle;
     }
 
-    public void setIdDetalle(long idDetalle) {
+    public void setIdDetalle(Long idDetalle) {
         this.idDetalle = idDetalle;
     }
 
-    public long getIdVenta() {
+    public Long getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(long idVenta) {
+    public void setIdVenta(Long idVenta) {
         this.idVenta = idVenta;
     }
 
-    public long getIdProducto() {
-        return idProducto;
+    public ProductoDTO getProducto() {
+        return producto;
     }
 
-    public void setIdProducto(long idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(ProductoDTO producto) {
+        this.producto = producto;
     }
 
     public Integer getCantidad() {
@@ -51,19 +53,20 @@ public class DetalleVentaDTO {
         this.cantidad = cantidad;
     }
 
-    public double getPrecioUnitario() {
+    public Double getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(Double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public double getSubtotal() {
+    public Double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(double subtotal) {
+    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
+
 }

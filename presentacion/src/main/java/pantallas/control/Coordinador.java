@@ -1,14 +1,16 @@
 package pantallas.control;
 
+import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import DTO.RecetaDTO;
+import DTO.VentaDTO;
 import FCatalogo.FCatalogo;
 import ICatalogo.ICatalogo;
+import com.mycompany.dto_negocios.CarritoDTO;
 import com.mycompany.objetos_negocio.VentaBO;
 import subsistemaRecetas.FachadaSubsistemaReceta;
-import com.mycompany.negocios_ventas.FVentas;
-import com.mycompany.negocios_ventas.IVenta;
-import com.mycompany.negocios_ventas.VentaException;
+import fachada.FVentas;
+import fachada.IVenta;
 import java.util.List; 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -59,54 +61,6 @@ public class Coordinador {
         return cordinador;
     }
     
-    /**
-     * Busca un producto por nombre y solicita a la vista agregarlo a la tabla.
-     * @param nombreProducto Nombre ingresado por el usuario.
-     * @param cantidad Cantidad de unidades deseadas.
-     */
-//    public void agregarProductoAVenta(String nombreProducto, int cantidad) {
-//        ProductoDTO producto = fVentas.buscarProducto(nombreProducto);
-//
-//        if (producto != null) {
-//            double precio = producto.getPrecio();
-//            fVentas.calcularSubtotal(precio, cantidad);
-//            
-//            ventaFrame.agregarProducto(producto.getNombre(), cantidad, precio);
-//        } else {
-//            JOptionPane.showMessageDialog(ventaFrame, "El producto '" + nombreProducto + "' no existe.");
-//        }
-//    }
-
-//    /**
-//     * Procesa el cálculo del cambio a través de la fachada.
-//     * @param total Monto total de la venta.
-//     * @param pago Monto entregado por el cliente.
-//     * @return El cambio calculado o -1 si hubo un error (pago insuficiente).
-//     */
-//    public double procesarCalculoCambio(double total, double pago) {
-//        try {
-//            return fVentas.calcularCambio(total, pago);
-//        } catch (VentaException e) {
-//            JOptionPane.showMessageDialog(ventaFrame, e.getMessage());
-//            return -1;
-//        }
-//    }
-//
-//    /**
-//     * Envía la lista de productos comprados para procesar el cierre de la venta.
-//     * @param listaProductos Productos que están actualmente en la tabla.
-//     */
-//    public void ejecutarFinalizarVenta(List<ProductoDTO> listaProductos) {
-//        if (fVentas.finalizarVenta(listaProductos)) {
-//            JOptionPane.showMessageDialog(ventaFrame, "Venta registrada con éxito.");
-//            ventaFrame.limpiarVenta();
-//        } else {
-//            JOptionPane.showMessageDialog(ventaFrame, "Error: No se pudo procesar la venta. Verifique la lista.");
-//        }
-//    }
-    
-    
-    
     public List<ProductoDTO> ObtenerProductos() {
         return catalogo.obtenerProductos();
     }
@@ -118,5 +72,88 @@ public class Coordinador {
     public ProductoDTO ObtenerProductoConId(Long id){
         return catalogo.obtenerProductoId(id);
     }
+    /**
+     * Toma el producto seleccionado en la pantalla, arma el renglón (Detalle) 
+     * y lo manda a la fachada para agregarlo al carrito.
+     * * @param producto El producto seleccionado de la tabla catálogo.
+     * @param cantidad Cantidad ingresada por el usuario.
+     */
+    public void agregarProductoAlCarrito(ProductoDTO producto, int cantidad) {
+        if (producto == null || cantidad <= 0) {
+            JOptionPane.showMessageDialog(ventaFrame, "Producto inválido o cantidad incorrecta.");
+            return;
+        }
+        
+        // 1. Armamos el DTO del renglón
+        DetalleVentaDTO detalle = new DetalleVentaDTO();
+        detalle.setProducto(producto);
+        detalle.setCantidad(cantidad);
+        
+        // 2. Lo mandamos al subsistema de ventas
+        fVentas.agregarAlCarrito(detalle);
+        
+        // 3. Obtenemos el carrito actualizado y refrescamos la pantalla
+        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
+        ventaFrame.actualizarTablaCarrito(carritoActualizado); // Ocuparás crear este método en tu VentaFrame
+    }
 
+    /**
+     * Manda la orden de borrar un producto del carrito y actualiza la pantalla.
+     */
+    public void eliminarProductoDelCarrito(Long idProducto) {
+        // 1. Borramos lógicamente
+        fVentas.eliminarDelCarrito(idProducto);
+        
+        // 2. Refrescamos visualmente
+        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
+        ventaFrame.actualizarTablaCarrito(carritoActualizado);
+    }
+
+    /**
+     * Pide el carrito actual a la fachada para mostrarlo (útil al abrir la pantalla).
+     */
+    public CarritoDTO obtenerCarritoActual() {
+        return fVentas.obtenerCarritoActual();
+    }
+
+    /**
+     * Ejecuta el proceso de cobrar. Toma el carrito temporal y manda la orden de convertirlo en Venta.
+     */
+    public void ejecutarFinalizarVenta(Long idEmpleado, Long idCliente) {
+        
+        // 1. Obtenemos el carrito que está guardado en memoria
+        CarritoDTO carrito = fVentas.obtenerCarritoActual();
+        
+        // 2. Validamos que no esté vacío antes de molestar al backend
+        if (carrito == null || carrito.getListaProductos().isEmpty()) {
+            JOptionPane.showMessageDialog(ventaFrame, "El carrito está vacío. Agregue productos para vender.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 3. Mandamos el carrito entero a la fachada para que registre la venta
+        VentaDTO ventaRegistrada = fVentas.registrarVenta(carrito);
+        
+        // 4. Comprobamos el resultado
+        if (ventaRegistrada != null) {
+            JOptionPane.showMessageDialog(ventaFrame, 
+                "¡Venta #" + ventaRegistrada.getIdVenta() + " registrada con éxito!\nTotal cobrado: $" + ventaRegistrada.getTotal(), 
+                "Venta Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                
+            // Limpiamos la pantalla porque ya se cobró
+            ventaFrame.limpiarVenta(); 
+        } else {
+            JOptionPane.showMessageDialog(ventaFrame, "Error: No se pudo procesar la venta en la Base de Datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Procesa el cálculo del cambio (Si tu IControlVentas/FVentas aún tiene este método).
+     */
+    public double procesarCalculoCambio(double total, double pago) {
+        if (pago < total) {
+            JOptionPane.showMessageDialog(ventaFrame, "El pago es insuficiente. Faltan $" + (total - pago), "Aviso", JOptionPane.WARNING_MESSAGE);
+            return -1;
+        }
+        return pago - total; 
+    }
 }

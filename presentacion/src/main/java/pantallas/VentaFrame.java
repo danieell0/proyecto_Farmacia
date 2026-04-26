@@ -1,6 +1,11 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package pantallas;
 
-import DTO.ProductoDTO;
+import DTO.DetalleVentaDTO;
+import com.mycompany.dto_negocios.CarritoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -8,8 +13,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,7 +38,8 @@ public class VentaFrame extends JFrame {
     private JLabel lblTotal;
     private JTextField txtPago;
     private JLabel lblCambio;
-    private double total = 0;
+    
+    // ELIMINAMOS la variable local 'total' porque ahora el carritoDTO maneja eso.
     private Coordinador coordinador;
 
     private final Color colorFondo = new Color(245, 245, 245);
@@ -93,7 +97,7 @@ public class VentaFrame extends JFrame {
         txtPago.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyReleased(java.awt.event.KeyEvent evt) {
-//                calcularCambio();
+                calcularCambio();
             }
         });
 
@@ -115,6 +119,7 @@ public class VentaFrame extends JFrame {
         JButton btnCancelar = crearBotonEstilizado("CANCELAR VENTA", new Color(231, 76, 60));
         JButton btnFinalizar = crearBotonEstilizado("FINALIZAR COMPRA", colorAzul);
 
+        // BOTONES CONECTADOS
         btnCancelar.addActionListener(e -> limpiarVenta());
         btnFinalizar.addActionListener(e -> finalizarCompra());
 
@@ -125,7 +130,6 @@ public class VentaFrame extends JFrame {
         panelContenedorInferior.add(panelBotones, BorderLayout.SOUTH);
 
         add(panelContenedorInferior, BorderLayout.SOUTH);
-
     }
 
     public void setCoordinador(Coordinador coordinador) {
@@ -156,46 +160,69 @@ public class VentaFrame extends JFrame {
         return btn;
     }
 
-    public void agregarProducto(String nombre, int cantidad, double precio) {
-        double subtotal = cantidad * precio;
-        total += subtotal;
-        modelo.addRow(new Object[]{nombre, cantidad, precio, subtotal});
-        lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", total));
+    /**
+     * MÉTODO NUEVO: Toma el carrito actualizado desde el coordinador y repinta la tabla.
+     */
+    public void actualizarTablaCarrito(CarritoDTO carrito) {
+        // 1. Limpiamos las filas actuales visualmente
+        modelo.setRowCount(0);
+
+        if (carrito != null && carrito.getListaProductos() != null) {
+            // 2. Volvemos a llenar la tabla con la lista real que nos mandó la fachada
+            for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
+                modelo.addRow(new Object[]{
+                    detalle.getProducto().getNombre(),
+                    detalle.getCantidad(),
+                    detalle.getProducto().getPrecio(),
+                    detalle.getSubtotal()
+                });
+            }
+            
+            // 3. Actualizamos la etiqueta del total a pagar leyendo del CarritoDTO
+            lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", carrito.getTotalAPagar()));
+            
+            // Recalculamos el cambio por si el cliente ya había escrito un billete en la caja de texto
+            calcularCambio();
+        }
     }
 
-//    private void calcularCambio() {
-//        if (coordinador == null) return;    
-//
-//        try {
-//            String texto = txtPago.getText().trim();
-//            if (texto.isEmpty()) {
-//                lblCambio.setText("CAMBIO: $0.00");
-//                lblCambio.setForeground(colorVerde);
-//                return;
-//            }
-//            double pago = Double.parseDouble(texto);
-//            
-//////            double cambio = coordinador.procesarCalculoCambio(total, pago);
-//            
-//            if (cambio == -1) { 
-//                lblCambio.setText("CAMBIO: $0.00 (Falta dinero)");
-//                lblCambio.setForeground(Color.RED);
-//            } else {
-//                lblCambio.setText("CAMBIO: $" + String.format("%.2f", cambio));
-//                lblCambio.setForeground(colorVerde);
-//            }
-//        } catch (NumberFormatException e) {
-//            lblCambio.setText("CAMBIO: Error");
-//        }
-//    } muevele a tu mamada
+    private void calcularCambio() {
+        if (coordinador == null || coordinador.obtenerCarritoActual() == null) return;    
+
+        try {
+            String texto = txtPago.getText().trim();
+            if (texto.isEmpty()) {
+                lblCambio.setText("CAMBIO: $0.00");
+                lblCambio.setForeground(colorVerde);
+                return;
+            }
+            double pago = Double.parseDouble(texto);
+            
+            // Ahora sacamos el total real preguntándole al coordinador por el carrito
+            double totalReal = coordinador.obtenerCarritoActual().getTotalAPagar();
+            
+            double cambio = coordinador.procesarCalculoCambio(totalReal, pago);
+            
+            if (cambio == -1) { 
+                lblCambio.setText("CAMBIO: $0.00 (Falta dinero)");
+                lblCambio.setForeground(Color.RED);
+            } else {
+                lblCambio.setText("CAMBIO: $" + String.format("%.2f", cambio));
+                lblCambio.setForeground(colorVerde);
+            }
+        } catch (NumberFormatException e) {
+            lblCambio.setText("CAMBIO: Error");
+        }
+    }
 
     public void limpiarVenta() {
         modelo.setRowCount(0);
-        total = 0;
         lblTotal.setText("TOTAL A PAGAR: $0.00");
         lblCambio.setText("CAMBIO: $0.00");
         lblCambio.setForeground(colorVerde);
         txtPago.setText("");
+        // Nota: Si implementas limpiarCarrito en tu Fachada, también puedes llamarlo aquí:
+        // coordinador.limpiarCarrito();
     }
 
     private void finalizarCompra() {
@@ -204,17 +231,10 @@ public class VentaFrame extends JFrame {
             return;
         }
 
-        List<ProductoDTO> productosParaVenta = new ArrayList<>();
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            ProductoDTO p = new ProductoDTO();
-            p.setNombre(modelo.getValueAt(i, 0).toString());
-            p.setStock((Integer)modelo.getValueAt(i, 1)); // Enviamos la cantidad vendida como stock
-            p.setPrecio((Double)modelo.getValueAt(i, 2));
-            productosParaVenta.add(p);
+        if (coordinador != null) {
+            // Ya no construimos los DTOs aquí, solo damos la orden de cobrar.
+            // Mandamos 1L y 1L asumiendo el ID del empleado y del cliente por defecto.
+            coordinador.ejecutarFinalizarVenta(1L, 1L);
         }
-
-//        if (coordinador != null) {
-//            coordinador.ejecutarFinalizarVenta(productosParaVenta);
-//        } Error de cordinador checalo
     }
 }
