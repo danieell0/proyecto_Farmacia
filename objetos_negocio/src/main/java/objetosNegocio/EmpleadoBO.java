@@ -4,7 +4,14 @@
  */
 package objetosNegocio;
 
+import com.mycompany.dto_negocios.enums.EstatusEmpleado;
+import com.mycompany.dto_negocios.enums.RolPuesto;
+import dtos.CuentaAccesoDTO;
+import dtos.EmpleadoDTO;
 import excepciones.NegocioExcepcion;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Clase de business object que hace las reglas de negocio relacionada a un empleado
@@ -12,40 +19,76 @@ import excepciones.NegocioExcepcion;
  */
 public class EmpleadoBO {
     
-    //donde se instanciaria la clase de acceso a la base de datos 
+    // Simulación de nuestras tablas en la base de datos
+    private List<EmpleadoDTO> tablaEmpleados;
+    private List<CuentaAccesoDTO> tablaCuentas;
     
-    public EmpleadoBO(){
-        //se inicializaria aqui la DAO 
+    public EmpleadoBO() {
+        tablaEmpleados = new ArrayList<>();
+        tablaCuentas = new ArrayList<>();
+        
+        // --- 1. Llenamos la tabla de Empleados ---
+        // Asumo que tus enums se llaman algo así como RolPuesto.LIDER y EstatusEmpleado.ACTIVO
+        EmpleadoDTO emp1 = new EmpleadoDTO(123L, "Juan", "Perez", "Gomez", "555-0001", 
+                                           RolPuesto.LIDER, LocalDateTime.of(1990, 5, 20, 0, 0), EstatusEmpleado.ACTIVO);
+                                           
+        EmpleadoDTO emp2 = new EmpleadoDTO(456L, "Maria", "Lopez", "Diaz", "555-0002", 
+                                           RolPuesto.CAJERO, LocalDateTime.of(1995, 8, 15, 0, 0), EstatusEmpleado.ACTIVO);
+                                           
+        EmpleadoDTO emp3 = new EmpleadoDTO(789L, "Carlos", "Ruiz", "Soto", "555-0003", 
+                                           RolPuesto.CAJERO, LocalDateTime.of(1998, 2, 10, 0, 0), EstatusEmpleado.DESACTIVO);
+        
+        tablaEmpleados.add(emp1);
+        tablaEmpleados.add(emp2);
+        tablaEmpleados.add(emp3);
+
+        // --- 2. Llenamos la tabla de Cuentas de Acceso ---
+        // Parámetros: (IDEmpleado, IDReporte, contraseña)
+        tablaCuentas.add(new CuentaAccesoDTO(123L, 1L, "admin"));
+        tablaCuentas.add(new CuentaAccesoDTO(456L, 2L, "caja"));
+        tablaCuentas.add(new CuentaAccesoDTO(789L, 3L, "caja2"));
     }
     
-    public String validarLogin(Long idEmpleado, String contraseña) throws NegocioExcepcion{
+    public EmpleadoDTO validarLogin(Long idEmpleado, String contrasena) throws NegocioExcepcion {
         
-        //validaciones 
-        if (idEmpleado == null){ 
-            throw new NegocioExcepcion("El campo de ID no puede estar vacio");
+        // Validaciones iniciales
+        if (idEmpleado == null || idEmpleado <= 0) { 
+            throw new NegocioExcepcion("El ID ingresado no es válido.");
         }
-        if (idEmpleado <= 0){
-            throw new NegocioExcepcion("El campo de contraseña no puede estar vacio");
-        }
-        if (contraseña == null || contraseña.trim().isEmpty()){
-            throw new NegocioExcepcion("El campo de contraseña no puede estar vacio");
+        if (contrasena == null || contrasena.trim().isEmpty()) {
+            throw new NegocioExcepcion("El campo de contraseña no puede estar vacío.");
         }
         
-        //caso ficticio para mockear
-        String rol = null;
-        
-        if (idEmpleado.equals(123L) && contraseña.equals("admin")){
-            rol = "Lider";
-        } else if (idEmpleado.equals(456L) && contraseña.equals("caja")){
-            rol = "Cajero";
+        // Paso 1: Verificar en la tabla de cuentas si las credenciales coinciden
+        boolean credencialesCorrectas = false;
+        for (CuentaAccesoDTO cuenta : tablaCuentas) {
+            // Usamos tus getters exactos: getIDEmpleado() y getContraseña()
+            if (cuenta.getIDEmpleado().equals(idEmpleado) && cuenta.getContraseña().equals(contrasena)) {
+                credencialesCorrectas = true;
+                break;
+            }
         }
         
-        //validacion del resultado
-        if (rol == null){
-            throw new NegocioExcepcion("Credenciales incorrectas o el empleado");
+        if (!credencialesCorrectas) {
+            throw new NegocioExcepcion("Credenciales incorrectas.");
         }
         
-        return rol;
+        // Paso 2: Si la contraseña es correcta, buscamos al empleado para ver su estatus y rol
+        for (EmpleadoDTO empleado : tablaEmpleados) {
+            if (empleado.getID().equals(idEmpleado)) {
+                
+                // Aprovechamos tu DTO para validar si el empleado sigue trabajando en la farmacia
+                if (empleado.getEstatus() != EstatusEmpleado.ACTIVO) {
+                    throw new NegocioExcepcion("Acceso denegado: El empleado está inactivo en el sistema.");
+                }
+                
+                // Retornamos el rol (convertimos el Enum a String)
+                return empleado;
+            }
+        }
+        
+        // Por si existe la cuenta pero por algún error de base de datos se borró al empleado
+        throw new NegocioExcepcion("Error de integridad");
     }
      
 }

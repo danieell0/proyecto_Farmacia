@@ -24,4 +24,5 @@
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.negocios_ventas.Negocios_ventas</exec.mainClass>
     </properties>
+    <name>SubsistemaVentas</name>
 </project>

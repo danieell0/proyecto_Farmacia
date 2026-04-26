@@ -23,7 +23,7 @@ public class pruebillas {
                 controlNavegacion navegador = new controlNavegacion();
                 
                 // Usamos tu método para abrir el frame principal (menuFrame)
-                navegador.abrirFrame(); 
+                //navegador.abrirFrame(); 
             }
         });
     }

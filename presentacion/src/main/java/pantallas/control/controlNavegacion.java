@@ -1,58 +1,89 @@
 package pantallas.control;
 
-import componentes.LoginDialog;
+import javax.swing.JDialog;
+
 import javax.swing.JFrame;
+import pantallas.VentaFrame;
 import pantallas.menuFrame;
+import pantallas.validarRecetaDlg;
+import presentacion.InicioSesionFrm;
 
 /**
  * Clase que se encarga de la nevagacion entre pantallas.
  * @author Dario
  */
 public class controlNavegacion {
-    private JFrame frameActual;
     
-    /**
-     * Cierra la pantalla actual y abre menuFrame.
-     */
-    public void abrirClientesForm(){
-        cambiarPantalla(new menuFrame());
+    
+    
+    private static controlNavegacion ControlNavegacion;
+    private JFrame frameActual;
+    private Coordinador coordinador;
+    
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
     }
     
     /**
      * Cierra la pantalla actual y abre no se como le pongas a la pantalla.
      */
-    public void abrirFrame(){
+    public void abrirMenuFrame(){
         cambiarPantalla(new menuFrame());
     }
     
-    /**
-     * Realiza el cambio de pantallas, cierra el frame actual y centra el nuevo.
-     * @param nuevo El nuevo JFrame a mostrar.
-     */
-    public void cambiarPantalla(JFrame nuevo){
+    public void abrirVentaFrame(){
+        VentaFrame nuevaVenta = new VentaFrame();
+        // le pone el coordinador
+        nuevaVenta.setCoordinador(Coordinador.getCoordinador());
+        
+        // le dice al coordinador que esta es su nueva pantalla de ventas activa
+        Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
+        
+        //se obtiene el carrito que se llena en el menu y se le pide a la nueva ventana que dibuje la tabla con esos datos
+        com.mycompany.dto_negocios.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
+        if (carritoGuardado != null) {
+            nuevaVenta.actualizarTablaCarrito(carritoGuardado);
+        }
+        
+        // cambio de pantalla visual
+        cambiarPantalla(nuevaVenta);
+    }
+    
+    public void abrirRecetaDialog(){
+        validarRecetaDlg dlg = new validarRecetaDlg(frameActual, true, coordinador);
+        abrirDialog(dlg);
+    }
+    
+    public static controlNavegacion getcontrolNavegacion() {
+        if (ControlNavegacion == null) {
+            ControlNavegacion = new controlNavegacion();
+        }
+        return ControlNavegacion;
+    }
+    
+    public void cambiarPantalla(JFrame nuevoFrame) {
         if (frameActual != null) {
             frameActual.dispose();
         }
-        this.frameActual = nuevo;
-        this.frameActual.setVisible(true);
-        this.frameActual.setLocationRelativeTo(null);
+
+        frameActual = nuevoFrame;
+
+        nuevoFrame.setVisible(true);
+        nuevoFrame.setLocationRelativeTo(null);
+    }
+    
+    public void abrirDialog(JDialog nuevoDialog){
+        nuevoDialog.setVisible(true);
     }
     
     /**
-     * Abre el pop-up modal de inicio de sesión.
-     * @param framePadre El JFrame desde donde se está llamando al login (usualmente 'this' o el frameActual).
+     * Crea e instancia el diálogo de inicio de sesión de forma modal.
      */
-    public void solicitarLogin(JFrame framePadre){
-        // 1. Instanciamos el diálogo pasándole la ventana padre
-        LoginDialog popUpLogin = new LoginDialog(framePadre);
-        
-        // 2. Lo hacemos visible. 
-        // IMPORTANTE: Como LoginDialog es modal, la ejecución del código 
-        // se pausará en esta línea hasta que el usuario cierre el pop-up.
-        popUpLogin.setVisible(true);
-        
-        // 3. (Opcional) Aquí el código continuará una vez que el diálogo se cierre.
-        // Si tienes una lógica post-login (como actualizar el nombre del usuario en el frame actual),
-        // podrías llamarla aquí.
+    public void abrirLogin() {
+        // Pasamos del frame actual para que el modal se bloquee correctamente osea se complete el jdialog de iniciar sesion 
+        // y se posicione al centro de la ventana que el usuario tiene abierta.
+        InicioSesionFrm loginDlg = new InicioSesionFrm(frameActual, pantallas.control.Coordinador.getCoordinador());
+        abrirDialog(loginDlg);
     }
+    
 }
