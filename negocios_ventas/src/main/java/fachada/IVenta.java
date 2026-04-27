@@ -19,7 +19,6 @@ public interface IVenta {
      public void eliminarDelCarrito(Long idProducto);
     
      public void agregarAlCarrito(DetalleVentaDTO detalle);
-
     
      public CarritoDTO obtenerCarritoActual();
 

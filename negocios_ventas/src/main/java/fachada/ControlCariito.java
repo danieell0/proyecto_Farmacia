@@ -4,7 +4,6 @@
  */
 package fachada;
 
-import fachada.ControlCalculos;
 import DTO.DetalleVentaDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
 import java.time.LocalDate;
@@ -16,17 +15,15 @@ import java.time.LocalDate;
 public class ControlCariito {
 
     protected CarritoDTO carritoActual;
-    protected ControlCalculos controlCalculos;
 
     protected ControlCariito() {
-        this.controlCalculos = new ControlCalculos();
         this.carritoActual = new CarritoDTO();
         this.carritoActual.setFecha(LocalDate.now());
     }
 
     public void agregarProductoAlCarrito(DetalleVentaDTO nuevoDetalle) {
 
-        Double subtotal = controlCalculos.calcularSubtotal(
+        Double subtotal = this.calcularSubtotal(
                 nuevoDetalle.getProducto().getPrecio(),
                 nuevoDetalle.getCantidad()
         );
@@ -34,7 +31,7 @@ public class ControlCariito {
 
         this.carritoActual.getListaProductos().add(nuevoDetalle);
 
-        controlCalculos.actualizarTotalesCarrito(this.carritoActual);
+        this.actualizarTotalesCarrito(this.carritoActual);
     }
 
     protected void eliminarProductoDelCarrito(Long idProductoAEliminar) {
@@ -42,7 +39,8 @@ public class ControlCariito {
         this.carritoActual.getListaProductos().removeIf(
                 detalle -> detalle.getProducto().getId().equals(idProductoAEliminar)
         );
-        controlCalculos.actualizarTotalesCarrito(this.carritoActual);
+        
+        this.actualizarTotalesCarrito(this.carritoActual);
     }
 
     protected CarritoDTO obtenerCarrito() {
@@ -52,5 +50,21 @@ public class ControlCariito {
     protected void limpiarCarrito() {
         this.carritoActual = new CarritoDTO();
         this.carritoActual.setFecha(LocalDate.now());
+    }
+    
+    protected Double calcularSubtotal(Double precioUnitario, Integer cantidad) {
+        if (precioUnitario == null || cantidad == null) return 0.0;
+        return precioUnitario * cantidad;
+    }
+    
+    protected void actualizarTotalesCarrito(CarritoDTO carrito) {
+        Double totalPagar = 0.0;
+        Integer totalArticulos = 0;
+        for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
+            totalPagar += detalle.getSubtotal();
+            totalArticulos += detalle.getCantidad();
+        }
+        carrito.setTotalAPagar(totalPagar);
+        carrito.setTotalArticulos(totalArticulos);
     }
 }

@@ -18,15 +18,11 @@ import java.util.List;
 public class FVentas implements IVenta {
 
     private ControlCariito controlCarrito;
-    private ControlCalculos controlCalculos;
     private ControlFinalizarVenta controlFinalizar;
-    private ControlRegisitrarVenta controlRegistrar;
 
     public FVentas() {
         this.controlCarrito = new ControlCariito();
-        this.controlCalculos = new ControlCalculos();
         this.controlFinalizar = new ControlFinalizarVenta();
-        this.controlRegistrar = new ControlRegisitrarVenta();
     }
     
     @Override
@@ -46,14 +42,14 @@ public class FVentas implements IVenta {
 
     @Override
     public void calcularTotal(CarritoDTO carrito) {
-        this.controlCalculos.actualizarTotalesCarrito(carrito);
+        this.controlCarrito.actualizarTotalesCarrito(carrito);
     }
 
     @Override
     public VentaDTO registrarVenta(CarritoDTO carrito) {
         try {
             VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, 1L, 1L);
-            boolean exito = this.controlRegistrar.registrarVenta(ventaEmpacada);
+            boolean exito = this.controlFinalizar.registrarVenta(ventaEmpacada);
             if (exito) {
                 this.controlCarrito.limpiarCarrito();
                 return ventaEmpacada;
