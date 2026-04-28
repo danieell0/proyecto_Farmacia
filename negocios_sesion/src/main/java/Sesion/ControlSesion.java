@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controlador;
+package Sesion;
 
 
 import dtos.EmpleadoDTO;
@@ -18,14 +18,14 @@ import objetosNegocio.EmpleadoBO;
 public class ControlSesion {
     
     private static final Logger LOGGER = Logger.getLogger(ControlSesion.class.getName());
-    private EmpleadoBO empleadoBO;
+    protected EmpleadoBO empleadoBO;
     
-    public ControlSesion() {
+    protected ControlSesion() {
         // instancia el objeto de negocio que tiene el mock del dao
         this.empleadoBO = new EmpleadoBO();
     }
     
-    public EmpleadoDTO validarLogin(LoginDTO credenciales) {
+    protected EmpleadoDTO validarLogin(LoginDTO credenciales) {
         
         // Validación de seguridad por si el DTO llega vacío
         if (credenciales == null || credenciales.getIdUsuarioTexto() == null) {
