@@ -16,7 +16,6 @@ public class NewMain {
      */
     public static void main(String[] args) {
 
-        //se supone que es buena practica el hilo ese?
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 

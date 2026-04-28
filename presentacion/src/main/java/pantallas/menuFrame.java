@@ -4,6 +4,8 @@ import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
 import dtos.EmpleadoDTO;
+import interfaces.IControlNevagacion;
+import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,6 +51,17 @@ public class menuFrame extends JFrame {
     private JTextField txtBuscar;
     private JPanel grid;
 
+    private ICoordinador coordinador;
+    private IControlNevagacion navegacion;
+
+    public void setCoordinador(ICoordinador coordinador) {
+        this.coordinador = coordinador;
+    }
+
+    public void setNavegacion() {
+        this.navegacion = navegacion;
+    }
+
     public menuFrame() {
         //agregamos un titulo
         setTitle("Farmacia");
@@ -60,16 +73,16 @@ public class menuFrame extends JFrame {
         setLayout(new BorderLayout());
         //le ponemos al frame un color
         getContentPane().setBackground(new Color(245, 245, 245));
-        
+
         Coordinador.getCoordinador().setMenuFrame(this);
 
         pantallas.control.Coordinador.getCoordinador().setMenuFrame(this);
-        
+
         add(crearHeader(), BorderLayout.NORTH);
         add(crearContenido(), BorderLayout.CENTER);
-        
+
     }
-    
+
     private JPanel crearHeader() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(180, 210, 210));
@@ -78,7 +91,7 @@ public class menuFrame extends JFrame {
         // 1. Obtenemos al usuario activo desde tu Coordinador
         // (Asegúrate de importar DTO.EmpleadoDTO en esta clase)
         EmpleadoDTO usuarioActivo = pantallas.control.Coordinador.getCoordinador().getEmpleadoLogueado();
-        
+
         String saludo = "Punto de Venta Farmacia";
         if (usuarioActivo != null) {
             saludo = "Atendiendo: " + usuarioActivo.getNombre() + " (" + usuarioActivo.getRolPuesto() + ")";
@@ -92,20 +105,20 @@ public class menuFrame extends JFrame {
         btnCerrarSesion.setFocusPainted(false);
         btnCerrarSesion.setBackground(new Color(220, 80, 80)); // Un tono rojizo
         btnCerrarSesion.setForeground(Color.WHITE);
-        
+
         btnCerrarSesion.addActionListener(e -> {
             // Confirmación opcional
-            int respuesta = JOptionPane.showConfirmDialog(this, 
-                "¿Estás seguro de que deseas cerrar sesión?", 
-                "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
-                
+            int respuesta = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro de que deseas cerrar sesión?",
+                    "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
+
             if (respuesta == JOptionPane.YES_OPTION) {
                 // Limpiamos el usuario del coordinador llamando al método que hicimos
                 pantallas.control.Coordinador.getCoordinador().cerrarSesion();
-                
+
                 // Cerramos este menú
-                this.dispose(); 
-                
+                this.dispose();
+
                 // Opcional: Volvemos a levantar "El Muro" para el siguiente empleado
                 pantallas.control.controlNavegacion.getcontrolNavegacion().abrirLogin();
                 if (pantallas.control.Coordinador.getCoordinador().getEmpleadoLogueado() == null) {
@@ -237,13 +250,13 @@ public class menuFrame extends JFrame {
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnAgregar.addActionListener(e -> {
-            String input = JOptionPane.showInputDialog(this, "¿Cuantas unidades de " + p.getNombre() + 
-                    " deseas agregar?", "Ingresar Cantidad",JOptionPane.QUESTION_MESSAGE);            
+            String input = JOptionPane.showInputDialog(this, "¿Cuantas unidades de " + p.getNombre()
+                    + " deseas agregar?", "Ingresar Cantidad", JOptionPane.QUESTION_MESSAGE);
             if (input != null && !input.trim().isEmpty()) {
                 try {
                     int cantidad = Integer.parseInt(input);
                     if (cantidad > 0) {
-                        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);                   
+                        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);
                     } else {
                         JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero.");
                     }
@@ -290,13 +303,13 @@ public class menuFrame extends JFrame {
         btnQuitar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnQuitar.addActionListener(e -> {
             int index = listaCarrito.getSelectedIndex();
-            if (index != -1) { 
+            if (index != -1) {
                 CarritoDTO carrito = Coordinador.getCoordinador().obtenerCarritoActual();
                 if (carrito != null && index < carrito.getListaProductos().size()) {
                     DetalleVentaDTO detalle = carrito.getListaProductos().get(index);
-                    
+
                     Coordinador.getCoordinador().eliminarProductoDelCarrito(
-                            detalle.getProducto().getId(), 
+                            detalle.getProducto().getId(),
                             detalle.getCantidad()
                     );
                 }
@@ -317,13 +330,13 @@ public class menuFrame extends JFrame {
         JButton pagar = new JButton("Pagar");
         pagar.setBackground(new Color(80, 140, 100));
         pagar.setForeground(Color.WHITE);
-        
+
         pagar.addActionListener(e -> {
             // validacion de carrito vacio
             if (modeloCarrito.isEmpty()) {
-                JOptionPane.showMessageDialog(this, 
-                    "El carrito está vacío. Agrega productos primero.", 
-                    "Aviso", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "El carrito está vacío. Agrega productos primero.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
                 return; // Cortamos la ejecución aquí
             }
 
@@ -365,59 +378,32 @@ public class menuFrame extends JFrame {
     }
 
     /**
-    * Este método lo llama el Coordinador después de validar la receta.
-    */
-   public void actualizarTablaCarrito(CarritoDTO carrito) {
-       modeloCarrito.clear(); // Limpiamos la JList visual
-       total = 0;
+     * Este método lo llama el Coordinador después de validar la receta.
+     */
+    public void actualizarTablaCarrito(CarritoDTO carrito) {
+        modeloCarrito.clear(); // Limpiamos la JList visual
+        total = 0;
 
-       for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
-           // Creamos el texto para la lista: "Nombre xCantidad - $Subtotal"
-           String item = detalle.getProducto().getNombre() + " x" + detalle.getCantidad() + 
-                         " - $" + (detalle.getProducto().getPrecio() * detalle.getCantidad());
+        for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
+            // Creamos el texto para la lista: "Nombre xCantidad - $Subtotal"
+            String item = detalle.getProducto().getNombre() + " x" + detalle.getCantidad()
+                    + " - $" + (detalle.getProducto().getPrecio() * detalle.getCantidad());
 
-           modeloCarrito.addElement(item);
-           total += (detalle.getProducto().getPrecio() * detalle.getCantidad());
-       }
+            modeloCarrito.addElement(item);
+            total += (detalle.getProducto().getPrecio() * detalle.getCantidad());
+        }
 
-       // Actualizamos el label del total con formato de 2 decimales
-       lblTotal.setText("Total: $ " + String.format("%.2f", total));
-   }
-
-   /**
-    * Limpia la vista después de una venta exitosa.
-    */
-    public void limpiarVenta() {
-       modeloCarrito.clear();
-       total = 0;
-       lblTotal.setText("Total: $0.00");
-       txtBuscar.setText("Buscar Producto...");
-   }
-}
-/*
-    //Este es el header 
-    private JPanel crearHeader() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(new Color(180, 210, 210));
-        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
-
-        JLabel titulo = new JLabel("Pantalla Inicial");
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-
-        JButton btnIniciarSesion = new JButton("Iniciar sesion");
-        btnIniciarSesion.setFocusPainted(false);
-        
-        // 2. Le agregamos el evento de clic
-        btnIniciarSesion.addActionListener(e -> {
-            // Mandamos a llamar al método que creamos en controlNavegacion
-            pantallas.control.controlNavegacion.getcontrolNavegacion().abrirLogin();
-        });
-
-        panel.add(titulo, BorderLayout.WEST);
-        
-        // 3. Agregamos el nuevo botón a la derecha
-        panel.add(btnIniciarSesion, BorderLayout.EAST);
-
-        return panel;
+        // Actualizamos el label del total con formato de 2 decimales
+        lblTotal.setText("Total: $ " + String.format("%.2f", total));
     }
-*/
+
+    /**
+     * Limpia la vista después de una venta exitosa.
+     */
+    public void limpiarVenta() {
+        modeloCarrito.clear();
+        total = 0;
+        lblTotal.setText("Total: $0.00");
+        txtBuscar.setText("Buscar Producto...");
+    }
+}

@@ -1,5 +1,6 @@
 package pantallas.control;
 
+import interfaces.IControlNevagacion;
 import javax.swing.JDialog;
 
 import javax.swing.JFrame;
@@ -12,20 +13,21 @@ import presentacion.InicioSesionFrm;
  * Clase que se encarga de la nevagacion entre pantallas.
  * @author Dario
  */
-public class controlNavegacion {
+public class controlNavegacion implements IControlNevagacion{
     
     private static controlNavegacion ControlNavegacion;
     private JFrame frameActual;
     private Coordinador coordinador;
     
-    public void setCoordinador(Coordinador coordinador) {
-        this.coordinador = coordinador;
+    @Override
+    public void setControlNeavegacion() {
+        this.coordinador = new Coordinador();
     }
-    
+    @Override
     public void abrirMenuFrame(){
         cambiarPantalla(new menuFrame());
     }
-    
+    @Override
     public void abrirVentaFrame() {
         // 1. Creamos la nueva ventana
         VentaFrame nuevaVenta = new VentaFrame();
@@ -47,7 +49,7 @@ public class controlNavegacion {
         // 5. Finalmente, hacemos el cambio visual
         cambiarPantalla(nuevaVenta);
     }
-    
+    @Override
     public void abrirRecetaDialog(){
         validarRecetaDlg dlg = new validarRecetaDlg(frameActual, true, coordinador);
         abrirDialog(dlg);
@@ -59,7 +61,7 @@ public class controlNavegacion {
         }
         return ControlNavegacion;
     }
-    
+    @Override
     public void cambiarPantalla(JFrame nuevoFrame) {
         if (frameActual != null) {
             frameActual.dispose();
@@ -70,7 +72,7 @@ public class controlNavegacion {
         nuevoFrame.setVisible(true);
         nuevoFrame.setLocationRelativeTo(null);
     }
-    
+    @Override
     public void abrirDialog(JDialog nuevoDialog){
         nuevoDialog.setVisible(true);
     }
