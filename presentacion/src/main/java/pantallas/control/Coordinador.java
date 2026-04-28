@@ -9,11 +9,11 @@ import FCatalogo.FCatalogo;
 import ICatalogo.ICatalogo;
 import com.mycompany.dto_negocios.CarritoDTO;
 import dtos.EmpleadoDTO;
+import dtos.LoginDTO;
 
 import subsistemaRecetas.FachadaSubsistemaReceta;
 import fachada.FVentas;
 import fachada.IVenta;
-import interfaces.IControlSesion;
 import interfaces.ICoordinador;
 import java.util.List; 
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import pantallas.validarRecetaDlg;
 
 import fachadas.FachadaSesion;
 import subsistemaRecetas.IControlRecetas;
+import interfaces.IFachadaSesion;
 
 /**
  *
@@ -34,7 +35,7 @@ public class Coordinador implements ICoordinador{
     
     private EmpleadoDTO empleadoLogueado;
     
-    private IControlSesion controlSesion; 
+    private IFachadaSesion controlSesion; 
     // Atributo de navegación
     private controlNavegacion navegacion;
     
@@ -285,10 +286,10 @@ public class Coordinador implements ICoordinador{
     }
     
     @Override
-    public boolean validarInicioSesion(String idUsuario, String password) {
+    public boolean validarInicioSesion(LoginDTO login) {
         try {
             // Llamamos a la capa de negocios (Subsistema Sesion)
-            EmpleadoDTO empleadoQueEntro = controlSesion.verificarCredenciales(idUsuario, password);
+            EmpleadoDTO empleadoQueEntro = controlSesion.verificarCredenciales(login);
 
             if (empleadoQueEntro != null) {
                 

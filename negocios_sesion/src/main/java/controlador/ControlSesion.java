@@ -6,7 +6,10 @@ package controlador;
 
 
 import dtos.EmpleadoDTO;
+import dtos.LoginDTO;
 import excepciones.NegocioExcepcion;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import objetosNegocio.EmpleadoBO;
 /**
  *
@@ -14,30 +17,42 @@ import objetosNegocio.EmpleadoBO;
  */
 public class ControlSesion {
     
+    private static final Logger LOGGER = Logger.getLogger(ControlSesion.class.getName());
     private EmpleadoBO empleadoBO;
     
     public ControlSesion() {
         // instancia el objeto de negocio que tiene el mock del dao
         this.empleadoBO = new EmpleadoBO();
     }
+    
+    public EmpleadoDTO validarLogin(LoginDTO credenciales) {
+        
+        // Validación de seguridad por si el DTO llega vacío
+        if (credenciales == null || credenciales.getIdUsuarioTexto() == null) {
+            LOGGER.log(Level.WARNING, "Se intentó procesar un login con credenciales nulas.");
+            return null;
+        }
 
-    public EmpleadoDTO validarLogin(String idUsuarioTexto, String password) {
         try {
-            // 1. convierte string que viene de pantalla a long para comparar id
-            Long idEmpleado = Long.parseLong(idUsuarioTexto);
+            //se extraen los datos del dto
+            Long idEmpleado = Long.parseLong(credenciales.getIdUsuarioTexto().trim());
+            String password = credenciales.getPassword();
             
-            // 2. se llama al metodo del bo para que busque las credenciales
             EmpleadoDTO empleado = empleadoBO.validarLogin(idEmpleado, password);
             
-            // 3. si llega a esta linea significa que no lanzo excepcion y que el inicio de sesion fue valido
-            System.out.println("Login exitoso. Bienvenido: " + empleado.getNombre());
+            //se tira el log de que el login fue exitoso
+            LOGGER.log(Level.INFO, "Login exitoso para el empleado con ID: {0}", idEmpleado);
             return empleado;
             
-        } catch (Exception e) {
-            // Se ejecuta si el usuario escribio letras
-            System.err.println("Error: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            // se tira el log de que uso algo no numerico
+            LOGGER.log(Level.WARNING, "Intento de login fallido. El ID ingresado no es numérico: {0}", credenciales.getIdUsuarioTexto());
             return null;
             
+        } catch (Exception e) {
+            // pasa algo inesperado entonces se tira el log severo
+            LOGGER.log(Level.SEVERE, "Error crítico al intentar validar el login", e);
+            return null;
         } 
     }
     

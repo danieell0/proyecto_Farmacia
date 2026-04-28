@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import dtos.LoginDTO;
 import interfaces.ICoordinador;
 import java.awt.Color;
 import java.awt.Component;
@@ -118,8 +119,13 @@ public class InicioSesionFrm extends JDialog{
             return;
         }
         
+        LoginDTO credenciales = new LoginDTO();
+        credenciales.setIdUsuarioTexto(idUsuario);
+        credenciales.setPassword(password);
+        
+        
         // se delega la logica al coordinador 
-        boolean sesionValida = coordinador.validarInicioSesion(idUsuario, password);
+        boolean sesionValida = coordinador.validarInicioSesion(credenciales);
        
         if(sesionValida){
             this.dispose();

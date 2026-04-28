@@ -6,13 +6,14 @@ package fachadas;
 
 import controlador.ControlSesion;
 import dtos.EmpleadoDTO;
-import interfaces.IControlSesion;
+import dtos.LoginDTO;
+import interfaces.IFachadaSesion;
 
 /**
  *
  * @author Benjamin
  */
-public class FachadaSesion implements IControlSesion{
+public class FachadaSesion implements IFachadaSesion{
     
     private ControlSesion controlSesion;
     
@@ -22,9 +23,9 @@ public class FachadaSesion implements IControlSesion{
     }
     
     @Override
-    public EmpleadoDTO verificarCredenciales(String idUsuario, String password) {
-        // La fachada intercepta la petición de la presentación 
+    public EmpleadoDTO verificarCredenciales(LoginDTO login) {
+        // La fachada intercepta la petición de la presentacion 
         // y se la delega a la clase que realmente sabe cómo hacerlo.
-        return controlSesion.validarLogin(idUsuario, password);
+        return controlSesion.validarLogin(login);
     }
 }

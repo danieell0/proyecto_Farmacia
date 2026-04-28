@@ -6,6 +6,7 @@ package interfaces;
 
 import DTO.ProductoDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
+import dtos.LoginDTO;
 import java.util.List;
 import pantallas.VentaFrame;
 import pantallas.control.Coordinador;
@@ -37,6 +38,6 @@ public interface ICoordinador {
     String getFolioRecetaActual();
     boolean validarProductoConReceta(Long idProducto, Integer cantidad);
     
-    boolean validarInicioSesion(String idUsuario, String password);
+    boolean validarInicioSesion(LoginDTO login);
     
 }

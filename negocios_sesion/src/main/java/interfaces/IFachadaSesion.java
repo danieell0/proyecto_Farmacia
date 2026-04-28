@@ -5,13 +5,14 @@
 package interfaces;
 
 import dtos.EmpleadoDTO;
+import dtos.LoginDTO;
 
 /**
  *
  * @author Benjamin
  */
-public interface IControlSesion {
+public interface IFachadaSesion {
     
     //verifica en la bd si las credenciales coinciden
-    EmpleadoDTO verificarCredenciales(String idUsuario, String password);
+    EmpleadoDTO verificarCredenciales(LoginDTO login);
 }
