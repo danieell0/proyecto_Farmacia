@@ -23,9 +23,9 @@ import pantallas.VentaFrame;
 import pantallas.menuFrame;
 import pantallas.validarRecetaDlg;
 
-import fachadas.FachadaSesion;
+import Sesion.FachadaSesion;
 import subsistemaRecetas.IControlRecetas;
-import interfaces.IFachadaSesion;
+import Sesion.IFachadaSesion;
 
 /**
  *

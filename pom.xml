@@ -13,6 +13,7 @@
         <module>negocios_sesion</module>
         <module>negocios_receta</module>
         <module>negocios_catalogo</module>
+        <module>Persistencia</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
