@@ -7,8 +7,8 @@ package fachada;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import DTO.VentaDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
-import com.mycompany.dto_negocios.DetalleCarritoDTO;
+import DTO.CarritoDTO;
+import DTO.DetalleCarritoDTO;
 import exception.VentaException;
 import java.util.List;
 

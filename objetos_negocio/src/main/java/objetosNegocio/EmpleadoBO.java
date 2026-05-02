@@ -4,10 +4,10 @@
  */
 package objetosNegocio;
 
-import com.mycompany.dto_negocios.enums.EstatusEmpleado;
-import com.mycompany.dto_negocios.enums.RolPuesto;
-import dtos.CuentaAccesoDTO;
-import dtos.EmpleadoDTO;
+import Enums.EstatusEmpleado;
+import Enums.RolPuesto;
+import DTO.CuentaAccesoDTO;
+import DTO.EmpleadoDTO;
 import excepciones.NegocioExcepcion;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

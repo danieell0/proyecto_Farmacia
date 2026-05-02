@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dtos;
+package DTO;
 
-import com.mycompany.dto_negocios.enums.EstatusEmpleado;
-import com.mycompany.dto_negocios.enums.RolPuesto;
+import Enums.EstatusEmpleado;
+import Enums.RolPuesto;
 import java.time.LocalDateTime;
 
 /**

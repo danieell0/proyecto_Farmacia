@@ -4,8 +4,8 @@
  */
 package Sesion;
 
-import dtos.EmpleadoDTO;
-import dtos.LoginDTO;
+import DTO.EmpleadoDTO;
+import DTO.LoginDTO;
 
 /**
  *

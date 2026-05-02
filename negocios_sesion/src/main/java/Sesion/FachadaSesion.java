@@ -5,8 +5,8 @@
 package Sesion;
 
 import Sesion.ControlSesion;
-import dtos.EmpleadoDTO;
-import dtos.LoginDTO;
+import DTO.EmpleadoDTO;
+import DTO.LoginDTO;
 
 /**
  *

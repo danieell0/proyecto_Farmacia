@@ -2,12 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.dto_negocios.enums;
+package DTO;
 
 /**
- * Enumerador que representa el tipo de responsabilidades y permisos de un empleado dentro del sistema
+ * Clase data transfer object para representar una lista de permisos que tiene un empleado dentro del sistema
  * @author Benjamin
  */
-public enum RolPuesto {
-    CAJERO,COORDINADOR,LIDER;
+public class PermisosDTO {
+    
+    private Long IDEmpleado;
+    private String modulosHabilitados;
+    
 }

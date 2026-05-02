@@ -4,7 +4,7 @@
  */
 package presentacion;
 
-import dtos.LoginDTO;
+import DTO.LoginDTO;
 import interfaces.ICoordinador;
 import java.awt.Color;
 import java.awt.Component;

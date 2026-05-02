@@ -2,9 +2,9 @@ package pantallas;
 
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
-import com.mycompany.dto_negocios.DetalleCarritoDTO;
-import dtos.EmpleadoDTO;
+import DTO.CarritoDTO;
+import DTO.DetalleCarritoDTO;
+import DTO.EmpleadoDTO;
 import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;

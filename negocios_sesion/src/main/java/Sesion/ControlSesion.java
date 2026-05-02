@@ -5,8 +5,8 @@
 package Sesion;
 
 
-import dtos.EmpleadoDTO;
-import dtos.LoginDTO;
+import DTO.EmpleadoDTO;
+import DTO.LoginDTO;
 import excepciones.NegocioExcepcion;
 import java.util.logging.Level;
 import java.util.logging.Logger;

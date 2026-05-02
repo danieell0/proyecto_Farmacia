@@ -39,7 +39,7 @@ public class controlNavegacion implements IControlNevagacion{
         Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
         
         // 4. ¡EL PASO CLAVE! Obtenemos el carrito que llenamos en el menú
-        com.mycompany.dto_negocios.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
+        DTO.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
         
         // Y se lo pasamos a la tabla
         if (carritoGuardado != null) {

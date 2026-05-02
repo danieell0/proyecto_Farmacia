@@ -5,7 +5,7 @@
 package interfaces;
 
 import DTO.ProductoDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
+import DTO.CarritoDTO;
 import java.util.List;
 
 /**

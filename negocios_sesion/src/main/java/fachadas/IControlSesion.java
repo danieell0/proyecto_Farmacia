@@ -4,7 +4,7 @@
  */
 package fachadas;
 
-import dtos.EmpleadoDTO;
+import DTO.EmpleadoDTO;
 
 /**
  *

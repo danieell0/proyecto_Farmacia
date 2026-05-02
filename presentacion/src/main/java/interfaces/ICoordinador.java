@@ -5,8 +5,8 @@
 package interfaces;
 
 import DTO.ProductoDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
-import dtos.LoginDTO;
+import DTO.CarritoDTO;
+import DTO.LoginDTO;
 import java.util.List;
 import pantallas.VentaFrame;
 import pantallas.control.Coordinador;

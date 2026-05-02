@@ -6,8 +6,8 @@ package fachada;
 
 import DTO.DetalleVentaDTO;
 import DTO.VentaDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
-import com.mycompany.dto_negocios.DetalleCarritoDTO;
+import DTO.CarritoDTO;
+import DTO.DetalleCarritoDTO;
 import com.mycompany.objetos_negocio.VentaBO;
 import exception.VentaException;
 import java.time.LocalDate;

@@ -7,10 +7,10 @@ import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 
 import DTO.VentaDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
-import com.mycompany.dto_negocios.DetalleCarritoDTO;
-import dtos.EmpleadoDTO;
-import dtos.LoginDTO;
+import DTO.CarritoDTO;
+import DTO.DetalleCarritoDTO;
+import DTO.EmpleadoDTO;
+import DTO.LoginDTO;
 
 import subsistemaRecetas.FachadaSubsistemaReceta;
 import fachada.FVentas;

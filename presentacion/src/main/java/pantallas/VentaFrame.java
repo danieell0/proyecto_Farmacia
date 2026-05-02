@@ -5,8 +5,8 @@
 package pantallas;
 
 import DTO.DetalleVentaDTO;
-import com.mycompany.dto_negocios.CarritoDTO;
-import com.mycompany.dto_negocios.DetalleCarritoDTO;
+import DTO.CarritoDTO;
+import DTO.DetalleCarritoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
