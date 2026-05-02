@@ -3,6 +3,7 @@ package pantallas;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
+import com.mycompany.dto_negocios.DetalleCarritoDTO;
 import dtos.EmpleadoDTO;
 import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
@@ -89,7 +90,6 @@ public class menuFrame extends JFrame {
         panel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
         // 1. Obtenemos al usuario activo desde tu Coordinador
-        // (Asegúrate de importar DTO.EmpleadoDTO en esta clase)
         EmpleadoDTO usuarioActivo = pantallas.control.Coordinador.getCoordinador().getEmpleadoLogueado();
 
         String saludo = "Punto de Venta Farmacia";
@@ -100,26 +100,21 @@ public class menuFrame extends JFrame {
         JLabel titulo = new JLabel(saludo);
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
 
-        // 2. El botón ahora es para Cerrar Sesión
         JButton btnCerrarSesion = new JButton("Cerrar sesión");
         btnCerrarSesion.setFocusPainted(false);
-        btnCerrarSesion.setBackground(new Color(220, 80, 80)); // Un tono rojizo
+        btnCerrarSesion.setBackground(new Color(220, 80, 80)); 
         btnCerrarSesion.setForeground(Color.WHITE);
 
         btnCerrarSesion.addActionListener(e -> {
-            // Confirmación opcional
             int respuesta = JOptionPane.showConfirmDialog(this,
                     "¿Estás seguro de que deseas cerrar sesión?",
                     "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
 
             if (respuesta == JOptionPane.YES_OPTION) {
-                // Limpiamos el usuario del coordinador llamando al método que hicimos
                 pantallas.control.Coordinador.getCoordinador().cerrarSesion();
 
-                // Cerramos este menú
                 this.dispose();
 
-                // Opcional: Volvemos a levantar "El Muro" para el siguiente empleado
                 pantallas.control.controlNavegacion.getcontrolNavegacion().abrirLogin();
                 if (pantallas.control.Coordinador.getCoordinador().getEmpleadoLogueado() == null) {
                     System.exit(0);
@@ -306,7 +301,7 @@ public class menuFrame extends JFrame {
             if (index != -1) {
                 CarritoDTO carrito = Coordinador.getCoordinador().obtenerCarritoActual();
                 if (carrito != null && index < carrito.getListaProductos().size()) {
-                    DetalleVentaDTO detalle = carrito.getListaProductos().get(index);
+                    DetalleCarritoDTO detalle = carrito.getListaProductos().get(index);
 
                     Coordinador.getCoordinador().eliminarProductoDelCarrito(
                             detalle.getProducto().getId(),
@@ -381,10 +376,10 @@ public class menuFrame extends JFrame {
      * Este método lo llama el Coordinador después de validar la receta.
      */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
-        modeloCarrito.clear(); // Limpiamos la JList visual
+        modeloCarrito.clear(); 
         total = 0;
 
-        for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
+        for (DetalleCarritoDTO detalle : carrito.getListaProductos()) {
             // Creamos el texto para la lista: "Nombre xCantidad - $Subtotal"
             String item = detalle.getProducto().getNombre() + " x" + detalle.getCantidad()
                     + " - $" + (detalle.getProducto().getPrecio() * detalle.getCantidad());

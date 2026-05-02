@@ -8,6 +8,7 @@ import DTO.ProductoDTO;
 
 import DTO.VentaDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
+import com.mycompany.dto_negocios.DetalleCarritoDTO;
 import dtos.EmpleadoDTO;
 import dtos.LoginDTO;
 
@@ -109,7 +110,7 @@ public class Coordinador implements ICoordinador{
      * * @param producto El producto seleccionado de la tabla catálogo.
      * @param cantidad Cantidad ingresada por el usuario.
      */
-    public void agregarProductoAlCarrito(ProductoDTO producto, int cantidad) {
+    public void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad) {
         if (producto == null || cantidad <= 0) return;
 
         // 1. Verificamos si el producto es en realidad un Medicamento
@@ -140,7 +141,7 @@ public class Coordinador implements ICoordinador{
         }
 
         // 4. Proceso normal de agregar al carrito de ventas
-        DetalleVentaDTO detalle = new DetalleVentaDTO();
+        DetalleCarritoDTO detalle = new DetalleCarritoDTO();
         detalle.setProducto(producto);
         detalle.setCantidad(cantidad);
 
@@ -232,7 +233,7 @@ public class Coordinador implements ICoordinador{
     /**
      * Procesa el cálculo del cambio (Si tu IControlVentas/FVentas aún tiene este método).
      */
-    public double procesarCalculoCambio(double total, double pago) {
+    public double procesarCalculoCambio(Double total, Double pago) {
         if (pago < total) {
             //JOptionPane.showMessageDialog(ventaFrame, "El pago es insuficiente. Faltan $" + (total - pago), "Aviso", JOptionPane.WARNING_MESSAGE);
             return -1;

@@ -34,9 +34,4 @@ public class ControlObtenerProductos {
     protected ProductoDTO obtenerProductoId(Long id) {
         return catalogoBO.getProductos().stream().filter(p-> id!=null && p.getId()!=null&& p.getId()==id).findFirst().orElse(null);
     }
-    
-    protected void agregarCarrito(DetalleVentaDTO detalle) {
-        this.carrito.agregarProductoAlCarrito(detalle);
-    }
-
 }

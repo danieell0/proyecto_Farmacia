@@ -8,6 +8,7 @@ import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import DTO.VentaDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
+import com.mycompany.dto_negocios.DetalleCarritoDTO;
 import com.mycompany.objetos_negocio.VentaBO;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class FVentas implements IVenta {
     }
 
     @Override
-    public void agregarAlCarrito(DetalleVentaDTO detalle) {
+    public void agregarAlCarrito(DetalleCarritoDTO detalle) {
         this.controlCarrito.agregarProductoAlCarrito(detalle);
     }
 

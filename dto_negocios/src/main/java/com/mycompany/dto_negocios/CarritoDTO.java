@@ -14,53 +14,49 @@ import java.util.List;
  * @author munos
  */
 public class CarritoDTO {
-    private Long idEmpleado; 
+    private Long idEmpleado;
     private LocalDate fecha;
-    private List<DetalleVentaDTO> listaProductos; 
+    private List<DetalleCarritoDTO> listaProductos; 
     private Double totalAPagar;
     private Integer totalArticulos;
-    
+
     public CarritoDTO() {
-    this.listaProductos = new ArrayList<>();
+        this.listaProductos = new ArrayList<>();
+        this.totalAPagar = 0.0;
+        this.totalArticulos = 0;
+    }
+    public Long getIdEmpleado() { 
+        return idEmpleado; 
+    }
+    public void setIdEmpleado(Long idEmpleado) { 
+        this.idEmpleado = idEmpleado; 
     }
 
-    public Long getIdEmpleado() {
-        return idEmpleado;
+    public LocalDate getFecha() { 
+        return fecha; 
+    }
+    public void setFecha(LocalDate fecha) { 
+        this.fecha = fecha; 
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public List<DetalleCarritoDTO> getListaProductos() { 
+        return listaProductos; 
+    }
+    public void setListaProductos(List<DetalleCarritoDTO> listaProductos) { 
+        this.listaProductos = listaProductos; 
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public Double getTotalAPagar() { 
+        return totalAPagar; 
+    }
+    public void setTotalAPagar(Double totalAPagar) { 
+        this.totalAPagar = totalAPagar; 
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public Integer getTotalArticulos() { 
+        return totalArticulos; 
     }
-
-    public List<DetalleVentaDTO> getListaProductos() {
-        return listaProductos;
-    }
-
-    public void setListaProductos(List<DetalleVentaDTO> listaProductos) {
-        this.listaProductos = listaProductos;
-    }
-
-    public Double getTotalAPagar() {
-        return totalAPagar;
-    }
-
-    public void setTotalAPagar(Double totalAPagar) {
-        this.totalAPagar = totalAPagar;
-    }
-
-    public Integer getTotalArticulos() {
-        return totalArticulos;
-    }
-
-    public void setTotalArticulos(Integer totalArticulos) {
-        this.totalArticulos = totalArticulos;
+    public void setTotalArticulos(Integer totalArticulos) { 
+        this.totalArticulos = totalArticulos; 
     }
 }

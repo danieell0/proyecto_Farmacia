@@ -6,6 +6,7 @@ package pantallas;
 
 import DTO.DetalleVentaDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
+import com.mycompany.dto_negocios.DetalleCarritoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -178,7 +179,7 @@ public class VentaFrame extends JFrame {
 
         if (carrito != null && carrito.getListaProductos() != null) {
             // 2. Volvemos a llenar la tabla
-            for (DetalleVentaDTO detalle : carrito.getListaProductos()) {
+            for (DetalleCarritoDTO detalle : carrito.getListaProductos()) {
                 
                 double precio = detalle.getProducto().getPrecio();
                 int cantidad = detalle.getCantidad();

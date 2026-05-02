@@ -8,6 +8,7 @@ import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import DTO.VentaDTO;
 import com.mycompany.dto_negocios.CarritoDTO;
+import com.mycompany.dto_negocios.DetalleCarritoDTO;
 import exception.VentaException;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public interface IVenta {
      public void eliminarDelCarrito(Long idProducto);
     
-     public void agregarAlCarrito(DetalleVentaDTO detalle);
+     public void agregarAlCarrito(DetalleCarritoDTO detalle);
     
      public CarritoDTO obtenerCarritoActual();
 

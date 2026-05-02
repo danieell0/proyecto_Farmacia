@@ -27,11 +27,11 @@ public interface ICoordinador {
     List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
     ProductoDTO ObtenerProductoConId(Long id);
 
-    void agregarProductoAlCarrito(ProductoDTO producto, int cantidad);
+    void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
     void eliminarProductoDelCarrito(Long idProducto, Integer cantidad);
     CarritoDTO obtenerCarritoActual();
     void ejecutarFinalizarVenta(Long idEmpleado, Long idCliente);
-    double procesarCalculoCambio(double total, double pago);
+    double procesarCalculoCambio(Double total, Double pago);
 
     void setFolioRecetaActual(String folio);
     void limpiarFolioReceta();
