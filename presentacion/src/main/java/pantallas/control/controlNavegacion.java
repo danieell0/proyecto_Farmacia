@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import pantallas.VentaFrame;
 import pantallas.menuFrame;
 import pantallas.validarRecetaDlg;
-import presentacion.InicioSesionFrm;
+import pantallas.InicioSesionFrm;
 
 /**
  * Clase que se encarga de la nevagacion entre pantallas.
