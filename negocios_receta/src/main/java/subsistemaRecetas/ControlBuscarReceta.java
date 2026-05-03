@@ -1,5 +1,6 @@
 package subsistemaRecetas;
 
+import Bo.NegocioException;
 import DTO.RecetaDTO;
 import com.mycompany.objetos_negocio.RecetaBO;
 import java.util.List;
@@ -26,13 +27,11 @@ public class ControlBuscarReceta {
      * @return La receta si el folio coincide, null si no.
      */
     protected RecetaDTO obtenerRecetaPorFolio(String folio) {
-        List<RecetaDTO> recetas = recetaBO.getRecetas();
-        for (RecetaDTO receta : recetas) {
-            if (Objects.equals(receta.getFolio(), folio)) {
-                return receta;
-            }
+        try {
+            return recetaBO.buscarRecetaPorFolio(folio);
+        } catch (NegocioException ex) {
+            return null;
         }
-        return null;
     }
     
 }

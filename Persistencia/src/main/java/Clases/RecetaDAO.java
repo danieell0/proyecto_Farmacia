@@ -3,6 +3,7 @@ package Clases;
 import Entidades.DetalleReceta;
 import Entidades.Receta;
 import Enums.EstadoReceta;
+import Interfaces.IRecetaDAO;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Dario
  */
-public class RecetaDAO {
+public class RecetaDAO implements IRecetaDAO{
     
     private List<Receta> recetas;
     
@@ -72,6 +73,57 @@ public class RecetaDAO {
     
     public List<Receta> getRecetas() {
         return recetas;
+    }
+
+    @Override
+    public Receta obtenerRecetaPorFolio(String folio) {
+        for (int i = 0; i < recetas.size(); i++) {
+            Receta receta = recetas.get(i);
+            if (receta.getFolio().equals(folio)) {
+                return receta;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void actualizarEstadoReceta(Receta receta) {
+        Receta recetaActualizada = obtenerRecetaPorFolio(receta.getFolio());
+        if (recetaActualizada != null) {
+            recetaActualizada.setEstado(receta.getEstado());
+            recetaActualizada.setUsos(receta.getUsos());
+        }
+    }
+
+    @Override
+    public void restarMedicamentos(Receta receta, Long idMedicamento, Integer cantidad) {
+        Receta recetaRestar = obtenerRecetaPorFolio(receta.getFolio());
+        if (recetaRestar != null && recetaRestar.getDetalles() != null) {
+            for (DetalleReceta detalle : recetaRestar.getDetalles()) {
+                if (detalle.getIdMedicamento().equals(idMedicamento)) {
+                    int nuevaCantidad = detalle.getCantidadSurtida() - cantidad;
+                    if (nuevaCantidad < 0) {
+                        detalle.setCantidadSurtida(0);
+                    } else {
+                        detalle.setCantidadSurtida(nuevaCantidad);
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void sumarMedicamentos(Receta receta, Long idMedicamento, Integer cantidad) {
+        Receta recetaSumar = obtenerRecetaPorFolio(receta.getFolio());
+        if (recetaSumar != null && recetaSumar.getDetalles() != null) {
+            for (DetalleReceta detalle : recetaSumar.getDetalles()) {
+                if (detalle.getIdMedicamento().equals(idMedicamento)) {
+                    detalle.setCantidadSurtida(detalle.getCantidadSurtida() + cantidad);
+                    return;
+                }
+            }
+        }
     }
     
 }

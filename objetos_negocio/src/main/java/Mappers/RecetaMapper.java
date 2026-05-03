@@ -1,15 +1,19 @@
 package Mappers;
 
+import DTO.DetalleRecetaDTO;
 import DTO.RecetaDTO;
+import Entidades.DetalleReceta;
 import Entidades.Receta;
-import Enums.EstadoReceta;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
  * @author Dario
  */
 public class RecetaMapper {
-    public static RecetaDTO toDTO(Receta receta) {
+    
+    public static RecetaDTO adaptarADTO(Receta receta) {
         if (receta == null) {
             return null;
         }
@@ -19,23 +23,15 @@ public class RecetaMapper {
         recetadto.setUsos(receta.getUsos());
         recetadto.setEstado(receta.getEstado());
         recetadto.setFechaCaducidad(receta.getFechaCaducidad());
-        recetadto.setDetalles(receta.getDetalles());
-        return receta;
+        if (receta.getDetalles() != null) {
+            List<DetalleRecetaDTO> listaDetallesDTO = new ArrayList<>();
+            for (DetalleReceta detalle : receta.getDetalles()) {
+                DetalleRecetaDTO detalleDTO = DetalleRecetaMapper.adaptarADTO(detalle);
+                listaDetallesDTO.add(detalleDTO);
+            }
+            recetadto.setDetalles(listaDetallesDTO);
+        }
+        return recetadto;
     }
 
-    // Mapeo para Medicamento (Clase independiente)
-    public static MedicamentoDTO toDTO(Medicamento entidad) {
-        if (entidad == null) return null;
-        
-        MedicamentoDTO dto = new MedicamentoDTO();
-        // Mapeamos los campos comunes manualmente si no hay herencia
-        dto.setIdProducto(entidad.getIdProducto());
-        dto.setNombre(entidad.getNombre());
-        dto.setPrecio(entidad.getPrecio());
-        
-        // Atributos únicos de Medicamento
-        dto.setEsControlada(entidad.getEsControlada());
-        dto.setDosis(entidad.getDosis());
-        return dto;
-    }
 }

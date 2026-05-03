@@ -14,10 +14,9 @@ public class DetalleRecetaMapper {
             return null;
         }
         DetalleRecetaDTO detalleRecetadto = new DetalleRecetaDTO();
-        detalleReceta.setIdMedicamento(detalleRecetadto.getIdMedicamento());
-        detalleReceta.setCantidadRecetada(detalleRecetadto.getCantidadRecetada());
-        detalleReceta.setCantidadSurtida(detalleRecetadto.getCantidadSurtida());
-        detalleReceta.setProducto(ProductoMapper.toDTO(detalleRecetadto.getProducto()));
+        detalleRecetadto.setIdMedicamento(detalleReceta.getIdMedicamento());
+        detalleRecetadto.setCantidadRecetada(detalleReceta.getCantidadRecetada());
+        detalleRecetadto.setCantidadSurtida(detalleReceta.getCantidadSurtida());
         return detalleRecetadto;
     }
 }
