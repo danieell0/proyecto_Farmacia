@@ -39,5 +39,30 @@ public class ProductoMapper {
         dto.setImagen(producto.getImagen());
         return dto;
     }
+    
+    public Producto toEntity(ProductoDTO dto){
+        if(dto==null){
+            return null;
+        }
+        if(dto instanceof MedicamentoDTO m){
+            Medicamento entity=new Medicamento();
+            entity.setIdProducto(m.getId());
+            entity.setNombre(m.getNombre());
+            entity.setPrecio(m.getPrecio());
+            entity.setImagen(m.getImagen());
+            entity.setMarca(m.getMarca());
+            entity.setMedida(m.getMedida());
+            entity.setDosis(m.getDosis());
+            entity.setPresentacion(m.getPresentacion());
+            entity.setEsControlada(m.isEsControlado());
+            return entity;
+        }
+        Producto entity=new Producto();
+        entity.setIdProducto(dto.getId());
+        entity.setNombre(dto.getNombre());
+        entity.setPrecio(dto.getPrecio());
+        entity.setImagen(dto.getImagen());
+        return entity;
+    }
 
 }

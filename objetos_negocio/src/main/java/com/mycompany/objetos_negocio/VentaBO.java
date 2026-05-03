@@ -4,19 +4,24 @@
  */
 package com.mycompany.objetos_negocio;
 
+import Clases.VentaDAO;
 import DTO.VentaDTO;
+import Entidades.Venta;
+import IBO.IVentaBO;
+import Interfaces.IVentaDAO;
+import Mappers.VentaMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VentaBO {
+public class VentaBO implements IVentaBO{
 
-    private static VentaBO instancia; 
-    private List<VentaDTO> listaMock; 
-    private Long contador; 
+    private static VentaBO instancia;
+    private IVentaDAO ventaDAO;
+    private VentaMapper mapperVenta;
 
     private VentaBO() {
-        this.listaMock = new ArrayList<>();
-        this.contador = 1L;
+        this.ventaDAO=new VentaDAO();
+        this.mapperVenta=new VentaMapper();
     }
 
     public static VentaBO getInstance() {
@@ -25,15 +30,15 @@ public class VentaBO {
         }
         return instancia;
     }
-    
-    public boolean agregarVenta(VentaDTO nuevaVenta) {
-        if (nuevaVenta != null) {
-            nuevaVenta.setIdVenta(contador);
-            contador++;         
-            listaMock.add(nuevaVenta);
-            System.out.println("Venta#" + nuevaVenta.getIdVenta() + " registrada con éxito. Total: $" + nuevaVenta.getTotal());
-            return true;
+
+    @Override
+    public boolean agregarVenta(VentaDTO ventaDTO) {
+        if(ventaDTO!=null){
+            Venta venta=mapperVenta.toEntity(ventaDTO);
+            boolean ventaOk=ventaDAO.agregarVenta(venta);
+            ventaDTO.setIdVenta(venta.getIdVenta());
+            return ventaOk;
         }
         return false;
     }
-    }
+}

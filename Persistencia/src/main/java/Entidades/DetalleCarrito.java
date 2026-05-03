@@ -1,0 +1,53 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Entidades;
+
+/**
+ *
+ * @author Jorge
+ */
+public class DetalleCarrito {
+
+    private Producto producto;
+    private Integer cantidad;
+    private Double precioUnitario;
+    private Double subtotal;
+
+    public DetalleCarrito() {
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(Double precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
+    }
+    
+}
