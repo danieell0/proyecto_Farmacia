@@ -10,7 +10,8 @@ import Enums.Medida;
  *
  * @author Jorge
  */
-public class Medicamento extends Producto{
+public class Medicamento extends Producto {
+
     private String marca;
     private Medida medida;
     private Double dosis;
@@ -20,16 +21,9 @@ public class Medicamento extends Producto{
     public Medicamento() {
     }
 
-    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada) {
-        this.marca = marca;
-        this.medida = medida;
-        this.dosis = dosis;
-        this.presentacion = presentacion;
-        this.esControlada = esControlada;
-    }
-
-    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, Long idProducto, String nombre, Double precio, String Imagen) {
-        super(idProducto, nombre, precio, Imagen);
+    public Medicamento(Long idProducto, String nombre, Double precio, String imagen,
+            String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada) {
+        super(idProducto, nombre, precio, imagen);
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;
@@ -76,5 +70,5 @@ public class Medicamento extends Producto{
     public void setEsControlada(Boolean esControlada) {
         this.esControlada = esControlada;
     }
-    
+
 }

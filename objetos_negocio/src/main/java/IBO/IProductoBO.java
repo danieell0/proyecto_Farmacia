@@ -2,19 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package Interfaces;
+package IBO;
 
-import Entidades.Producto;
+import DTO.ProductoDTO;
 import java.util.List;
 
 /**
  *
  * @author Jorge
  */
-public interface IProductoDAO {
-
-    public List<Producto> obtenerProductos();
+public interface IProductoBO {
+    public List<ProductoDTO> obtenerProductos();
     
-    public List<Producto> obtenerProductosPorNombre(String nombre);
-    
+    public List<ProductoDTO> obtenerProductosPorNombre(String nombre);
 }
