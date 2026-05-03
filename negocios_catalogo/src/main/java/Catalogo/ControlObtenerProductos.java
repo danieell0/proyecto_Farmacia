@@ -24,14 +24,11 @@ public class ControlObtenerProductos {
     }
 
     protected List<ProductoDTO> obtenerProductos() {
-        return catalogoBO.getProductos().stream().toList(); //filter(p -> p.getStock() != null && p.getStock() > 0).
+        return catalogoBO.obtenerProductos();
     }
 
     protected List<ProductoDTO> obtenerProductoPorNombre(String nombre) {
-        return catalogoBO.getProductos().stream().filter(p -> p.getNombre() != null && p.getNombre().toLowerCase().contains(nombre.toLowerCase())).toList();
+        return catalogoBO.obtenerProductosPorNombre(nombre);
     }
     
-    protected ProductoDTO obtenerProductoId(Long id) {
-        return catalogoBO.getProductos().stream().filter(p-> id!=null && p.getId()!=null&& p.getId()==id).findFirst().orElse(null);
-    }
 }

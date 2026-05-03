@@ -25,7 +25,6 @@ public interface ICoordinador {
 
     List<ProductoDTO> ObtenerProductos();
     List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
-    ProductoDTO ObtenerProductoConId(Long id);
 
     void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
     void eliminarProductoDelCarrito(Long idProducto, Integer cantidad);

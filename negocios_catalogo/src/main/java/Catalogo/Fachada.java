@@ -30,8 +30,4 @@ public class Fachada implements ICatalogo {
         return control.obtenerProductoPorNombre(nombre);
     }
 
-    @Override
-    public ProductoDTO obtenerProductoId(Long id) {
-        return control.obtenerProductoId(id);
-    }
 }

@@ -12,7 +12,5 @@ public interface ICatalogo {
     public List<ProductoDTO> obtenerProductos();
 
     public List<ProductoDTO> buscarProductosNombre(String nombre);
-
-    public ProductoDTO obtenerProductoId(Long id);
         
 }

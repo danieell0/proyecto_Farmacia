@@ -114,15 +114,7 @@ public class Coordinador implements ICoordinador{
         return catalogo.buscarProductosNombre(nombre);
     }
     
-    /**
-     * Obtiene un producto en base su id.
-     * @param id ID del producto a buscar.
-     * @return El resultado de la busqueda.
-     */
-    @Override
-    public ProductoDTO ObtenerProductoConId(Long id){
-        return catalogo.obtenerProductoId(id);
-    }
+
     
     public EmpleadoDTO getEmpleadoLogueado(){
         return empleadoLogueado;

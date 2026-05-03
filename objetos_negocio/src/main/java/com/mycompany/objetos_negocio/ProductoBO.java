@@ -7,8 +7,10 @@ package com.mycompany.objetos_negocio;
 
 import Clases.ProductoDAO;
 import DTO.ProductoDTO;
+import Entidades.Producto;
 import IBO.IProductoBO;
 import Interfaces.IProductoDAO;
+import Mappers.ProductoMapper;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ import java.util.List;
 public class ProductoBO implements IProductoBO {
 
     private IProductoDAO productoDAO;
+    private ProductoMapper mapper = new ProductoMapper();
 
     public ProductoBO() {
         this.productoDAO = new ProductoDAO();
@@ -25,12 +28,14 @@ public class ProductoBO implements IProductoBO {
 
     @Override
     public List<ProductoDTO> obtenerProductos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Producto> productos=productoDAO.obtenerProductos();
+        return productos.stream().map(p-> mapper.toDTO(p)).toList();
     }
 
     @Override
     public List<ProductoDTO> obtenerProductosPorNombre(String nombre) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Producto> productoN=productoDAO.obtenerProductosPorNombre(nombre);
+        return productoN.stream().map(p->mapper.toDTO(p)).toList();
     }
 
 }

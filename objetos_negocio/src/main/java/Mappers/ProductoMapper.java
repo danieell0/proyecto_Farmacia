@@ -14,36 +14,30 @@ import Entidades.Producto;
  * @author Jorge
  */
 public class ProductoMapper {
-    
-      public static ProductoDTO toDTO(Producto producto) {
 
+    public ProductoDTO toDTO(Producto producto) {
         if (producto == null) {
             return null;
         }
         if (producto instanceof Medicamento m) {
-
             MedicamentoDTO dto = new MedicamentoDTO();
             dto.setId(m.getIdProducto());
             dto.setNombre(m.getNombre());
             dto.setPrecio(m.getPrecio());
             dto.setImagen(m.getImagen());
-
             dto.setMarca(m.getMarca());
             dto.setMedida(m.getMedida());
             dto.setDosis(m.getDosis());
             dto.setPresentacion(m.getPresentacion());
             dto.setEsControlado(m.getEsControlada());
-
             return dto;
         }
-        
         ProductoDTO dto = new ProductoDTO();
         dto.setId(producto.getIdProducto());
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
         dto.setImagen(producto.getImagen());
-
         return dto;
     }
-    
+
 }
