@@ -23,7 +23,7 @@ public class ProductoMapper {
         if (producto instanceof Medicamento m) {
 
             MedicamentoDTO dto = new MedicamentoDTO();
-            dto.setIdProducto(m.getIdProducto());
+            dto.setId(m.getIdProducto());
             dto.setNombre(m.getNombre());
             dto.setPrecio(m.getPrecio());
             dto.setImagen(m.getImagen());
@@ -32,13 +32,13 @@ public class ProductoMapper {
             dto.setMedida(m.getMedida());
             dto.setDosis(m.getDosis());
             dto.setPresentacion(m.getPresentacion());
-            dto.setEsControlada(m.getEsControlada());
+            dto.setEsControlado(m.getEsControlada());
 
             return dto;
         }
         
         ProductoDTO dto = new ProductoDTO();
-        dto.setIdProducto(producto.getIdProducto());
+        dto.setId(producto.getIdProducto());
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
         dto.setImagen(producto.getImagen());
