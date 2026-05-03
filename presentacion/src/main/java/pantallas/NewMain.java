@@ -27,7 +27,8 @@ public class NewMain {
                     System.out.println("Acceso cancelado por el usuario. Apagando sistema...");
                     System.exit(0); // Mata el proceso de Java por completo
                 }
-                
+                //123
+                //admin
             }
         });
 

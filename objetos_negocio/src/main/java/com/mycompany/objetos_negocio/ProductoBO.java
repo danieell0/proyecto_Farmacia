@@ -5,9 +5,10 @@
 package com.mycompany.objetos_negocio;
 
 
+import Clases.ProductoDAO;
 import DTO.ProductoDTO;
 import IBO.IProductoBO;
-import InterfacesDAO.IProductoDAO;
+import Interfaces.IProductoDAO;
 import java.util.List;
 
 /**

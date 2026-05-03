@@ -24,7 +24,7 @@ public class ControlObtenerProductos {
     }
 
     protected List<ProductoDTO> obtenerProductos() {
-        return catalogoBO.getProductos().stream().filter(p -> p.getStock() != null && p.getStock() > 0).toList();
+        return catalogoBO.getProductos().stream().toList(); //filter(p -> p.getStock() != null && p.getStock() > 0).
     }
 
     protected List<ProductoDTO> obtenerProductoPorNombre(String nombre) {

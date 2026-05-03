@@ -36,8 +36,8 @@ public class MedicamentoDTO extends ProductoDTO{
      * @param esControlado Restriccion del medicamento.
      * @param imagen Imagen del Producto
      */
-    public MedicamentoDTO(Long id, String nombre, Double precio, Integer stock,String imagen, String marca, Medida medida, Double dosis, String presentacion, boolean esControlado) {
-        super(id, nombre, precio, stock, imagen);
+    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, String marca, Medida medida, Double dosis, String presentacion, boolean esControlado) {
+        super(id, nombre, precio, imagen); //stock
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;

@@ -6,6 +6,8 @@ package Mappers;
 
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
+import Entidades.Medicamento;
+import Entidades.Producto;
 
 /**
  *
