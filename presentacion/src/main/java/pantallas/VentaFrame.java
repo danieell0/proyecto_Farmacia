@@ -7,6 +7,8 @@ package pantallas;
 import DTO.DetalleVentaDTO;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
+import interfaces.IControlNevagacion;
+import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -27,6 +29,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import pantallas.control.Coordinador;
+import pantallas.control.controlNavegacion;
+import pantallas.menuFrame;
 
 /**
  *
@@ -40,7 +44,8 @@ public class VentaFrame extends JFrame {
     private JTextField txtPago;
     private JLabel lblCambio;
     
-    private Coordinador coordinador;
+    private ICoordinador coordinador;
+    private IControlNevagacion control;
 
     private final Color colorFondo = new Color(245, 245, 245);
     private final Color colorAzul = new Color(52, 152, 219);
@@ -120,15 +125,20 @@ public class VentaFrame extends JFrame {
         JButton btnFinalizar = crearBotonEstilizado("FINALIZAR COMPRA", colorAzul);
 
         btnCancelar.addActionListener(e -> {
-            int confirmacion = JOptionPane.showConfirmDialog(this, 
-                "¿Estas seguro de cancelar la venta? Se vaciara el carrito.", 
-                "Cancelar Venta", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.WARNING_MESSAGE);
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Estas seguro de cancelar la venta? Se vaciara el carrito.",
+                    "Cancelar Venta",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
             if (confirmacion == JOptionPane.YES_OPTION) {
-                coordinador.cancelarVenta();
+                coordinador.cancelarVenta(); // Esto debería limpiar el carrito y devolver stock
+                if (control != null) {
+                    control.abrirMenuFrame(); // Regresamos al catálogo
+                }
             }
-        });        btnFinalizar.addActionListener(e -> finalizarCompra());
+        });
+        btnFinalizar.addActionListener(e -> finalizarCompra());
 
         panelBotones.add(btnCancelar);
         panelBotones.add(btnFinalizar);
@@ -141,6 +151,9 @@ public class VentaFrame extends JFrame {
 
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
+    }
+    public void setControlNavegacion(IControlNevagacion control) {
+        this.control = control;
     }
 
     private void configurarEstiloTabla() {
@@ -235,39 +248,71 @@ public class VentaFrame extends JFrame {
         
     }
 
+    /**
+     * Procesa la finalización de la compra, registra la venta en el sistema
+     * y redirige al usuario de vuelta al catálogo de productos.
+     */
     private void finalizarCompra() {
+        // 1. Validar que existan productos en la tabla antes de intentar cobrar
         if (modelo.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "La lista de productos está vacía.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                    "La lista de productos está vacía. No hay nada que vender.", 
+                    "Aviso", 
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
+            // 2. Obtener y validar el texto ingresado en el campo de pago
             String textoRecibido = txtPago.getText().trim();
             if (textoRecibido.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad con la que paga el cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, 
+                        "Debe ingresar la cantidad con la que paga el cliente.", 
+                        "Aviso", 
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
+            // 3. Convertir el texto a número (puede lanzar NumberFormatException)
             Double cantidadRecibida = Double.parseDouble(textoRecibido);
 
-            if (coordinador != null) {
-                Double cambio = coordinador.ejecutarFinalizarCompra(cantidadRecibida, 1L, 1L);
+            // 4. Verificar que el coordinador esté disponible
+            if (this.coordinador != null) {
+                
+                // Ejecutar la lógica de negocio a través del coordinador
+                // El coordinador devuelve el cambio calculado o lanza excepción si falta dinero
+                Double cambio = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, 1L, 1L);
 
+                // 5. Mostrar mensaje de éxito al usuario con su cambio
                 JOptionPane.showMessageDialog(this, 
                         "Venta registrada con éxito.\nEntregar cambio: $" + String.format("%.2f", cambio), 
                         "Venta Exitosa", 
                         JOptionPane.INFORMATION_MESSAGE);
-                this.dispose(); 
-                menuFrame frmCatalogo = new menuFrame(); 
-                frmCatalogo.setVisible(true);
+
+                // 6. REDIRECCIÓN: Usar el control de navegación para volver al menú/catálogo
+                // El control de navegación se encarga de cerrar esta ventana y abrir la otra
+                if (this.control != null) {
+                    this.control.abrirMenuFrame();
+                } else {
+                    // Fallback en caso de que el control no esté inyectado (por seguridad)
+                    System.err.println("Error: El control de navegación no fue inicializado en VentaFrame.");
+                    this.dispose();
+                }
             }
 
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido en la cantidad recibida.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            // Error si el usuario escribe letras o símbolos no válidos en el pago
+            JOptionPane.showMessageDialog(this, 
+                    "Por favor ingrese un número válido en la cantidad recibida.", 
+                    "Error de formato", 
+                    JOptionPane.ERROR_MESSAGE);
             
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error en el pago", JOptionPane.WARNING_MESSAGE);
+            // Captura errores de negocio (ej. "Dinero insuficiente") o errores de base de datos
+            JOptionPane.showMessageDialog(this, 
+                    "No se pudo completar la venta: " + ex.getMessage(), 
+                    "Error en el pago", 
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
-    }
-
+}

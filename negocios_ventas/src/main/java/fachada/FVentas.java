@@ -18,22 +18,39 @@ import java.util.List;
  */
 public class FVentas implements IVenta {
 
-    private ControlCariito controlCarrito;
-    private ControlFinalizarVenta controlFinalizar;
+    private final ControlCariito controlCarrito;
+    private final ControlFinalizarVenta controlFinalizar;
 
     public FVentas() {
         this.controlCarrito = new ControlCariito();
         this.controlFinalizar = new ControlFinalizarVenta();
     }
 
+    /**
+     * Agrega un producto al carrito y descuenta el stock de forma temporal 
+     * en el DTO para evitar sobreventas.
+     */
+    @Override
+    public void agregarAlCarrito(DetalleCarritoDTO detalle) {
+        // El control se encarga de la logica de stock temporal y agrupacion
+        this.controlCarrito.agregarProductoAlCarrito(detalle);
+    }
+
+    /**
+     * Elimina un producto y devuelve el stock temporal al DTO.
+     */
     @Override
     public void eliminarDelCarrito(Long idProducto) {
         this.controlCarrito.eliminarProductoDelCarrito(idProducto);
     }
 
-    @Override
-    public void agregarAlCarrito(DetalleCarritoDTO detalle) {
-        this.controlCarrito.agregarProductoAlCarrito(detalle);
+    /**
+     * Cancela toda la operacion actual, devolviendo todo el stock temporal
+     * y limpiando el carrito.
+     */
+    public void cancelarVentaActual() {
+        this.controlCarrito.devolverTodoElStockTemporal();
+        this.controlCarrito.limpiarCarrito();
     }
 
     @Override
@@ -46,43 +63,58 @@ public class FVentas implements IVenta {
         this.controlCarrito.actualizarTotalesCarrito(carrito);
     }
 
+    /**
+     * Procesa la finalizacion de la compra.
+     * Valida el pago, registra en la base de datos (descuento definitivo) 
+     * y limpia el carrito.
+     * * @return El cambio a entregar o codigos de error (-1: Vacio, -2: Dinero insuficiente)
+     */
+    @Override
+    public Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente) {
+        CarritoDTO carrito = this.controlCarrito.obtenerCarrito();
+
+        // 1. Validacion de negocio: Carrito vacio
+        if (carrito == null || carrito.getListaProductos().isEmpty()) {
+            return -1.0; 
+        }
+
+        // 2. Validacion de negocio: Pago suficiente
+        Double total = carrito.getTotalAPagar();
+        if (cantidadRecibida < total) {
+            return -2.0; 
+        }
+
+        try {
+            // 3. Orquestacion de la persistencia
+            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente);
+            
+            // Al registrar, el VentaBO hara el descuento de stock definitivo en las entidades
+            boolean exito = this.controlFinalizar.registrarVenta(ventaEmpacada);
+
+            if (exito) {
+                this.controlCarrito.limpiarCarrito(); // Se limpia porque la venta fue exitosa
+                return cantidadRecibida - total;
+            }
+        } catch (Exception e) {
+            System.err.println("Error en el subsistema de ventas: " + e.getMessage());
+        }
+
+        return null; // Error interno
+    }
+
+    /**
+     * Metodo legado para compatibilidad, delega a finalizarVenta.
+     */
     @Override
     public VentaDTO registrarVenta(CarritoDTO carrito) {
         try {
             VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, 1L, 1L);
-            boolean exito = this.controlFinalizar.registrarVenta(ventaEmpacada);
-            if (exito) {
+            if (this.controlFinalizar.registrarVenta(ventaEmpacada)) {
                 this.controlCarrito.limpiarCarrito();
                 return ventaEmpacada;
             }
         } catch (Exception e) {
-            System.err.println("Ocurrió un error al registrar la venta: " + e.getMessage());
-        }
-        return null;
-    }
-
-    @Override
-    public Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente) {
-        try {
-            CarritoDTO carrito = this.controlCarrito.obtenerCarrito();
-            if (carrito == null || carrito.getListaProductos().isEmpty()) {
-                System.err.println("Carrito vacio");
-                return -1.0;
-            }
-            Double total = carrito.getTotalAPagar();
-            if (cantidadRecibida < total) {
-                System.err.println("Error: Dinero insuficiente");
-                return -2.0;
-            }
-            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente);
-            boolean exito = this.controlFinalizar.registrarVenta(ventaEmpacada);
-            if (exito) {
-                Double cambio = cantidadRecibida - total;
-                this.controlCarrito.limpiarCarrito();
-                return cambio;
-            }
-        } catch (Exception e) {
-            System.err.println("Error crítico en subsistema ventas: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
         return null;
     }

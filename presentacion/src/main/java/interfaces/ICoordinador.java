@@ -22,20 +22,17 @@ public interface ICoordinador {
     void setVentaFrame(VentaFrame ventaFrame);
     void setMenuFrame(menuFrame menuJFrame);
     void setRecetaDlg(validarRecetaDlg recetaDlg);
-
     List<ProductoDTO> ObtenerProductos();
     List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
-
     void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
     void eliminarProductoDelCarrito(Long idProducto, Integer cantidad);
     CarritoDTO obtenerCarritoActual();
     public Double ejecutarFinalizarCompra(Double cantidadRecibida, Long idEmpleado, Long idCliente) throws Exception;
     Double procesarCalculoCambio(Double total, Double pago);
-
     void setFolioRecetaActual(String folio);
     void limpiarFolioReceta();
     String getFolioRecetaActual();
+    void cancelarVenta();
     Boolean validarProductoConReceta(Long idProducto, Integer cantidad);
-    
     Boolean validarInicioSesion(CuentaAccesoDTO login);    
 }

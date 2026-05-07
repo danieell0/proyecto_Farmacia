@@ -6,6 +6,8 @@ package com.mycompany.objetos_negocio;
 
 import Clases.VentaDAO;
 import DTO.VentaDTO;
+import Entidades.DetalleVenta;
+import Entidades.Producto;
 import Entidades.Venta;
 import IBO.IVentaBO;
 import Interfaces.IVentaDAO;
@@ -13,15 +15,15 @@ import Mappers.VentaMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VentaBO implements IVentaBO{
+public class VentaBO implements IVentaBO {
 
     private static VentaBO instancia;
     private IVentaDAO ventaDAO;
     private VentaMapper mapperVenta;
 
     private VentaBO() {
-        this.ventaDAO=new VentaDAO();
-        this.mapperVenta=new VentaMapper();
+        this.ventaDAO = new VentaDAO();
+        this.mapperVenta = new VentaMapper();
     }
 
     public static VentaBO getInstance() {
@@ -33,11 +35,16 @@ public class VentaBO implements IVentaBO{
 
     @Override
     public boolean agregarVenta(VentaDTO ventaDTO) {
-        if(ventaDTO!=null){
-            Venta venta=mapperVenta.toEntity(ventaDTO);
-            boolean ventaOk=ventaDAO.agregarVenta(venta);
-            ventaDTO.setIdVenta(venta.getIdVenta());
-            return ventaOk;
+        if (ventaDTO != null) {
+            Venta venta = mapperVenta.toEntity(ventaDTO);
+
+            // DESCUENTO REAL DE STOCK
+            for (DetalleVenta dv : venta.getDetalles()) {
+                int stockActual = dv.getProducto().getStock();
+                dv.getProducto().setStock(stockActual - dv.getCantidad());
+            }
+
+            return ventaDAO.agregarVenta(venta);
         }
         return false;
     }

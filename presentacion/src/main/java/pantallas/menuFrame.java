@@ -310,15 +310,21 @@ public class menuFrame extends JFrame {
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAgregar.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(this, "¿Cuántas unidades deseas agregar?");
+            //
+            //
+            //
             if (input != null && !input.trim().isEmpty()) {
                 try {
-                    int cantidad = Integer.parseInt(input);
-                    if (cantidad > 0) {
-                        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);
-                    }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Cantidad inválida");
-                }
+    int cantidad = Integer.parseInt(input);
+    if (cantidad > 0) {
+        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);
+    }
+} catch (NumberFormatException nfe) {
+    JOptionPane.showMessageDialog(this, "Por favor, ingresa un número entero.");
+} catch (Exception ex) {
+    ex.printStackTrace(); 
+    JOptionPane.showMessageDialog(this, "Error al agregar: " + ex.getMessage());
+}
             }
         });
 

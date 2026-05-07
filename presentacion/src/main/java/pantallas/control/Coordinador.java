@@ -333,6 +333,7 @@ public class Coordinador implements ICoordinador {
     /**
      * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
      */
+    @Override
     public void cancelarVenta() {
         if (fVentas.obtenerCarritoActual() != null) {
             fVentas.obtenerCarritoActual().getListaProductos().clear();

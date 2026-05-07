@@ -29,26 +29,22 @@ public class controlNavegacion implements IControlNevagacion{
     }
     @Override
     public void abrirVentaFrame() {
-        // 1. Creamos la nueva ventana
-        VentaFrame nuevaVenta = new VentaFrame();
-        
-        // 2. Le presentamos el coordinador a la nueva ventana
-        nuevaVenta.setCoordinador(Coordinador.getCoordinador());
-        
-        // 3. Le decimos al coordinador que esta es su nueva pantalla activa
-        Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
-        
-        // 4. ¡EL PASO CLAVE! Obtenemos el carrito que llenamos en el menú
-        DTO.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
-        
-        // Y se lo pasamos a la tabla
-        if (carritoGuardado != null) {
-            nuevaVenta.actualizarTablaCarrito(carritoGuardado);
-        }
-        
-        // 5. Finalmente, hacemos el cambio visual
-        cambiarPantalla(nuevaVenta);
+    VentaFrame nuevaVenta = new VentaFrame();
+    
+    // ESTA LÍNEA ES LA QUE EVITA QUE SE CIERRE EL PROGRAMA
+    nuevaVenta.setControlNavegacion(this); 
+    
+    nuevaVenta.setCoordinador(Coordinador.getCoordinador());
+    Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
+    
+    // Cargar datos actuales
+    DTO.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
+    if (carritoGuardado != null) {
+        nuevaVenta.actualizarTablaCarrito(carritoGuardado);
     }
+    
+    cambiarPantalla(nuevaVenta);
+}
     @Override
     public void abrirRecetaDialog(){
         validarRecetaDlg dlg = new validarRecetaDlg(frameActual, true, coordinador);
