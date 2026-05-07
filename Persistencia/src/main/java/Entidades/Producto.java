@@ -14,15 +14,17 @@ public class Producto {
     private String nombre;
     private Double precio;
     private String Imagen;
+    private Integer stock;
 
     public Producto() {
     }
 
-    public Producto(Long idProducto, String nombre, Double precio, String Imagen) {
+    public Producto(Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;
         this.Imagen = Imagen;
+        this.stock = stock;
     }
 
     public Long getIdProducto() {
@@ -56,5 +58,15 @@ public class Producto {
     public void setImagen(String Imagen) {
         this.Imagen = Imagen;
     }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+    
+    
 
 }

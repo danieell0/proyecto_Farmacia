@@ -24,8 +24,8 @@ public class Medicamento extends Producto {
     public Medicamento() {
     }
 
-    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidad, Long idProducto, String nombre, Double precio, String Imagen) {
-        super(idProducto, nombre, precio, Imagen);
+    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidad, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
+        super(idProducto, nombre, precio, Imagen, stock);
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;
