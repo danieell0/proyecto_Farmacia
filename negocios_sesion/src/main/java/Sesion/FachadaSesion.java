@@ -6,7 +6,7 @@ package Sesion;
 
 import Sesion.ControlSesion;
 import DTO.EmpleadoDTO;
-import DTO.LoginDTO;
+import DTO.CuentaAccesoDTO;
 
 /**
  *
@@ -22,7 +22,7 @@ public class FachadaSesion implements IFachadaSesion{
     }
     
     @Override
-    public EmpleadoDTO verificarCredenciales(LoginDTO login) {
+    public EmpleadoDTO verificarCredenciales(CuentaAccesoDTO login) {
         // La fachada intercepta la petición de la presentacion 
         // y se la delega a la clase que realmente sabe cómo hacerlo.
         return controlSesion.validarLogin(login);

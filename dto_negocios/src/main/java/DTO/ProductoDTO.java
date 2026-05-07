@@ -9,7 +9,7 @@ public class ProductoDTO {
     private Long id;
     private String nombre;
     private Double precio;
-//    private Integer stock;
+    private Integer stock;
     private String imagen;
 
     /**
@@ -27,11 +27,11 @@ public class ProductoDTO {
      * @param stock Stock del producto.
      * @param imagen Imagen del producto
      */
-    public ProductoDTO(Long id, String nombre, Double precio, String imagen) {
+    public ProductoDTO(Long id, String nombre, Double precio, String imagen, Integer stock) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
-//        this.stock = stock;
+        this.stock = stock;
         this.imagen = imagen;
     }
 
@@ -89,19 +89,19 @@ public class ProductoDTO {
         this.precio = precio;
     }
 
-//    /**
-//     * @return Obtiene el stock del producto.
-//     */
-//    public Integer getStock() {
-//        return stock;
-//    }
-//
-//    /**
-//     * @param stock El stock a asignar al producto.
-//     */
-//    public void setStock(Integer stock) {
-//        this.stock = stock;
-//    }
+    /**
+    * @return Obtiene el stock del producto.
+     */
+    public Integer getStock() {
+        return stock;
+    }
+
+      /**
+     * @param stock El stock a asignar al producto.
+     */
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
     
     /**
      * @return La imagen del producto.

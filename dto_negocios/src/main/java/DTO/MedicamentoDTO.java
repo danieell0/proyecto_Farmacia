@@ -12,7 +12,7 @@ public class MedicamentoDTO extends ProductoDTO{
     private Medida medida;
     private Double dosis;
     private String presentacion;
-    private boolean esControlado;
+    private Boolean esControlado;
 //    private String lote;
 //    private LocalDate caducidad;
 
@@ -36,8 +36,8 @@ public class MedicamentoDTO extends ProductoDTO{
      * @param esControlado Restriccion del medicamento.
      * @param imagen Imagen del Producto
      */
-    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, String marca, Medida medida, Double dosis, String presentacion, boolean esControlado) {
-        super(id, nombre, precio, imagen); //stock
+    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, String marca, Medida medida, Double dosis, String presentacion, Boolean esControlado, Integer stock) {
+        super(id, nombre, precio, imagen, stock); //stock
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;

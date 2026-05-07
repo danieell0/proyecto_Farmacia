@@ -28,6 +28,7 @@ public class ProductoMapper {
             dto.setMarca(m.getMarca());
             dto.setMedida(m.getMedida());
             dto.setDosis(m.getDosis());
+            dto.setStock(m.getStock());
             dto.setPresentacion(m.getPresentacion());
             dto.setEsControlado(m.getEsControlada());
             return dto;
@@ -53,6 +54,7 @@ public class ProductoMapper {
             entity.setMarca(m.getMarca());
             entity.setMedida(m.getMedida());
             entity.setDosis(m.getDosis());
+            entity.setStock(m.getStock());
             entity.setPresentacion(m.getPresentacion());
             entity.setEsControlada(m.isEsControlado());
             return entity;

@@ -4,7 +4,7 @@
  */
 package pantallas;
 
-import DTO.LoginDTO;
+import DTO.CuentaAccesoDTO;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -146,28 +146,39 @@ public class InicioSesionFrm extends JDialog{
     }
 
     private void iniciarSesion() {
-        String idUsuario = txtId.getText();
+        // 1. Obtenemos los textos CRUDOS primero
+        String idTexto = txtId.getText();
         String password = new String(txtContrasena.getPassword());
 
-        // Validar que no estén vacíos antes de molestar al servidor/BD
-        if (idUsuario.trim().isEmpty() || password.trim().isEmpty()) {
+        // 2. Validamos que no estén vacíos
+        if (idTexto.trim().isEmpty() || password.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, ingresa tu ID y contraseña.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        LoginDTO credenciales = new LoginDTO();
-        credenciales.setIdUsuarioTexto(idUsuario);
-        credenciales.setPassword(password);
-        
-        
-        // se delega la logica al coordinador 
-        boolean sesionValida = coordinador.validarInicioSesion(credenciales);
-       
-        if(sesionValida){
-            this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(this, "ID o contraseña incorrectos.", "Error de Autenticacion", JOptionPane.ERROR_MESSAGE);
-            txtContrasena.setText(""); //se limpia la contra para seguridad
+        try {
+            // 3. AHORA SÍ convertimos a número (porque ya sabemos que no está vacío)
+            Long idUsuario = Long.parseLong(idTexto.trim());
+            
+            // 4. Armamos el DTO
+            CuentaAccesoDTO credenciales = new CuentaAccesoDTO();
+            credenciales.setIDEmpleado(idUsuario);
+            credenciales.setContraseña(password);
+            
+            // 5. Delegamos al coordinador 
+            boolean sesionValida = coordinador.validarInicioSesion(credenciales);
+           
+            if(sesionValida){
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "ID o contraseña incorrectos.", "Error de Autenticacion", JOptionPane.ERROR_MESSAGE);
+                txtContrasena.setText(""); // se limpia la contra para seguridad
+            }
+            
+        } catch (NumberFormatException ex) {
+            // 6. Atrapamos el error por si el usuario escribió letras en vez de números en el ID
+            JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.", "Formato incorrecto", JOptionPane.WARNING_MESSAGE);
+            txtId.setText("");
         }
     }
 }
