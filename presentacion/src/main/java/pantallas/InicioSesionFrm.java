@@ -6,11 +6,14 @@ package pantallas;
 
 import DTO.LoginDTO;
 import interfaces.ICoordinador;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
@@ -41,44 +44,71 @@ public class InicioSesionFrm extends JDialog{
     public InicioSesionFrm(Frame parent, ICoordinador coordinador) {
         // El 'true' al final es la clave: hace que el diálogo sea MODAL
         super(parent, "Iniciar Sesión", true); 
+        
         this.coordinador = coordinador;
         inicializarComponentes();
         configurarVentana(parent);
     }
 
     private void inicializarComponentes() {
-        // Panel principal con fondo blanco para simular tu diseño
+        // Contenedor principal con BorderLayout
+        JPanel pnlFondo = new JPanel(new BorderLayout());
+        pnlFondo.setBackground(Color.WHITE);
+
+        // --- HEADER (Rectángulo Verde Arriba) ---
+        JPanel pnlHeader = new JPanel();
+        pnlHeader.setBackground(new Color(80, 139, 107)); // El verde de tu farmacia
+        pnlHeader.setPreferredSize(new Dimension(0, 60));
+        pnlHeader.setLayout(new GridBagLayout()); // Excelente para centrar cosas rápido
+
+        JLabel lblTitulo = new JLabel("INICIO DE SESIÓN");
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        pnlHeader.add(lblTitulo); // Se centra automáticamente por el GridBagLayout
+
+        // --- FORMULARIO (Centro) ---
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
         panelPrincipal.setBackground(Color.WHITE);
-        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        // Le damos un poco más de margen lateral para que no se vea apretado
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        // 1. Icono de Usuario (Simulado con un JLabel centrado)
-        // Aquí puedes cambiarlo por un new ImageIcon("ruta/a/tu/icono.png")
+        // 1. Icono de Usuario
         JLabel lblIcono = new JLabel("👤", SwingConstants.CENTER);
-        lblIcono.setFont(new Font("Segoe UI", Font.PLAIN, 50));
+        lblIcono.setFont(new Font("Segoe UI", Font.PLAIN, 55));
         lblIcono.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // 2. Campo de ID
-        JLabel lblId = new JLabel("ID");
+        JLabel lblId = new JLabel("ID de Empleado");
+        lblId.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblId.setAlignmentX(Component.CENTER_ALIGNMENT);
-        txtId = new JTextField(15);
-        txtId.setMaximumSize(new Dimension(Integer.MAX_VALUE, txtId.getPreferredSize().height));
+        
+        txtId = new JTextField();
+        txtId.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtId.setHorizontalAlignment(JTextField.CENTER);
+        txtId.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
         // 3. Campo de Contraseña
         JLabel lblContrasena = new JLabel("Contraseña");
+        lblContrasena.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblContrasena.setAlignmentX(Component.CENTER_ALIGNMENT);
-        txtContrasena = new JPasswordField(15);
-        txtContrasena.setMaximumSize(new Dimension(Integer.MAX_VALUE, txtContrasena.getPreferredSize().height));
+        
+        txtContrasena = new JPasswordField();
+        txtContrasena.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtContrasena.setHorizontalAlignment(JTextField.CENTER);
+        txtContrasena.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
         // 4. Botón Iniciar Sesión
-        btnIniciarSesion = new JButton("Iniciar sesión");
+        btnIniciarSesion = new JButton("Entrar al sistema");
         btnIniciarSesion.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnIniciarSesion.setBackground(new Color(40, 40, 40)); // Gris oscuro/negro
+        btnIniciarSesion.setBackground(new Color(40, 40, 40)); 
         btnIniciarSesion.setForeground(Color.WHITE);
+        btnIniciarSesion.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnIniciarSesion.setFocusPainted(false);
+        btnIniciarSesion.setPreferredSize(new Dimension(150, 40));
+        btnIniciarSesion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        btnIniciarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Manita al pasar el mouse
         
-        // Evento del botón (aquí conectaremos con tu lógica de negocios luego)
         btnIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,23 +116,29 @@ public class InicioSesionFrm extends JDialog{
             }
         });
 
-        // Ensamblar el panel
+        // Ensamblar el formulario
         panelPrincipal.add(lblIcono);
-        panelPrincipal.add(Box.createVerticalStrut(20)); // Espaciado
+        panelPrincipal.add(Box.createVerticalStrut(20));
         panelPrincipal.add(lblId);
+        panelPrincipal.add(Box.createVerticalStrut(5));
         panelPrincipal.add(txtId);
-        panelPrincipal.add(Box.createVerticalStrut(15));
+        panelPrincipal.add(Box.createVerticalStrut(20));
         panelPrincipal.add(lblContrasena);
+        panelPrincipal.add(Box.createVerticalStrut(5));
         panelPrincipal.add(txtContrasena);
-        panelPrincipal.add(Box.createVerticalStrut(25));
+        panelPrincipal.add(Box.createVerticalStrut(30));
         panelPrincipal.add(btnIniciarSesion);
 
-        // Agregar panel al JDialog
-        this.add(panelPrincipal);
+        // Unir todo al panel de fondo
+        pnlFondo.add(pnlHeader, BorderLayout.NORTH);
+        pnlFondo.add(panelPrincipal, BorderLayout.CENTER);
+
+        // Agregar al JDialog
+        this.add(pnlFondo);
     }
 
     private void configurarVentana(Frame parent) {
-        this.setSize(300, 350);
+        this.setSize(350, 450);
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         // Esto hace que la ventanita aparezca exactamente en el centro de la ventana actual

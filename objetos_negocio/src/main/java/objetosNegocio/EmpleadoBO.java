@@ -4,10 +4,14 @@
  */
 package objetosNegocio;
 
+import Clases.CuentaAccesoDAO;
+import Clases.EmpleadoDAO;
 import Enums.EstatusEmpleado;
 import Enums.RolPuesto;
 import DTO.CuentaAccesoDTO;
 import DTO.EmpleadoDTO;
+import Entidades.Empleado;
+import Mappers.EmpleadoMapper;
 import excepciones.NegocioExcepcion;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,34 +23,17 @@ import java.util.List;
  */
 public class EmpleadoBO {
     
-    // Simulación de nuestras tablas en la base de datos
-    private List<EmpleadoDTO> tablaEmpleados;
-    private List<CuentaAccesoDTO> tablaCuentas;
+    // Instanciamos los accesos a datos
+    private CuentaAccesoDAO cuentaDAO;
+    private EmpleadoDAO empleadoDAO;
+    
+    // Asumo que tienes un mapper creado, si no, lo haremos manual abajo
+    private EmpleadoMapper mapper; 
     
     public EmpleadoBO() {
-        tablaEmpleados = new ArrayList<>();
-        tablaCuentas = new ArrayList<>();
-        
-        // --- 1. Llenamos la tabla de Empleados ---
-        // Asumo que tus enums se llaman algo así como RolPuesto.LIDER y EstatusEmpleado.ACTIVO
-        EmpleadoDTO emp1 = new EmpleadoDTO(123L, "Juan", "Perez", "Gomez", "555-0001", 
-                                           RolPuesto.LIDER, LocalDateTime.of(1990, 5, 20, 0, 0), EstatusEmpleado.ACTIVO);
-                                           
-        EmpleadoDTO emp2 = new EmpleadoDTO(456L, "Maria", "Lopez", "Diaz", "555-0002", 
-                                           RolPuesto.CAJERO, LocalDateTime.of(1995, 8, 15, 0, 0), EstatusEmpleado.ACTIVO);
-                                           
-        EmpleadoDTO emp3 = new EmpleadoDTO(789L, "Carlos", "Ruiz", "Soto", "555-0003", 
-                                           RolPuesto.CAJERO, LocalDateTime.of(1998, 2, 10, 0, 0), EstatusEmpleado.DESACTIVO);
-        
-        tablaEmpleados.add(emp1);
-        tablaEmpleados.add(emp2);
-        tablaEmpleados.add(emp3);
-
-        // --- 2. Llenamos la tabla de Cuentas de Acceso ---
-        // Parámetros: (IDEmpleado, IDReporte, contraseña)
-        tablaCuentas.add(new CuentaAccesoDTO(123L, 1L, "admin"));
-        tablaCuentas.add(new CuentaAccesoDTO(456L, 2L, "caja"));
-        tablaCuentas.add(new CuentaAccesoDTO(789L, 3L, "caja2"));
+        this.cuentaDAO = new CuentaAccesoDAO();
+        this.empleadoDAO = new EmpleadoDAO();
+        this.mapper = new EmpleadoMapper(); 
     }
     
     public EmpleadoDTO validarLogin(Long idEmpleado, String contrasena) throws NegocioExcepcion {
@@ -59,36 +46,27 @@ public class EmpleadoBO {
             throw new NegocioExcepcion("El campo de contraseña no puede estar vacío.");
         }
         
-        // Paso 1: Verificar en la tabla de cuentas si las credenciales coinciden
-        boolean credencialesCorrectas = false;
-        for (CuentaAccesoDTO cuenta : tablaCuentas) {
-            // Usamos tus getters exactos: getIDEmpleado() y getContraseña()
-            if (cuenta.getIDEmpleado().equals(idEmpleado) && cuenta.getContraseña().equals(contrasena)) {
-                credencialesCorrectas = true;
-                break;
-            }
-        }
+        // Paso 1: Pedirle a la BD que valide la cuenta
+        boolean credencialesCorrectas = cuentaDAO.validarCredenciales(idEmpleado, contrasena);
         
         if (!credencialesCorrectas) {
             throw new NegocioExcepcion("Credenciales incorrectas.");
         }
         
-        // Paso 2: Si la contraseña es correcta, buscamos al empleado para ver su estatus y rol
-        for (EmpleadoDTO empleado : tablaEmpleados) {
-            if (empleado.getID().equals(idEmpleado)) {
-                
-                // Aprovechamos tu DTO para validar si el empleado sigue trabajando en la farmacia
-                if (empleado.getEstatus() != EstatusEmpleado.ACTIVO) {
-                    throw new NegocioExcepcion("Acceso denegado: El empleado está inactivo en el sistema.");
-                }
-                
-                // Retornamos el rol (convertimos el Enum a String)
-                return empleado;
-            }
+        // Paso 2: Si es correcta, pedirle a la BD la ENTIDAD pura del empleado
+        Empleado entidadEmpleado = empleadoDAO.obtenerEmpleadoPorId(idEmpleado);
+        
+        if (entidadEmpleado == null) {
+            throw new NegocioExcepcion("Error de integridad: La cuenta existe pero el empleado no.");
         }
         
-        // Por si existe la cuenta pero por algún error de base de datos se borró al empleado
-        throw new NegocioExcepcion("Error de integridad");
+        // Validamos estatus usando la entidad
+        if (entidadEmpleado.getEmpleadoEstatus() != EstatusEmpleado.ACTIVO) {
+            throw new NegocioExcepcion("Acceso denegado: El empleado está inactivo en el sistema.");
+        }
+        
+        // Paso 3: Transformamos la Entidad de la BD a un DTO para la presentacion
+        return mapper.toDTO(entidadEmpleado); 
     }
      
 }

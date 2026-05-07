@@ -6,7 +6,7 @@
         <artifactId>ProyectoFarmacia</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Persistencia</artifactId>
+    <artifactId>persistencia_farmacia</artifactId>
     <packaging>jar</packaging>
     <properties>
         <maven.compiler.release>23</maven.compiler.release>

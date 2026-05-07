@@ -2,23 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DTO;
+package Entidades;
 
 /**
- * Data transfer object que representa a un objeto de cucenta de acceso dentro de el sistema
+ *
  * @author Benjamin
  */
-public class CuentaAccesoDTO {
+public class CuentaAcceso {
     
     private Long IDEmpleado;
-    private String contraseña;
-    
-    public CuentaAccesoDTO() {
+    private String contrasena;
+
+    public CuentaAcceso() {
     }
 
-    public CuentaAccesoDTO(Long IDEmpleado, String contraseña) {
+    public CuentaAcceso(Long IDEmpleado, String contrasena) {
         this.IDEmpleado = IDEmpleado;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
     }
 
     public Long getIDEmpleado() {
@@ -29,12 +29,13 @@ public class CuentaAccesoDTO {
         this.IDEmpleado = IDEmpleado;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
+    
     
 }
