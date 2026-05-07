@@ -30,7 +30,7 @@ public class ProductoDAO implements IProductoDAO {
 
         productos.add(new Medicamento("Genérico",Medida.mg,500.0,"Tabletas",true,List.of(Especialidades.MEDICOGENERAL),6L,"Paracetamol",50.0,"/imagenes/omeprazol.png",10));
         productos.add(new Medicamento("Pfizer",Medida.mg,400.0,"Cápsulas",true,List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA),7L,"Ibuprofeno",80.0,"/imagenes/paracetamol.png",20));
-        productos.add(new Medicamento("Sandoz",Medida.mg,500.0,"Cápsulas",true,List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA),8L,"Amoxicilina",120.0,"/imagenes/ibuprofeno.png",5));
+        productos.add(new Medicamento("Sandoz",Medida.mg,500.0,"Cápsulas",true,List.of(Especialidades.PEDIATRIA),8L,"Amoxicilina",120.0,"/imagenes/ibuprofeno.png",5));
         productos.add(new Medicamento("Bayer",Medida.mg,100.0,"Tabletas",false,List.of(Especialidades.CARDIOLOGIA),9L,"Aspirina",45.0,"/imagenes/omeprazol.png",20));
         productos.add(new Medicamento("Genérico",Medida.mg,10.0,"Tabletas",false,List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA),10L,"Loratadina",90.0,"/imagenes/omeprazol.png",10));
 
@@ -52,5 +52,15 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public List<Producto> obtenerProductosPorNombre(String nombre) {
         return productos.stream().filter(p -> p.getNombre() != null && p.getNombre().toLowerCase().contains(nombre.toLowerCase())).toList();
+    }
+
+    @Override
+    public Producto obtenerProductoPorId(Long id) {
+        for (Producto p : productos) {
+            if (p.getIdProducto().equals(id)) {
+                return p;
+            }
+        }
+        return null;
     }
 }

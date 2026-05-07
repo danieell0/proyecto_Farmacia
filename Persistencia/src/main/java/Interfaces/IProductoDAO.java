@@ -16,5 +16,7 @@ public interface IProductoDAO {
     public List<Producto> obtenerProductos();
     
     public List<Producto> obtenerProductosPorNombre(String nombre);
+     
+    public Producto obtenerProductoPorId(Long id);
     
 }

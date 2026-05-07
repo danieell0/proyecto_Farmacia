@@ -1,10 +1,13 @@
 package Clases;
 
 import Entidades.DetalleReceta;
+import Entidades.Medicamento;
 import Entidades.Receta;
+import Enums.Especialidades;
 import Enums.EstadoReceta;
 import Interfaces.IRecetaDAO;
 import java.time.LocalDate;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +18,11 @@ import java.util.List;
 public class RecetaDAO implements IRecetaDAO{
     
     private List<Receta> recetas;
+    private List<Medicamento> medicamentos;
     
     public RecetaDAO() {
         this.recetas = new ArrayList<>();
+        this.medicamentos = new ArrayList<>();
 
         // --- RECETA 1: ACTIVA Y VÁLIDA ---
         Receta r1 = new Receta();
