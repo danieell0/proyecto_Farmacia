@@ -23,8 +23,9 @@ public interface ICoordinador {
     void setMenuFrame(menuFrame menuJFrame);
     void setRecetaDlg(validarRecetaDlg recetaDlg);
 
-    List<ProductoDTO> ObtenerProductos();
-    List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
+    public List<ProductoDTO> ObtenerProductos();
+    public List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
+    public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo);
 
     void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
     void eliminarProductoDelCarrito(Long idProducto, Integer cantidad);

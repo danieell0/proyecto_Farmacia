@@ -398,12 +398,17 @@ public class menuFrame extends JFrame {
     }
 
     private void filtrar() {
-        String texto = txtBuscar.getText();
+        String texto = txtBuscar.getText().trim();
         List<ProductoDTO> lista;
         if (texto.isEmpty()) {
             lista = Coordinador.getCoordinador().ObtenerProductos();
         } else {
-            lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
+            try {
+                Long codigo = Long.parseLong(texto);
+                lista = Coordinador.getCoordinador().ObtenerProductoPorCodigo(codigo);
+            } catch (NumberFormatException e) {
+                lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
+            }
         }
         actualizarProductos(lista);
     }
