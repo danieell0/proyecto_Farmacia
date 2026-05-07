@@ -26,7 +26,7 @@ public class RecetaBO implements IRecetaBO{
     public RecetaDTO buscarRecetaPorFolio(String folio) throws NegocioException {
         try {
             Receta receta = recetaDAO.obtenerRecetaPorFolio(folio);
-            if(receta != null){
+            if(receta == null){
                 throw new NegocioException("No se encontro ninguna receta con ese folio.");
             }
             return RecetaMapper.adaptarADTO(receta);
