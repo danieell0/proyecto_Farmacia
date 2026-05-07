@@ -6,6 +6,7 @@ package Clases;
 
 import Entidades.Medicamento;
 import Entidades.Producto;
+import Enums.Especialidades;
 import Enums.Medida;
 import Interfaces.IProductoDAO;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author Jorge
  */
-public class ProductoDAO implements IProductoDAO{
+public class ProductoDAO implements IProductoDAO {
 
     private List<Producto> productos;
 
@@ -27,11 +28,12 @@ public class ProductoDAO implements IProductoDAO{
         productos.add(new Producto(4L, "Papel Higiénico", 60.0, "/imagenes/paracetamol.png"));
         productos.add(new Producto(5L, "Shampoo", 75.0, "/imagenes/ibuprofeno.png"));
 
-        productos.add(new Medicamento(6L, "Paracetamol", 50.0, "/imagenes/omeprazol.png", "Genérico", Medida.mg, 500.0, "Tabletas", true));
-        productos.add(new Medicamento(7L, "Ibuprofeno", 80.0, "/imagenes/paracetamol.png", "Pfizer", Medida.mg, 400.0, "Cápsulas", true));
-        productos.add(new Medicamento(8L, "Amoxicilina", 120.0, "/imagenes/ibuprofeno.png", "Sandoz", Medida.mg, 500.0, "Cápsulas", true));
-        productos.add(new Medicamento(9L, "Aspirina", 45.0, "/imagenes/omeprazol.png", "Bayer", Medida.mg, 100.0, "Tabletas", false));
-        productos.add(new Medicamento(10L, "Loratadina", 90.0, "/imagenes/omeprazol.png", "Genérico", Medida.mg, 10.0, "Tabletas", false));
+        productos.add(new Medicamento("Genérico",Medida.mg,500.0,"Tabletas",true,List.of(Especialidades.MEDICOGENERAL),6L,"Paracetamol",50.0,"/imagenes/omeprazol.png"));
+        productos.add(new Medicamento("Pfizer",Medida.mg,400.0,"Cápsulas",true,List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA),7L,"Ibuprofeno",80.0,"/imagenes/paracetamol.png"));
+        productos.add(new Medicamento("Sandoz",Medida.mg,500.0,"Cápsulas",true,List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA),8L,"Amoxicilina",120.0,"/imagenes/ibuprofeno.png"));
+        productos.add(new Medicamento("Bayer",Medida.mg,100.0,"Tabletas",false,List.of(Especialidades.CARDIOLOGIA),9L,"Aspirina",45.0,"/imagenes/omeprazol.png"));
+        productos.add(new Medicamento("Genérico",Medida.mg,10.0,"Tabletas",false,List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA),10L,"Loratadina",90.0,"/imagenes/omeprazol.png"));
+
     }
 
     public List<Producto> getProductos() {

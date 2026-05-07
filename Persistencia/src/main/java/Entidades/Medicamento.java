@@ -4,7 +4,9 @@
  */
 package Entidades;
 
+import Enums.Especialidades;
 import Enums.Medida;
+import java.util.List;
 
 /**
  *
@@ -17,18 +19,19 @@ public class Medicamento extends Producto {
     private Double dosis;
     private String presentacion;
     private Boolean esControlada;
+    private List<Especialidades> especialidad;
 
     public Medicamento() {
     }
 
-    public Medicamento(Long idProducto, String nombre, Double precio, String imagen,
-            String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada) {
-        super(idProducto, nombre, precio, imagen);
+    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidad, Long idProducto, String nombre, Double precio, String Imagen) {
+        super(idProducto, nombre, precio, Imagen);
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;
         this.presentacion = presentacion;
         this.esControlada = esControlada;
+        this.especialidad = especialidad;
     }
 
     public String getMarca() {
@@ -69,6 +72,14 @@ public class Medicamento extends Producto {
 
     public void setEsControlada(Boolean esControlada) {
         this.esControlada = esControlada;
+    }
+
+    public List<Especialidades> getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(List<Especialidades> especialidad) {
+        this.especialidad = especialidad;
     }
 
 }

@@ -10,10 +10,16 @@ import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -64,101 +70,169 @@ public class menuFrame extends JFrame {
     }
 
     public menuFrame() {
-        //agregamos un titulo
+
         setTitle("Farmacia");
-        //establecemos el tamaño del frame 
-        setSize(1200, 700);
-        //establecemos que se cierre el frame al darle a la x
+        setSize(1450, 850);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //agregamos un border layout
         setLayout(new BorderLayout());
-        //le ponemos al frame un color
-        getContentPane().setBackground(new Color(245, 245, 245));
-
+        getContentPane().setBackground(new Color(240, 243, 245));
         Coordinador.getCoordinador().setMenuFrame(this);
-
-        pantallas.control.Coordinador.getCoordinador().setMenuFrame(this);
-
-        add(crearHeader(), BorderLayout.NORTH);
-        add(crearContenido(), BorderLayout.CENTER);
-
+        add(crearSidebar(), BorderLayout.WEST);
+        add(crearMainContent(), BorderLayout.CENTER);
     }
 
-    private JPanel crearHeader() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(new Color(180, 210, 210));
-        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
+    private JPanel crearSidebar() {
+        JPanel sidebar = new JPanel();
+        sidebar.setPreferredSize(new Dimension(110, 0));
+        sidebar.setBackground(new Color(0, 121, 107));
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.add(Box.createVerticalStrut(20));
 
-        // 1. Obtenemos al usuario activo desde tu Coordinador
-        EmpleadoDTO usuarioActivo = pantallas.control.Coordinador.getCoordinador().getEmpleadoLogueado();
+        ImageIcon iconLogo = new ImageIcon(
+                getClass().getResource("/icons/logo.png")
+        );
+        Image imgLogo = iconLogo.getImage().getScaledInstance(
+                45,
+                45,
+                Image.SCALE_SMOOTH
+        );
 
-        String saludo = "Punto de Venta Farmacia";
+        JLabel logo = new JLabel(new ImageIcon(imgLogo));
+        logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidebar.add(logo);
+        sidebar.add(Box.createVerticalStrut(50));
+
+        String[] iconos = {
+            "/icons/venta.png"
+        };
+
+        String[] tooltips = {
+            "Ventas",
+            "Historial",
+            "Clientes",
+            "Inventario",
+            "Reportes",
+            "Configuración"
+        };
+
+        for (int i = 0; i < iconos.length; i++) {
+            ImageIcon icon = new ImageIcon(
+                    getClass().getResource(iconos[i])
+            );
+
+            Image img = icon.getImage().getScaledInstance(28, 28, Image.SCALE_SMOOTH);
+
+            JButton btn = new JButton(new ImageIcon(img));
+            btn.setToolTipText(tooltips[i]);
+            btn.setMaximumSize(new Dimension(60, 60));
+            btn.setFocusPainted(false);
+            btn.setBorderPainted(false);
+            btn.setContentAreaFilled(false);
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            btn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    btn.setOpaque(true);
+                    btn.setBackground(new Color(0, 150, 136));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    btn.setOpaque(false);
+                    btn.setBackground(null);
+                }
+            });
+            sidebar.add(btn);
+            sidebar.add(Box.createVerticalStrut(20));
+        }
+        return sidebar;
+    }
+
+    private JPanel crearMainContent() {
+        JPanel main = new JPanel(new BorderLayout());
+        main.setBackground(new Color(245, 247, 250));
+        main.add(crearHeaderModerno(), BorderLayout.NORTH);
+        JPanel body = new JPanel(new BorderLayout());
+        body.setOpaque(false);
+        body.setBorder(new EmptyBorder(20, 20, 20, 20));
+        JPanel centro = new JPanel(new BorderLayout());
+        centro.setOpaque(false);
+        centro.add(crearBuscador(), BorderLayout.NORTH);
+        centro.add(crearProductos(), BorderLayout.CENTER);
+        body.add(centro, BorderLayout.CENTER);
+        body.add(crearCarritoModerno(), BorderLayout.EAST);
+        main.add(body, BorderLayout.CENTER);
+        return main;
+    }
+
+    private JPanel crearHeaderModerno() {
+        JPanel header = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(
+                        0,
+                        0,
+                        new Color(0, 121, 107),
+                        getWidth(),
+                        0,
+                        new Color(0, 150, 136)
+                );
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        header.setPreferredSize(new Dimension(0, 70));
+
+        EmpleadoDTO usuarioActivo = Coordinador.getCoordinador().getEmpleadoLogueado();
+        String saludo = "Atendiendo";
         if (usuarioActivo != null) {
             saludo = "Atendiendo: " + usuarioActivo.getNombre() + " (" + usuarioActivo.getRolPuesto() + ")";
         }
-
         JLabel titulo = new JLabel(saludo);
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-
+        titulo.setForeground(Color.WHITE);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titulo.setBorder(new EmptyBorder(0, 25, 0, 0));
         JButton btnCerrarSesion = new JButton("Cerrar sesión");
         btnCerrarSesion.setFocusPainted(false);
-        btnCerrarSesion.setBackground(new Color(220, 80, 80)); 
         btnCerrarSesion.setForeground(Color.WHITE);
-
+        btnCerrarSesion.setBackground(new Color(239, 83, 80));
+        btnCerrarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCerrarSesion.addActionListener(e -> {
-            int respuesta = JOptionPane.showConfirmDialog(this,
-                    "¿Estás seguro de que deseas cerrar sesión?",
-                    "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
+
+            int respuesta = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Deseas cerrar sesión?",
+                    "Cerrar Sesión",
+                    JOptionPane.YES_NO_OPTION);
 
             if (respuesta == JOptionPane.YES_OPTION) {
-                pantallas.control.Coordinador.getCoordinador().cerrarSesion();
-
+                Coordinador.getCoordinador().cerrarSesion();
                 this.dispose();
-
-                pantallas.control.controlNavegacion.getcontrolNavegacion().abrirLogin();
-                if (pantallas.control.Coordinador.getCoordinador().getEmpleadoLogueado() == null) {
-                    System.exit(0);
-                }
+                controlNavegacion.getcontrolNavegacion().abrirLogin();
             }
         });
-
-        panel.add(titulo, BorderLayout.WEST);
-        panel.add(btnCerrarSesion, BorderLayout.EAST);
-
-        return panel;
-    }
-
-    //panel de contenido
-    public JPanel crearContenido() {
-        //creo un panel y le asigno un border layout
-        JPanel panel = new JPanel(new BorderLayout());
-        //le pongo un margen
-        panel.setBorder(new EmptyBorder(10, 20, 10, 20));
-        //agrego un color de background
-        panel.setBackground(new Color(245, 245, 245));
-        //agrego la barra buscadora 
-        panel.add(crearBuscador(), BorderLayout.NORTH);
-
-        JPanel panelCentro = new JPanel(new BorderLayout());
-        panelCentro.setOpaque(false);
-        panelCentro.add(crearProductos(), BorderLayout.CENTER);
-        panelCentro.add(crearCarrito(), BorderLayout.EAST);
-
-        panel.add(panelCentro, BorderLayout.CENTER);
-
-        return panel;
+        JPanel right = new JPanel();
+        right.setOpaque(false);
+        right.add(btnCerrarSesion);
+        header.add(titulo, BorderLayout.WEST);
+        header.add(right, BorderLayout.EAST);
+        return header;
     }
 
     private JPanel crearBuscador() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(new EmptyBorder(10, 0, 10, 0));
         panel.setOpaque(false);
-
-        txtBuscar = new JTextField("Buscar Producto...");
-        txtBuscar.setPreferredSize(new Dimension(300, 40));
+        panel.setBorder(new EmptyBorder(0, 0, 20, 20));
+        txtBuscar = new JTextField();
+        txtBuscar.setPreferredSize(new Dimension(300, 50));
+        txtBuscar.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtBuscar.setBorder(new CompoundBorder(
-                new LineBorder(Color.LIGHT_GRAY, 1, true),
-                new EmptyBorder(5, 10, 5, 10)
+                new LineBorder(new Color(220, 220, 220), 2, true),
+                new EmptyBorder(10, 15, 10, 15)
         ));
 
         txtBuscar.getDocument().addDocumentListener(new DocumentListener() {
@@ -176,46 +250,34 @@ public class menuFrame extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 filtrar();
             }
-
         });
-
         panel.add(txtBuscar, BorderLayout.CENTER);
-
         return panel;
     }
 
     private JPanel crearProductos() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
-
         JLabel titulo = new JLabel("Productos en stock");
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
-
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
         header.add(titulo, BorderLayout.WEST);
-
         panel.add(header, BorderLayout.NORTH);
-
-        grid = new JPanel(new GridLayout(0, 4, 15, 15));
+        grid = new JPanel(new GridLayout(0, 4, 20, 20));
         grid.setOpaque(false);
-
         List<ProductoDTO> lista = obtenerProductos();
-
         for (ProductoDTO p : lista) {
+
             grid.add(crearCard(p));
         }
-
         JPanel contenedor = new JPanel(new BorderLayout());
         contenedor.setOpaque(false);
         contenedor.add(grid, BorderLayout.NORTH);
-
         JScrollPane scroll = new JScrollPane(contenedor);
         scroll.setBorder(null);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
-
         panel.add(scroll, BorderLayout.CENTER);
-
         return panel;
     }
 
@@ -223,121 +285,110 @@ public class menuFrame extends JFrame {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
-        card.setBorder(new CompoundBorder(new LineBorder(new Color(220, 220, 220), 1, true), new EmptyBorder(10, 10, 10, 10)));
+        card.setBorder(new CompoundBorder(
+                new LineBorder(new Color(230, 230, 230), 1, true),
+                new EmptyBorder(20, 20, 20, 20)
+        ));
 
         ImageIcon icon = new ImageIcon(getClass().getResource(p.getImagen()));
-        Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        Image img = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
         JLabel lblImg = new JLabel(new ImageIcon(img));
         lblImg.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JLabel nombreLbl = new JLabel(p.getNombre());
+        nombreLbl.setFont(new Font("Segoe UI", Font.BOLD, 18));
         nombreLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        String precio = String.valueOf(p.getPrecio());
-        JLabel precioLbl = new JLabel("$" + precio);
-        precioLbl.setForeground(new Color(0, 130, 0));
+        JLabel precioLbl = new JLabel("$" + p.getPrecio());
+        precioLbl.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        precioLbl.setForeground(new Color(0, 150, 136));
         precioLbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JButton btnAgregar = new JButton("Agregar");
-        btnAgregar.setBackground(new Color(80, 140, 100));
-        btnAgregar.setForeground(Color.WHITE);
         btnAgregar.setFocusPainted(false);
+        btnAgregar.setBackground(new Color(0, 150, 136));
+        btnAgregar.setForeground(Color.WHITE);
+        btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnAgregar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         btnAgregar.addActionListener(e -> {
-            String input = JOptionPane.showInputDialog(this, "¿Cuantas unidades de " + p.getNombre()
-                    + " deseas agregar?", "Ingresar Cantidad", JOptionPane.QUESTION_MESSAGE);
+            String input = JOptionPane.showInputDialog(this, "¿Cuántas unidades deseas agregar?");
             if (input != null && !input.trim().isEmpty()) {
                 try {
                     int cantidad = Integer.parseInt(input);
                     if (cantidad > 0) {
                         Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero.");
                     }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Por favor ingresa un número válido.");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Cantidad inválida");
                 }
             }
         });
-        card.add(lblImg);
-        card.add(Box.createVerticalStrut(10));
-        card.add(nombreLbl);
-        card.add(precioLbl);
-        card.add(Box.createVerticalStrut(10));
-        card.add(btnAgregar);
 
+        card.add(lblImg);
+        card.add(Box.createVerticalStrut(15));
+        card.add(nombreLbl);
+        card.add(Box.createVerticalStrut(5));
+        card.add(precioLbl);
+        card.add(Box.createVerticalStrut(15));
+        card.add(btnAgregar);
         return card;
     }
 
-    private JPanel crearCarrito() {
+    private JPanel crearCarritoModerno() {
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(250, 0));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setPreferredSize(new Dimension(320, 0));
         panel.setBackground(Color.WHITE);
-        panel.setBorder(new CompoundBorder(
-                new LineBorder(new Color(220, 220, 220), 1, true),
-                new EmptyBorder(10, 10, 10, 10)
-        ));
-
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel titulo = new JLabel("Carrito");
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         panel.add(titulo);
-        panel.add(Box.createVerticalStrut(10));
-
+        panel.add(Box.createVerticalStrut(20));
         modeloCarrito = new DefaultListModel<>();
         listaCarrito = new JList<>(modeloCarrito);
+        listaCarrito.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         JScrollPane scroll = new JScrollPane(listaCarrito);
-        scroll.setPreferredSize(new Dimension(200, 200));
+        scroll.setPreferredSize(new Dimension(250, 400));
         panel.add(scroll);
-        panel.add(Box.createVerticalStrut(10));
-
+        panel.add(Box.createVerticalStrut(20));
         JButton btnQuitar = new JButton("Quitar seleccionado");
-        btnQuitar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnQuitar.setFocusPainted(false);
         btnQuitar.addActionListener(e -> {
             int index = listaCarrito.getSelectedIndex();
             if (index != -1) {
                 CarritoDTO carrito = Coordinador.getCoordinador().obtenerCarritoActual();
                 if (carrito != null && index < carrito.getListaProductos().size()) {
+
                     DetalleCarritoDTO detalle = carrito.getListaProductos().get(index);
-
-                    Coordinador.getCoordinador().eliminarProductoDelCarrito(
-                            detalle.getProducto().getId(),
-                            detalle.getCantidad()
-                    );
+                    Coordinador.getCoordinador().eliminarProductoDelCarrito(detalle.getProducto().getId(), detalle.getCantidad());
                 }
+
             } else {
-                JOptionPane.showMessageDialog(this, "Selecciona un producto de la lista para quitarlo.");
+                JOptionPane.showMessageDialog(this, "Selecciona un producto"
+                );
             }
         });
+
         panel.add(btnQuitar);
-        panel.add(Box.createVerticalStrut(10));
-
+        panel.add(Box.createVerticalStrut(20));
         lblTotal = new JLabel("Total: $0.00");
-        lblTotal.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 24));
         panel.add(lblTotal);
-        panel.add(Box.createVerticalStrut(10));
-
-        panel.add(Box.createVerticalStrut(10));
-
+        panel.add(Box.createVerticalGlue());
         JButton pagar = new JButton("Pagar");
-        pagar.setBackground(new Color(80, 140, 100));
+        pagar.setPreferredSize(new Dimension(250, 50));
+        pagar.setMaximumSize(new Dimension(300, 50));
+        pagar.setBackground(new Color(0, 150, 136));
         pagar.setForeground(Color.WHITE);
-
+        pagar.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        pagar.setFocusPainted(false);
+        pagar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         pagar.addActionListener(e -> {
-            // validacion de carrito vacio
             if (modeloCarrito.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "El carrito está vacío. Agrega productos primero.",
-                        "Aviso", JOptionPane.WARNING_MESSAGE);
-                return; // Cortamos la ejecución aquí
+                JOptionPane.showMessageDialog(this, "El carrito está vacío");
+                return;
             }
-
-            // Usamos tu Singleton de navegación para cambiar a la pantalla de ventas
-            pantallas.control.controlNavegacion.getcontrolNavegacion().abrirVentaFrame();
+            controlNavegacion.getcontrolNavegacion().abrirVentaFrame();
         });
+        panel.add(Box.createVerticalStrut(20));
         panel.add(pagar);
         return panel;
     }
@@ -348,10 +399,8 @@ public class menuFrame extends JFrame {
 
     private void filtrar() {
         String texto = txtBuscar.getText();
-
         List<ProductoDTO> lista;
-
-        if (texto.isEmpty() || "Buscar Producto...".equals(texto)) {
+        if (texto.isEmpty()) {
             lista = Coordinador.getCoordinador().ObtenerProductos();
         } else {
             lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
@@ -361,44 +410,40 @@ public class menuFrame extends JFrame {
 
     private void actualizarProductos(List<ProductoDTO> productos) {
         grid.removeAll();
-
-        // Volver a agregar los productos filtrados
         for (ProductoDTO p : productos) {
             grid.add(crearCard(p));
         }
-
-        // Refrescar la vista
         grid.revalidate();
         grid.repaint();
     }
 
-    /**
-     * Este método lo llama el Coordinador después de validar la receta.
-     */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
-        modeloCarrito.clear(); 
+        modeloCarrito.clear();
         total = 0;
-
-        for (DetalleCarritoDTO detalle : carrito.getListaProductos()) {
-            // Creamos el texto para la lista: "Nombre xCantidad - $Subtotal"
-            String item = detalle.getProducto().getNombre() + " x" + detalle.getCantidad()
-                    + " - $" + (detalle.getProducto().getPrecio() * detalle.getCantidad());
-
+        for (DetalleCarritoDTO detalle
+                : carrito.getListaProductos()) {
+            String item
+                    = detalle.getProducto().getNombre()
+                    + " x"
+                    + detalle.getCantidad()
+                    + " - $"
+                    + (detalle.getProducto().getPrecio()
+                    * detalle.getCantidad());
             modeloCarrito.addElement(item);
-            total += (detalle.getProducto().getPrecio() * detalle.getCantidad());
+            total += (detalle.getProducto().getPrecio()
+                    * detalle.getCantidad());
         }
 
-        // Actualizamos el label del total con formato de 2 decimales
-        lblTotal.setText("Total: $ " + String.format("%.2f", total));
+        lblTotal.setText(
+                "Total: $ "
+                + String.format("%.2f", total)
+        );
     }
 
-    /**
-     * Limpia la vista después de una venta exitosa.
-     */
     public void limpiarVenta() {
         modeloCarrito.clear();
         total = 0;
         lblTotal.setText("Total: $0.00");
-        txtBuscar.setText("Buscar Producto...");
+        txtBuscar.setText("");
     }
 }
