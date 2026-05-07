@@ -114,13 +114,12 @@ public class validarRecetaDlg extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Ingrese un folio valido.");
             return;
         }
-        if (!coordinador.existeReceta(folio)) {
+        if (coordinador.existeReceta(folio)) {
+            coordinador.setFolioRecetaActual(folio);
+            this.dispose();
+        } else {
             JOptionPane.showMessageDialog(this, "El folio ingresado no existe en el sistema.");
-            return;
         }
-        coordinador.setFolioRecetaActual(folio);
-        JOptionPane.showMessageDialog(this, "Folio vinculado correctamente.");
-        this.dispose();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
