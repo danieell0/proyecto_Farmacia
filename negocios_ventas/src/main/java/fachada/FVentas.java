@@ -25,7 +25,7 @@ public class FVentas implements IVenta {
         this.controlCarrito = new ControlCariito();
         this.controlFinalizar = new ControlFinalizarVenta();
     }
-    
+
     @Override
     public void eliminarDelCarrito(Long idProducto) {
         this.controlCarrito.eliminarProductoDelCarrito(idProducto);
@@ -58,6 +58,32 @@ public class FVentas implements IVenta {
         } catch (Exception e) {
             System.err.println("Ocurrió un error al registrar la venta: " + e.getMessage());
         }
-        return null; 
+        return null;
+    }
+
+    @Override
+    public Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente) {
+        try {
+            CarritoDTO carrito = this.controlCarrito.obtenerCarrito();
+            if (carrito == null || carrito.getListaProductos().isEmpty()) {
+                System.err.println("Carrito vacio");
+                return -1.0;
+            }
+            Double total = carrito.getTotalAPagar();
+            if (cantidadRecibida < total) {
+                System.err.println("Error: Dinero insuficiente");
+                return -2.0;
+            }
+            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente);
+            boolean exito = this.controlFinalizar.registrarVenta(ventaEmpacada);
+            if (exito) {
+                Double cambio = cantidadRecibida - total;
+                this.controlCarrito.limpiarCarrito();
+                return cambio;
+            }
+        } catch (Exception e) {
+            System.err.println("Error crítico en subsistema ventas: " + e.getMessage());
+        }
+        return null;
     }
 }

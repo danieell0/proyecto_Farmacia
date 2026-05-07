@@ -171,14 +171,11 @@ public class VentaFrame extends JFrame {
      * Este método actualiza la JTable de la pantalla final de cobro.
      */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
-        // 1. Limpiamos las filas de la tabla obligando a Java a reconocer el DefaultTableModel
         ((javax.swing.table.DefaultTableModel) tabla.getModel()).setRowCount(0);
         
-        // Variable segura para acumular el total
         double totalSeguro = 0.0;
 
         if (carrito != null && carrito.getListaProductos() != null) {
-            // 2. Volvemos a llenar la tabla
             for (DetalleCarritoDTO detalle : carrito.getListaProductos()) {
                 
                 double precio = detalle.getProducto().getPrecio();
@@ -187,7 +184,6 @@ public class VentaFrame extends JFrame {
                 
                 totalSeguro += subtotal; 
 
-                // Obligamos a reconocer el DefaultTableModel para agregar la fila
                 ((javax.swing.table.DefaultTableModel) tabla.getModel()).addRow(new Object[]{
                     detalle.getProducto().getNombre(),
                     cantidad,
@@ -196,10 +192,8 @@ public class VentaFrame extends JFrame {
                 });
             }
             
-            // 3. Actualizamos la etiqueta del total
             lblTotal.setText("TOTAL A PAGAR: $" + String.format("%.2f", totalSeguro));
             
-            // Recalculamos el cambio
             calcularCambio();
         }
     }
@@ -243,12 +237,37 @@ public class VentaFrame extends JFrame {
 
     private void finalizarCompra() {
         if (modelo.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "La lista de productos está vacía.");
+            JOptionPane.showMessageDialog(this, "La lista de productos está vacía.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (coordinador != null) {
-            coordinador.ejecutarFinalizarVenta(1L, 1L);
+        try {
+            String textoRecibido = txtPago.getText().trim();
+            if (textoRecibido.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad con la que paga el cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            Double cantidadRecibida = Double.parseDouble(textoRecibido);
+
+            if (coordinador != null) {
+                Double cambio = coordinador.ejecutarFinalizarCompra(cantidadRecibida, 1L, 1L);
+
+                JOptionPane.showMessageDialog(this, 
+                        "Venta registrada con éxito.\nEntregar cambio: $" + String.format("%.2f", cambio), 
+                        "Venta Exitosa", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.dispose(); 
+                menuFrame frmCatalogo = new menuFrame(); 
+                frmCatalogo.setVisible(true);
+            }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido en la cantidad recibida.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error en el pago", JOptionPane.WARNING_MESSAGE);
         }
     }
-}
+    }
+

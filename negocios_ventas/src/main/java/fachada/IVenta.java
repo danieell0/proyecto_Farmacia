@@ -29,4 +29,5 @@ public interface IVenta {
         
     public VentaDTO registrarVenta(CarritoDTO carrito);
 
+    Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente);
 }

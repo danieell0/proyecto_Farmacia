@@ -14,7 +14,7 @@ import subsistemaRecetas.FachadaSubsistemaReceta;
 import fachada.FVentas;
 import fachada.IVenta;
 import interfaces.ICoordinador;
-import java.util.List; 
+import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JOptionPane;
@@ -29,63 +29,67 @@ import Sesion.IFachadaSesion;
  *
  * @author Dario
  */
-public class Coordinador implements ICoordinador{
-    
+public class Coordinador implements ICoordinador {
+
     private EmpleadoDTO empleadoLogueado;
-    
-    private IFachadaSesion controlSesion; 
+
+    private IFachadaSesion controlSesion;
     // Atributo de navegación
     private controlNavegacion navegacion;
-    
+
     private static Coordinador cordinador;
-    private IVenta fVentas; 
+    private IVenta fVentas;
     private VentaFrame ventaFrame;
     private ICatalogo catalogo;
     private IControlRecetas recetaSub;
     private String folioRecetaActual;
     private validarRecetaDlg recetaDlg;
-    private menuFrame menuJFrame; 
-    
+    private menuFrame menuJFrame;
+
     /**
-     * Constructor del coordinador.
-     * Inicializa el acceso al subsistema de ventas a través de la fachada.
+     * Constructor del coordinador. Inicializa el acceso al subsistema de ventas
+     * a través de la fachada.
      */
     public Coordinador() {
-        this.catalogo=new Fachada();
+        this.catalogo = new Fachada();
         this.fVentas = new FVentas();
         this.recetaSub = new FachadaSubsistemaReceta();
-        this.controlSesion = new FachadaSesion(); 
+        this.controlSesion = new FachadaSesion();
     }
 
     /**
      * Asigna la referencia de la pantalla de ventas.
+     *
      * @param ventaFrame La instancia de la vista.
      */
     @Override
     public void setVentaFrame(VentaFrame ventaFrame) {
         this.ventaFrame = ventaFrame;
     }
-    
+
     /**
      * Asigna la referencia de la pantalla de menu.
+     *
      * @param menuJFrame La instancia de la vista.
      */
     @Override
     public void setMenuFrame(menuFrame menuJFrame) {
         this.menuJFrame = menuJFrame;
     }
-    
+
     /**
      * Asigna la referencia del dialog de validar receta.
+     *
      * @param recetaDlg La instancia de la vista.
      */
     @Override
     public void setRecetaDlg(validarRecetaDlg recetaDlg) {
         this.recetaDlg = recetaDlg;
     }
-    
+
     /**
      * Singelton del coordinador.
+     *
      * @return Instancia del coordinador.
      */
     public static Coordinador getCoordinador() {
@@ -94,58 +98,60 @@ public class Coordinador implements ICoordinador{
         }
         return cordinador;
     }
-    
+
     /**
      * Obtiene todos los productos activos existentes.
+     *
      * @return Resultado de la busqueda.
      */
     @Override
     public List<ProductoDTO> ObtenerProductos() {
         return catalogo.obtenerProductos();
     }
-    
+
     /**
      * Obtiene todos los productos en base un filtro por su nombre.
+     *
      * @param nombre Filtro nombre con el que se realizara la busqueda.
      * @return El resultado de la busqueda.
      */
     @Override
-    public List<ProductoDTO> ObtenerProductosPorNombre(String nombre){
+    public List<ProductoDTO> ObtenerProductosPorNombre(String nombre) {
         return catalogo.buscarProductosNombre(nombre);
     }
-    
 
-    
-    public EmpleadoDTO getEmpleadoLogueado(){
+    public EmpleadoDTO getEmpleadoLogueado() {
         return empleadoLogueado;
     }
-    
-    public void cerrarSesion(){
+
+    public void cerrarSesion() {
         this.empleadoLogueado = null;
-        
+
     }
 
     /**
-     * Procesa el cálculo del cambio (Si tu IControlVentas/FVentas aún tiene este método).
+     * Procesa el cálculo del cambio (Si tu IControlVentas/FVentas aún tiene
+     * este método).
      */
-    public double procesarCalculoCambio(Double total, Double pago) {
+    @Override
+    public Double procesarCalculoCambio(Double total, Double pago) {
         if (pago < total) {
             //JOptionPane.showMessageDialog(ventaFrame, "El pago es insuficiente. Faltan $" + (total - pago), "Aviso", JOptionPane.WARNING_MESSAGE);
-            return -1;
+            return -1.0;
         }
-        return pago - total; 
+        return pago - total;
     }
-    
+
     @Override
-    public boolean validarInicioSesion(LoginDTO login) {
+    public Boolean validarInicioSesion(LoginDTO login) {
         try {
             // Llamamos a la capa de negocios (Subsistema Sesion)
             EmpleadoDTO empleadoQueEntro = controlSesion.verificarCredenciales(login);
 
             if (empleadoQueEntro != null) {
-                
+
                 this.empleadoLogueado = empleadoQueEntro;
-                
+
                 pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
                 return true;
             }
@@ -157,11 +163,12 @@ public class Coordinador implements ICoordinador{
             System.err.println("Error al validar sesión: " + e.getMessage());
             return false;
         }
-    } 
-    
+    }
+
     /**
-     * Toma el producto seleccionado en la pantalla, arma el renglón (Detalle) 
-     * y lo manda a la fachada para agregarlo al carrito.
+     * Toma el producto seleccionado en la pantalla, arma el renglón (Detalle) y
+     * lo manda a la fachada para agregarlo al carrito.
+     *
      * @param producto El producto seleccionado de la tabla catálogo.
      * @param cantidad Cantidad ingresada por el usuario.
      */
@@ -195,13 +202,13 @@ public class Coordinador implements ICoordinador{
                 }
             }
         }
-        
+
         DetalleCarritoDTO detalle = new DetalleCarritoDTO();
         detalle.setProducto(producto);
         detalle.setCantidad(cantidad);
         fVentas.agregarAlCarrito(detalle);
         CarritoDTO carrito = fVentas.obtenerCarritoActual();
-        
+
         if (ventaFrame != null) {
             ventaFrame.actualizarTablaCarrito(carrito);
         }
@@ -209,9 +216,10 @@ public class Coordinador implements ICoordinador{
             menuJFrame.actualizarTablaCarrito(carrito);
         }
     }
-    
+
     /**
      * Manda la orden de borrar un producto del carrito y actualiza la pantalla.
+     *
      * @param idProducto ID del producto que se eliminara del carrito.
      * @param cantidad La cantidad a eliminar del producto.
      */
@@ -232,6 +240,7 @@ public class Coordinador implements ICoordinador{
 
     /**
      * Pide el carrito actual a la fachada para mostrarlo.
+     *
      * @return el carrito actual.
      */
     @Override
@@ -240,48 +249,22 @@ public class Coordinador implements ICoordinador{
     }
 
     /**
-     * Ejecuta el proceso de cobrar. Toma el carrito temporal y manda la orden de convertirlo en Venta.
-     * @param idEmpleado ID del empleado que realizo la venta.
-     * @param idCliente ID del cliente asociado a la venta.
+     * Procesa la compra: valida el pago, guarda en BD y devuelve el cambio. Si
+     * algo falla, lanza una Exception para que la pantalla la muestre.
+     *
+     * @param cantidadRecibida
+     * @param idEmpleado
+     * @param idCliente
+     * @return double
      */
     @Override
-    public void ejecutarFinalizarVenta(Long idEmpleado, Long idCliente) {
-        
-        CarritoDTO carrito = fVentas.obtenerCarritoActual();
-        
-        if (carrito == null || carrito.getListaProductos().isEmpty()) {
-            JOptionPane.showMessageDialog(ventaFrame, "El carrito esta vacio, agregue productos para vender.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+    public Double ejecutarFinalizarCompra(Double cantidadRecibida, Long idEmpleado, Long idCliente) throws Exception {
+        if (cantidadRecibida == null || idEmpleado == null || idCliente == null) {
+            return null;
         }
-
-        VentaDTO ventaRegistrada = fVentas.registrarVenta(carrito);
-        
-        if (ventaRegistrada != null) {
-            recetaSub.confirmarDescuentoReceta(); 
-            this.folioRecetaActual = null; 
-
-            JOptionPane.showMessageDialog(ventaFrame, 
-                "Venta " + ventaRegistrada.getIdVenta() + " registrada con exito!", 
-                "Venta Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                        ventaFrame.limpiarVenta(); 
-        } else {
-            JOptionPane.showMessageDialog(ventaFrame, "No se pudo procesar la venta en la Base de Datos.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        return fVentas.finalizarVenta(cantidadRecibida, idEmpleado, idCliente);
     }
 
-    /**
-     * Procesa el calculo del cambio.
-     * @param total Total de la venta.
-     * @param pago Pago dado por el cliente.
-     * @return El cambio de la operacion.
-     */
-    public double procesarCalculoCambio(double total, double pago) {
-        if (pago < total) {
-            return -1; 
-        }
-        return pago - total; 
-    }
-    
     /**
      * Limpia el folio actual (por ejemplo, si se cancela el uso de receta).
      */
@@ -293,15 +276,17 @@ public class Coordinador implements ICoordinador{
 
     /**
      * Asigna el folio actual que se usara en la venta.
+     *
      * @param folio Folio de la receta.
      */
     @Override
     public void setFolioRecetaActual(String folio) {
         this.folioRecetaActual = folio;
     }
-    
+
     /**
      * Metodo para obtener el folio que se esta trabajando.
+     *
      * @return El folio con el que se esta trabajando.
      */
     @Override
@@ -310,26 +295,28 @@ public class Coordinador implements ICoordinador{
     }
 
     /**
-     * Valida si un producto requiere receta y si hay disponibilidad en la misma.
+     * Valida si un producto requiere receta y si hay disponibilidad en la
+     * misma.
+     *
      * @param idProducto Producto a validar.
      * @param cantidad Cantidad a validar.
      * @return Si es valido.
      */
     @Override
-    public boolean validarProductoConReceta(Long idProducto, Integer cantidad) {
+    public Boolean validarProductoConReceta(Long idProducto, Integer cantidad) {
         if (folioRecetaActual == null || folioRecetaActual.isEmpty()) {
-            return true; 
+            return true;
         }
         boolean esValido = recetaSub.validarYReservar(folioRecetaActual, idProducto, cantidad);
         if (!esValido) {
-            JOptionPane.showMessageDialog(ventaFrame, 
-                "El producto no esta en la receta, el folio es inexistente o la cantidad excede lo recetado.", 
-                "Validacion de Receta", JOptionPane.WARNING_MESSAGE);
-            this.folioRecetaActual = null; 
+            JOptionPane.showMessageDialog(ventaFrame,
+                    "El producto no esta en la receta, el folio es inexistente o la cantidad excede lo recetado.",
+                    "Validacion de Receta", JOptionPane.WARNING_MESSAGE);
+            this.folioRecetaActual = null;
         }
         return esValido;
-    }  
-    
+    }
+
     /**
      * Muestra la pantalla de venta.
      */
@@ -341,7 +328,7 @@ public class Coordinador implements ICoordinador{
         ventaFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
         ventaFrame.setVisible(true);
     }
-    
+
     /**
      * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
      */
@@ -351,19 +338,20 @@ public class Coordinador implements ICoordinador{
             fVentas.obtenerCarritoActual().setTotalAPagar(0.0);
         }
         if (menuJFrame != null) {
-            menuJFrame.limpiarVenta(); 
+            menuJFrame.limpiarVenta();
         }
         if (ventaFrame != null) {
             ventaFrame.limpiarVenta();
-            ventaFrame.setVisible(false); 
+            ventaFrame.setVisible(false);
         }
         if (menuJFrame != null) {
             menuJFrame.setVisible(true);
         }
     }
-    
+
     /**
      * Verifica la existencia de una receta.
+     *
      * @param folio Folio de la receta a verificar.
      * @return El resultado de la busqueda.
      */

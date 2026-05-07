@@ -29,14 +29,14 @@ public interface ICoordinador {
     void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
     void eliminarProductoDelCarrito(Long idProducto, Integer cantidad);
     CarritoDTO obtenerCarritoActual();
-    void ejecutarFinalizarVenta(Long idEmpleado, Long idCliente);
-    double procesarCalculoCambio(Double total, Double pago);
+    public Double ejecutarFinalizarCompra(Double cantidadRecibida, Long idEmpleado, Long idCliente) throws Exception;
+    Double procesarCalculoCambio(Double total, Double pago);
 
     void setFolioRecetaActual(String folio);
     void limpiarFolioReceta();
     String getFolioRecetaActual();
-    boolean validarProductoConReceta(Long idProducto, Integer cantidad);
+    Boolean validarProductoConReceta(Long idProducto, Integer cantidad);
     
-    boolean validarInicioSesion(LoginDTO login);
+    Boolean validarInicioSesion(LoginDTO login);
     
 }

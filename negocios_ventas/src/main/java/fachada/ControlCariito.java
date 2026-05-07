@@ -22,16 +22,23 @@ public class ControlCariito {
         this.carritoActual.setFecha(LocalDate.now());
     }
 
-    public void agregarProductoAlCarrito(DetalleCarritoDTO nuevoDetalle) {
-
+    public void agregarProductoAlCarrito(DetalleCarritoDTO nuevoDetalle) {       
+        for (DetalleCarritoDTO existente : this.carritoActual.getListaProductos()) {
+            if (existente.getProducto().getId().equals(nuevoDetalle.getProducto().getId())) {               
+                int nuevaCantidad = existente.getCantidad() + nuevoDetalle.getCantidad();
+                existente.setCantidad(nuevaCantidad);
+                Double nuevoSubtotal = this.calcularSubtotal(existente.getProducto().getPrecio(), nuevaCantidad);
+                existente.setSubtotal(nuevoSubtotal);                
+                this.actualizarTotalesCarrito(this.carritoActual);
+                return; 
+            }
+        }
         Double subtotal = this.calcularSubtotal(
                 nuevoDetalle.getProducto().getPrecio(),
                 nuevoDetalle.getCantidad()
         );
         nuevoDetalle.setSubtotal(subtotal);
-
         this.carritoActual.getListaProductos().add(nuevoDetalle);
-
         this.actualizarTotalesCarrito(this.carritoActual);
     }
 
@@ -54,7 +61,8 @@ public class ControlCariito {
     }
     
     protected Double calcularSubtotal(Double precioUnitario, Integer cantidad) {
-        if (precioUnitario == null || cantidad == null) return 0.0;
+        if (precioUnitario == null || cantidad == null) 
+            return 0.0;
         return precioUnitario * cantidad;
     }
     
