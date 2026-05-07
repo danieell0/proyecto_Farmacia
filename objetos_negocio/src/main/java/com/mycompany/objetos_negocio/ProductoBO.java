@@ -38,4 +38,11 @@ public class ProductoBO implements IProductoBO {
         return productoN.stream().map(p->mapper.toDTO(p)).toList();
     }
 
+    @Override
+    public List<ProductoDTO> obtenerProductoPorClave(Long clave) {
+        List<Producto> productoC=productoDAO.obtenerProductoPorClave(clave);
+        return productoC.stream().map(p->mapper.toDTO(p)).toList();
+    }
+    
+    
 }

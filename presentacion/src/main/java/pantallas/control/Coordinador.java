@@ -361,4 +361,9 @@ public class Coordinador implements ICoordinador {
         boolean resultado = recetaSub.existeReceta(folio);
         return resultado;
     }
+
+    @Override
+    public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo) {
+        return catalogo.buscarProductoPorCodigo(codigo);
+    }
 }

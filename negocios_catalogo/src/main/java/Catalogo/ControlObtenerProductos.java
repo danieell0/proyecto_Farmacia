@@ -17,7 +17,6 @@ import java.util.List;
 public class ControlObtenerProductos {
 
     protected ProductoBO catalogoBO;
-    protected ControlCariito carrito;
 
     protected ControlObtenerProductos() {
         this.catalogoBO = new ProductoBO();
@@ -29,6 +28,10 @@ public class ControlObtenerProductos {
 
     protected List<ProductoDTO> obtenerProductoPorNombre(String nombre) {
         return catalogoBO.obtenerProductosPorNombre(nombre);
+    }
+    
+    protected  List<ProductoDTO> obtenerProductoPorCodigo(Long codigo){
+        return catalogoBO.obtenerProductoPorClave(codigo);
     }
     
 }

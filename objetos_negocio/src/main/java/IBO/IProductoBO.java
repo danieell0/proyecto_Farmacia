@@ -15,4 +15,7 @@ public interface IProductoBO {
     public List<ProductoDTO> obtenerProductos();
     
     public List<ProductoDTO> obtenerProductosPorNombre(String nombre);
+    
+    public List<ProductoDTO> obtenerProductoPorClave(Long clave);
+    
 }
