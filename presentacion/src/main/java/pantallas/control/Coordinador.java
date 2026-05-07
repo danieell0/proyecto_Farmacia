@@ -7,9 +7,10 @@ import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 import DTO.VentaDTO;
 import DTO.CarritoDTO;
+import DTO.CuentaAccesoDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
-import DTO.LoginDTO;
+import DTO.CuentaAccesoDTO;
 import subsistemaRecetas.FachadaSubsistemaReceta;
 import fachada.FVentas;
 import fachada.IVenta;
@@ -137,7 +138,7 @@ public class Coordinador implements ICoordinador{
     }
     
     @Override
-    public boolean validarInicioSesion(LoginDTO login) {
+    public boolean validarInicioSesion(CuentaAccesoDTO login) {
         try {
             // Llamamos a la capa de negocios (Subsistema Sesion)
             EmpleadoDTO empleadoQueEntro = controlSesion.verificarCredenciales(login);

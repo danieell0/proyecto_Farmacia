@@ -5,7 +5,7 @@
 package Sesion;
 
 import DTO.EmpleadoDTO;
-import DTO.LoginDTO;
+import DTO.CuentaAccesoDTO;
 
 /**
  *
@@ -14,5 +14,5 @@ import DTO.LoginDTO;
 public interface IFachadaSesion {
     
     //verifica en la bd si las credenciales coinciden
-    EmpleadoDTO verificarCredenciales(LoginDTO login);
+    EmpleadoDTO verificarCredenciales(CuentaAccesoDTO login);
 }

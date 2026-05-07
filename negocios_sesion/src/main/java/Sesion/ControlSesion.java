@@ -5,8 +5,9 @@
 package Sesion;
 
 
+import DTO.CuentaAccesoDTO;
 import DTO.EmpleadoDTO;
-import DTO.LoginDTO;
+
 import excepciones.NegocioExcepcion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,18 +26,18 @@ public class ControlSesion {
         this.empleadoBO = new EmpleadoBO();
     }
     
-    protected EmpleadoDTO validarLogin(LoginDTO credenciales) {
+    protected EmpleadoDTO validarLogin(CuentaAccesoDTO credenciales) {
         
         // Validación de seguridad por si el DTO llega vacío
-        if (credenciales == null || credenciales.getIdUsuarioTexto() == null) {
+        if (credenciales == null || credenciales.getIDEmpleado() == null) {
             LOGGER.log(Level.WARNING, "Se intentó procesar un login con credenciales nulas.");
             return null;
         }
 
         try {
             //se extraen los datos del dto
-            Long idEmpleado = Long.parseLong(credenciales.getIdUsuarioTexto().trim());
-            String password = credenciales.getPassword();
+            Long idEmpleado = credenciales.getIDEmpleado();
+            String password = credenciales.getContraseña();
             
             EmpleadoDTO empleado = empleadoBO.validarLogin(idEmpleado, password);
             
@@ -46,7 +47,7 @@ public class ControlSesion {
             
         } catch (NumberFormatException e) {
             // se tira el log de que uso algo no numerico
-            LOGGER.log(Level.WARNING, "Intento de login fallido. El ID ingresado no es numérico: {0}", credenciales.getIdUsuarioTexto());
+            LOGGER.log(Level.WARNING, "Intento de login fallido. El ID ingresado no es numérico: {0}", credenciales.getIDEmpleado());
             return null;
             
         } catch (Exception e) {
