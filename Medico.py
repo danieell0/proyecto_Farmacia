@@ -12,7 +12,8 @@ class MedicoDTO:
 # Mocks
 repositorio = {
     "12345678": MedicoDTO("12345678", "Dr. Simi", "MEDICOGENERAL", True),
-    "87654321": MedicoDTO("87654321", "Dr. Goku", "PEDIATRIA", True)
+    "87654321": MedicoDTO("87654321", "Dr. Goku", "PEDIATRIA", True),
+    "55556666": MedicoDTO("55556666", "Dr. Jorge", "MEDICOGENERAL", True)
 }
 
 # Definimos la ruta de la API
