@@ -334,22 +334,24 @@ public class Coordinador implements ICoordinador {
      * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
      */
     @Override
-    public void cancelarVenta() {
-        if (fVentas.obtenerCarritoActual() != null) {
-            fVentas.obtenerCarritoActual().getListaProductos().clear();
-            fVentas.obtenerCarritoActual().setTotalAPagar(0.0);
-        }
-        if (menuJFrame != null) {
-            menuJFrame.limpiarVenta();
-        }
-        if (ventaFrame != null) {
-            ventaFrame.limpiarVenta();
-            ventaFrame.setVisible(false);
-        }
-        if (menuJFrame != null) {
-            menuJFrame.setVisible(true);
-        }
+public void cancelarVenta() {
+    // 1. Ordenar a la fachada que devuelva el stock y limpie el carrito
+    // (Asegúrate de que FVentas tenga el método cancelarVentaActual como público)
+    if (this.fVentas instanceof FVentas) {
+        ((FVentas) this.fVentas).cancelarVentaActual();
     }
+
+    // 2. Limpiar las vistas
+    if (menuJFrame != null) {
+        menuJFrame.limpiarVenta();
+    }
+    
+    if (ventaFrame != null) {
+        ventaFrame.limpiarVenta();
+        // 3. Redirigir al menú usando la navegación
+        pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+    }
+}
 
     /**
      * Verifica la existencia de una receta.

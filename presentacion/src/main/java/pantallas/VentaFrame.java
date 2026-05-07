@@ -252,67 +252,55 @@ public class VentaFrame extends JFrame {
      * Procesa la finalización de la compra, registra la venta en el sistema
      * y redirige al usuario de vuelta al catálogo de productos.
      */
-    private void finalizarCompra() {
-        // 1. Validar que existan productos en la tabla antes de intentar cobrar
-        if (modelo.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, 
-                    "La lista de productos está vacía. No hay nada que vender.", 
-                    "Aviso", 
-                    JOptionPane.WARNING_MESSAGE);
+   private void finalizarCompra() {
+    // 1. Validación de presentación: Tabla vacía
+    if (modelo.getRowCount() == 0) {
+        JOptionPane.showMessageDialog(this, "La lista de productos está vacía.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    try {
+        // 2. Validación de presentación: Formato de texto
+        String textoRecibido = txtPago.getText().trim();
+        if (textoRecibido.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad con la que paga el cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            // 2. Obtener y validar el texto ingresado en el campo de pago
-            String textoRecibido = txtPago.getText().trim();
-            if (textoRecibido.isEmpty()) {
+        Double cantidadRecibida = Double.parseDouble(textoRecibido);
+
+        if (this.coordinador != null) {
+            // Pedimos el resultado al coordinador
+            Double resultado = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, 1L, 1L);
+
+            // 3. Evaluar la respuesta del subsistema
+            if (resultado == null) {
+                JOptionPane.showMessageDialog(this, "Error interno al procesar la venta.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (resultado == -1.0) {
+                JOptionPane.showMessageDialog(this, "El carrito de compras está vacío.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else if (resultado == -2.0) {
+                // AQUÍ SE CORRIGE TU ERROR DE LA CAPTURA:
+                JOptionPane.showMessageDialog(this, "Dinero insuficiente para completar la venta.", "Pago Insuficiente", JOptionPane.WARNING_MESSAGE);
+            } else {
+                // 4. VENTA EXITOSA: Solo si el resultado no es un código de error
                 JOptionPane.showMessageDialog(this, 
-                        "Debe ingresar la cantidad con la que paga el cliente.", 
-                        "Aviso", 
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            // 3. Convertir el texto a número (puede lanzar NumberFormatException)
-            Double cantidadRecibida = Double.parseDouble(textoRecibido);
-
-            // 4. Verificar que el coordinador esté disponible
-            if (this.coordinador != null) {
-                
-                // Ejecutar la lógica de negocio a través del coordinador
-                // El coordinador devuelve el cambio calculado o lanza excepción si falta dinero
-                Double cambio = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, 1L, 1L);
-
-                // 5. Mostrar mensaje de éxito al usuario con su cambio
-                JOptionPane.showMessageDialog(this, 
-                        "Venta registrada con éxito.\nEntregar cambio: $" + String.format("%.2f", cambio), 
+                        "Venta registrada con éxito.\nEntregar cambio: $" + String.format("%.2f", resultado), 
                         "Venta Exitosa", 
                         JOptionPane.INFORMATION_MESSAGE);
 
-                // 6. REDIRECCIÓN: Usar el control de navegación para volver al menú/catálogo
-                // El control de navegación se encarga de cerrar esta ventana y abrir la otra
+                // 5. Redirigir al menú (Catálogo)
                 if (this.control != null) {
                     this.control.abrirMenuFrame();
                 } else {
-                    // Fallback en caso de que el control no esté inyectado (por seguridad)
-                    System.err.println("Error: El control de navegación no fue inicializado en VentaFrame.");
-                    this.dispose();
+                    this.dispose(); 
                 }
             }
-
-        } catch (NumberFormatException ex) {
-            // Error si el usuario escribe letras o símbolos no válidos en el pago
-            JOptionPane.showMessageDialog(this, 
-                    "Por favor ingrese un número válido en la cantidad recibida.", 
-                    "Error de formato", 
-                    JOptionPane.ERROR_MESSAGE);
-            
-        } catch (Exception ex) {
-            // Captura errores de negocio (ej. "Dinero insuficiente") o errores de base de datos
-            JOptionPane.showMessageDialog(this, 
-                    "No se pudo completar la venta: " + ex.getMessage(), 
-                    "Error en el pago", 
-                    JOptionPane.WARNING_MESSAGE);
         }
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
+   }

@@ -35,4 +35,5 @@ public interface ICoordinador {
     void cancelarVenta();
     Boolean validarProductoConReceta(Long idProducto, Integer cantidad);
     Boolean validarInicioSesion(CuentaAccesoDTO login);    
+    public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo);
 }
