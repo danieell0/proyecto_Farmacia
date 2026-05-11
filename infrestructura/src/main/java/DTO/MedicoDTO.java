@@ -1,5 +1,7 @@
 package DTO;
 
+import Enums.Especialidades;
+
 
 /**
  *
@@ -8,14 +10,14 @@ package DTO;
 public class MedicoDTO {
     private String cedula;
     private String nombre;
-    private Especialidad especialidad;
+    private Especialidades especialidad;
     private Boolean permisos;
 
     public MedicoDTO() {
         
     }
     
-    public MedicoDTO(String cedula, String nombre, Especialidad especialidad, Boolean permisos) {
+    public MedicoDTO(String cedula, String nombre, Especialidades especialidad, Boolean permisos) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.especialidad = especialidad;
@@ -38,11 +40,11 @@ public class MedicoDTO {
         this.nombre = nombre;
     }
 
-    public Especialidad getEspecialidad() {
+    public Especialidades getEspecialidad() {
         return especialidad;
     }
 
-    public void setEspecialidad(Especialidad especialidad) {
+    public void setEspecialidad(Especialidades especialidad) {
         this.especialidad = especialidad;
     }
 

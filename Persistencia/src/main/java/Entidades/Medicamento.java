@@ -19,19 +19,19 @@ public class Medicamento extends Producto {
     private Double dosis;
     private String presentacion;
     private Boolean esControlada;
-    private List<Especialidades> especialidad;
+    private List<Especialidades> especialidades;
 
     public Medicamento() {
     }
 
-    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidad, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
+    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
         super(idProducto, nombre, precio, Imagen, stock);
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;
         this.presentacion = presentacion;
         this.esControlada = esControlada;
-        this.especialidad = especialidad;
+        this.especialidades = especialidades;
     }
 
     public String getMarca() {
@@ -74,12 +74,12 @@ public class Medicamento extends Producto {
         this.esControlada = esControlada;
     }
 
-    public List<Especialidades> getEspecialidad() {
-        return especialidad;
+    public List<Especialidades> getEspecialidades() {
+        return especialidades;
     }
 
-    public void setEspecialidad(List<Especialidades> especialidad) {
-        this.especialidad = especialidad;
+    public void setEspecialidades(List<Especialidades> especialidad) {
+        this.especialidades = especialidad;
     }
 
 }

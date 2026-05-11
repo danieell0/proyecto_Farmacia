@@ -2,6 +2,8 @@ package subsistemaRecetas;
 
 import DTO.RecetaDTO;
 import DTO.DetalleRecetaDTO;
+import Enums.Especialidades;
+import GestorMedico.ValidacionMedico;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -10,6 +12,8 @@ import java.util.Objects;
  * @author Dario
  */
 public class ControlValidarReceta {
+    
+    private final ValidacionMedico validadorMedico = new ValidacionMedico();
     
     /**
      * Valida si la fecha de la receta no esta expirada.
@@ -46,18 +50,26 @@ public class ControlValidarReceta {
      * @param receta Receta que se validara.
      * @param idProducto Producto que se validara.
      * @param cantidadSolicitada Cantidad solicitada del producto.
+     * @param especialidadProducto Especialidad del producto recetado.
      * @return Si la cantidad es valida o invalida.
      */
-    protected boolean validarMedicamentosReceta(RecetaDTO receta, Long idProducto, Integer cantidadSolicitada) {
-        if (receta == null || receta.getDetalles() == null) {
+    protected boolean validarMedicamentosReceta(RecetaDTO receta, Long idProducto, Integer cantidadSolicitada, Especialidades especialidadProducto) {
+        if (receta == null || especialidadProducto == null) {
+            return false;
+        }
+        boolean autorizado = validadorMedico.esMedicoAutorizado(
+                receta.getCedulaMedico(),
+                especialidadProducto
+        );
+
+        if (!autorizado) {
+            System.out.println("Bloqueo: Médico no autorizado por especialidad o permisos");
             return false;
         }
         for (DetalleRecetaDTO d : receta.getDetalles()) {
             if (Objects.equals(d.getIdMedicamento(), idProducto)) {
                 int disponible = d.getCantidadRecetada() - d.getCantidadSurtida();
-                if (disponible >= cantidadSolicitada) {
-                    return true;
-                }
+                return disponible >= cantidadSolicitada;
             }
         }
         return false;

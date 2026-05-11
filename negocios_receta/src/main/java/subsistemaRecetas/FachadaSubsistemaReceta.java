@@ -2,6 +2,7 @@ package subsistemaRecetas;
 
 import DTO.DetalleRecetaDTO;
 import DTO.RecetaDTO;
+import Enums.Especialidades;
 import Enums.EstadoReceta;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Fachada del subsistema de receta.
  * @author Dario
  */
-public class FachadaSubsistemaReceta implements IControlRecetas{
+public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
 
     private final ControlBuscarReceta controlBuscar = new ControlBuscarReceta();
     private final ControlValidarReceta controlValidar = new ControlValidarReceta();
@@ -21,26 +22,28 @@ public class FachadaSubsistemaReceta implements IControlRecetas{
 
     /**
      * Valida si la receta es apta para usarse basandose en fecha,
-     * estado actual y coincidencia con el medicamento.
+     * estado actual, coincidencia con el medicamento y especialidad del medico.
      * Esta descuenta temporalmente los medicamentos de la receta para asegurar
      * que no se usen en otra venta.
      * @param folio Folio de la receta que se validara y 
      * reservaran sus productos.
      * @param idProducto ID de los productos involucrados en la receta.
      * @param cantidad Cantidad de los productos involucrados en la receta.
+     * @param especialidadProducto Especialidad necesaria para recetar el Producto.
      * @return Si la receta se puede usar o no.
      */
     @Override
-    public boolean validarYReservar(String folio, Long idProducto, Integer cantidad) {
+    public boolean validarYReservar(String folio, Long idProducto, Integer cantidad, Especialidades especialidadProducto) {
         RecetaDTO receta = obtenerRecetaInterna(folio);
         if (receta == null) {
             receta = controlBuscar.obtenerRecetaPorFolio(folio);
         }
+
         if (receta != null) {
             boolean esValida = controlValidar.validarFechaReceta(receta) &&
                                controlEstado.obtenerEstadoDeReceta(receta) == EstadoReceta.ACTIVA &&
-                               controlValidar.validarExistenciaEnReceta(receta, idProducto) &&
-                               controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad);
+                               controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto);
+
             if (esValida) {
                 if (obtenerRecetaInterna(folio) == null) {
                     recetasActivas.add(receta);
@@ -134,13 +137,14 @@ public class FachadaSubsistemaReceta implements IControlRecetas{
      * Busca las productos en recetas activas.
      * @param idProducto ID de la receta activa a buscar.
      * @param cantidad La cantidad de productos en la receta.
+     * @param especialidadProducto Especialidad para recetar el Producto.
      * @return Si se encontro o no.
      */
     @Override
-    public String buscarEnRecetasActivas(Long idProducto, Integer cantidad) {
+    public String buscarEnRecetasActivas(Long idProducto, Integer cantidad, Especialidades especialidadProducto) {
         for (RecetaDTO receta : recetasActivas) {
             if (controlValidar.validarExistenciaEnReceta(receta, idProducto) && 
-                controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad)) {
+                controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto)) {
                 controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
                 return receta.getFolio();
             }

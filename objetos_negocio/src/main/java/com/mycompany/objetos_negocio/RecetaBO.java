@@ -16,6 +16,7 @@ import IBO.IRecetaBO;
 import Interfaces.IProductoDAO;
 import Interfaces.IRecetaDAO;
 import Mappers.RecetaMapper;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +28,9 @@ public class RecetaBO implements IRecetaBO{
     
     private IRecetaDAO recetaDAO;
     private IProductoDAO productoDAO;
-    private IValidacionMedico sistemaExterno;
     
     public RecetaBO(){
         this.recetaDAO = new RecetaDAO();
-        this.sistemaExterno = new ValidacionMedico();
         this.productoDAO = new ProductoDAO();
     }
 
@@ -39,54 +38,18 @@ public class RecetaBO implements IRecetaBO{
     public RecetaDTO buscarRecetaPorFolio(String folio) throws NegocioException {
         try {
             Receta receta = recetaDAO.obtenerRecetaPorFolio(folio);
-            if(receta == null){
-                throw new NegocioException("No se encontro ninguna receta con ese folio.");
+            if (receta == null) {
+                throw new NegocioException("No se encontró ninguna receta con ese folio.");
             }
-            String cedula = receta.getCedulaMedico();
-            List<DetalleReceta> detallesAutorizados = new ArrayList<>();
-            
-            for (DetalleReceta detalle : receta.getDetalles()) {
-            // 1. Buscamos el producto por el ID que viene en el detalle
-                Producto p = productoDAO.obtenerProductoPorId(detalle.getIdMedicamento());
-
-                // 2. Verificamos si ese producto es un Medicamento (tiene especialidades)
-                if (p instanceof Medicamento med) {
-                    List<Especialidades> requeridas = med.getEspecialidad();
-
-                    boolean autorizado = false;
-                    // Si no requiere especialidades, es de venta libre
-                    if (requeridas == null || requeridas.isEmpty()) {
-                        autorizado = true;
-                    } else {
-                        for (Especialidades esp : requeridas) {
-                            if (sistemaExterno.esMedicoAutorizado(cedula, esp.name())) {
-                                autorizado = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    // SI ESTÁ AUTORIZADO, LO AGREGAMOS
-                    if (autorizado) {
-                        detallesAutorizados.add(detalle);
-                    } else {
-                        // Opcional: imprimir en consola para saber qué se quitó
-                        System.out.println("Medicamento bloqueado por falta de especialidad: " + med.getNombre());
-                    }
-                } else {
-                    // Si es un producto normal (agua, galletas), pasa directo
-                    detallesAutorizados.add(detalle);
-                }
+            if (receta.getEstado() != EstadoReceta.ACTIVA) {
+                throw new NegocioException("La receta no está activa.");
             }
-
-            // IMPORTANTE: Actualizamos los detalles de la receta con solo los autorizados
-            receta.setDetalles(detallesAutorizados);
-
-            if (detallesAutorizados.isEmpty()) {
-                throw new NegocioException("El médico no está autorizado para recetar ninguno de los medicamentos de esta receta.");
+            if (receta.getFechaCaducidad() != null &&
+                LocalDate.now().isAfter(receta.getFechaCaducidad())) {
+                throw new NegocioException("La receta está caducada.");
             }
             return RecetaMapper.adaptarADTO(receta);
-        } catch (NegocioException ex){
+        } catch (NegocioException ex) {
             throw ex;
         }
     }

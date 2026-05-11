@@ -8,7 +8,7 @@ package Enums;
  *
  * @author Dario
  */
-public enum Especialidad {
+public enum Especialidades {
     MEDICOGENERAL,
     PSIQUIATRIA,
     ONCOLOGIA,

@@ -2,28 +2,20 @@ package pantallas.control;
 
 import Catalogo.Fachada;
 import Catalogo.ICatalogo;
-import DTO.DetalleVentaDTO;
-import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
-import DTO.VentaDTO;
 import DTO.CarritoDTO;
-import DTO.CuentaAccesoDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
 import DTO.CuentaAccesoDTO;
-import subsistemaRecetas.FachadaSubsistemaReceta;
 import fachada.FVentas;
 import fachada.IVenta;
 import interfaces.ICoordinador;
 import java.util.List;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import javax.swing.JOptionPane;
 import pantallas.VentaFrame;
 import pantallas.menuFrame;
 import pantallas.validarRecetaDlg;
 import Sesion.FachadaSesion;
-import subsistemaRecetas.IControlRecetas;
 import Sesion.IFachadaSesion;
 
 /**
@@ -42,7 +34,6 @@ public class Coordinador implements ICoordinador {
     private IVenta fVentas;
     private VentaFrame ventaFrame;
     private ICatalogo catalogo;
-    private IControlRecetas recetaSub;
     private String folioRecetaActual;
     private validarRecetaDlg recetaDlg;
     private menuFrame menuJFrame;
@@ -54,7 +45,6 @@ public class Coordinador implements ICoordinador {
     public Coordinador() {
         this.catalogo = new Fachada();
         this.fVentas = new FVentas();
-        this.recetaSub = new FachadaSubsistemaReceta();
         this.controlSesion = new FachadaSesion();
     }
 
@@ -175,46 +165,33 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad) {
-        if (producto == null || cantidad <= 0) {
-            return;
-        }
-        if (producto instanceof MedicamentoDTO) {
-            MedicamentoDTO medicamento = (MedicamentoDTO) producto;
-            if (medicamento.isEsControlado()) {
-                String folioValido = recetaSub.buscarEnRecetasActivas(medicamento.getId(), cantidad);
-                if (folioValido != null) {
-                    this.folioRecetaActual = folioValido;
-                } else {
-                    boolean exito = false;
-                    if (folioRecetaActual != null) {
-                        exito = recetaSub.validarYReservar(folioRecetaActual, medicamento.getId(), cantidad);
-                    }
-                    if (!exito) {
-                        validarRecetaDlg dlg = new validarRecetaDlg(null, true, this);
-                        dlg.setVisible(true);
-                        if (this.folioRecetaActual == null) {
-                            return;
-                        }
-                        if (!recetaSub.validarYReservar(this.folioRecetaActual, medicamento.getId(), cantidad)) {
-                            JOptionPane.showMessageDialog(null, "Receta invalida para este producto.");
-                            return;
-                        }
-                    }
+    if (producto == null || cantidad <= 0) return;
+
+        try {
+            DetalleCarritoDTO detalle = new DetalleCarritoDTO();
+            detalle.setProducto(producto);
+            detalle.setCantidad(cantidad);
+            fVentas.agregarAlCarrito(detalle);
+            actualizarCarrito();
+
+        } catch (RuntimeException e) {
+            
+            if (e.getMessage().contains("folio") || e.getMessage().contains("receta")) {
+                if (this.folioRecetaActual != null) {
+                    JOptionPane.showMessageDialog(null, "Validación fallida: " + e.getMessage());
+                    this.limpiarFolioReceta();
+                    return;
                 }
+                
+                validarRecetaDlg dlg = new validarRecetaDlg(null, true, this);
+                dlg.setVisible(true);
+                if (this.folioRecetaActual != null) {
+                    this.agregarProductoAlCarrito(producto, cantidad);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
-        }
-
-        DetalleCarritoDTO detalle = new DetalleCarritoDTO();
-        detalle.setProducto(producto);
-        detalle.setCantidad(cantidad);
-        fVentas.agregarAlCarrito(detalle);
-        CarritoDTO carrito = fVentas.obtenerCarritoActual();
-
-        if (ventaFrame != null) {
-            ventaFrame.actualizarTablaCarrito(carrito);
-        }
-        if (menuJFrame != null) {
-            menuJFrame.actualizarTablaCarrito(carrito);
         }
     }
 
@@ -227,16 +204,7 @@ public class Coordinador implements ICoordinador {
     @Override
     public void eliminarProductoDelCarrito(Long idProducto, Integer cantidad) {
         fVentas.eliminarDelCarrito(idProducto);
-        if (folioRecetaActual != null) {
-            recetaSub.cancelarReserva(folioRecetaActual, idProducto, cantidad);
-        }
-        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
-        if (ventaFrame != null) {
-            ventaFrame.actualizarTablaCarrito(carritoActualizado);
-        }
-        if (menuJFrame != null) {
-            menuJFrame.actualizarTablaCarrito(carritoActualizado);
-        }
+        actualizarCarrito();
     }
 
     /**
@@ -272,7 +240,7 @@ public class Coordinador implements ICoordinador {
     @Override
     public void limpiarFolioReceta() {
         this.folioRecetaActual = null;
-        recetaSub.limpiarRecetasGuardadas();
+        this.fVentas.setFolioRecetaActual(null);
     }
 
     /**
@@ -283,6 +251,7 @@ public class Coordinador implements ICoordinador {
     @Override
     public void setFolioRecetaActual(String folio) {
         this.folioRecetaActual = folio;
+        this.fVentas.setFolioRecetaActual(folio);
     }
 
     /**
@@ -299,20 +268,17 @@ public class Coordinador implements ICoordinador {
      * Valida si un producto requiere receta y si hay disponibilidad en la
      * misma.
      *
-     * @param idProducto Producto a validar.
+     * @param producto Producto a validar.
      * @param cantidad Cantidad a validar.
      * @return Si es valido.
      */
     @Override
-    public Boolean validarProductoConReceta(Long idProducto, Integer cantidad) {
-        if (folioRecetaActual == null || folioRecetaActual.isEmpty()) {
-            return true;
-        }
-        boolean esValido = recetaSub.validarYReservar(folioRecetaActual, idProducto, cantidad);
+    public Boolean validarProductoConReceta(ProductoDTO producto, Integer cantidad) {
+        boolean esValido = fVentas.validarProductoParaVenta(producto, cantidad);
         if (!esValido) {
             JOptionPane.showMessageDialog(ventaFrame,
-                    "El producto no esta en la receta, el folio es inexistente o la cantidad excede lo recetado.",
-                    "Validacion de Receta", JOptionPane.WARNING_MESSAGE);
+                    "El producto no está en la receta, el folio es inexistente o la cantidad excede lo recetado.",
+                    "Validación de Receta", JOptionPane.WARNING_MESSAGE);
             this.folioRecetaActual = null;
         }
         return esValido;
@@ -334,24 +300,20 @@ public class Coordinador implements ICoordinador {
      * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
      */
     @Override
-public void cancelarVenta() {
-    // 1. Ordenar a la fachada que devuelva el stock y limpie el carrito
-    // (Asegúrate de que FVentas tenga el método cancelarVentaActual como público)
-    if (this.fVentas instanceof FVentas) {
-        ((FVentas) this.fVentas).cancelarVentaActual();
-    }
+    public void cancelarVenta() {
+        // 1. Ordenar a la fachada que devuelva el stock y limpie el carrito
+        // (Asegúrate de que FVentas tenga el método cancelarVentaActual como público)
+        if (this.fVentas instanceof FVentas) {
+            ((FVentas) this.fVentas).cancelarVentaActual();
+        }
+        this.folioRecetaActual = null;
 
-    // 2. Limpiar las vistas
-    if (menuJFrame != null) {
-        menuJFrame.limpiarVenta();
+        if (menuJFrame != null) menuJFrame.limpiarVenta();
+        if (ventaFrame != null) {
+            ventaFrame.limpiarVenta();
+            pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+        }
     }
-    
-    if (ventaFrame != null) {
-        ventaFrame.limpiarVenta();
-        // 3. Redirigir al menú usando la navegación
-        pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
-    }
-}
 
     /**
      * Verifica la existencia de una receta.
@@ -360,12 +322,23 @@ public void cancelarVenta() {
      * @return El resultado de la busqueda.
      */
     public boolean existeReceta(String folio) {
-        boolean resultado = recetaSub.existeReceta(folio);
+        boolean resultado = fVentas.verificarExistenciaReceta(folio);
         return resultado;
     }
 
     @Override
     public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo) {
         return catalogo.buscarProductoPorCodigo(codigo);
+    }
+    
+    @Override
+    public void actualizarCarrito(){
+        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
+        if (ventaFrame != null) {
+            ventaFrame.actualizarTablaCarrito(carritoActualizado);
+        }
+        if (menuJFrame != null) {
+            menuJFrame.actualizarTablaCarrito(carritoActualizado);
+        }
     }
 }

@@ -31,6 +31,7 @@ public class ProductoMapper {
             dto.setStock(m.getStock());
             dto.setPresentacion(m.getPresentacion());
             dto.setEsControlado(m.getEsControlada());
+            dto.setEspecialidades(m.getEspecialidades());
             return dto;
         }
         ProductoDTO dto = new ProductoDTO();
@@ -58,6 +59,7 @@ public class ProductoMapper {
             entity.setStock(m.getStock());
             entity.setPresentacion(m.getPresentacion());
             entity.setEsControlada(m.isEsControlado());
+            entity.setEspecialidades(m.getEspecialidades());
             return entity;
         }
         Producto entity=new Producto();

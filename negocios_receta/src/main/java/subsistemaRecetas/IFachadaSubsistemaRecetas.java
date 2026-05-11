@@ -1,27 +1,28 @@
 package subsistemaRecetas;
 
 import DTO.RecetaDTO;
+import Enums.Especialidades;
 
 /**
  * Interfaz que determina los metodos de la clase FachadaSubsistemaReceta.
  * @author Dario
  */
-public interface IControlRecetas {
+public interface IFachadaSubsistemaRecetas {
     
     /**
      * Valida si la receta es apta para usarse basandose en fecha,
-     * estado actual y coincidencia con el medicamento.
+     * estado actual, coincidencia con el medicamento y especialidad del medico.
      * Esta descuenta temporalmente los medicamentos de la receta para asegurar
      * que no se usen en otra venta.
      * @param folio Folio de la receta que se validara y 
      * reservaran sus productos.
      * @param idProducto ID de los productos involucrados en la receta.
      * @param cantidad Cantidad de los productos involucrados en la receta.
+     * @param especialidadProducto Especialidad necesaria para recetar el Producto.
      * @return Si la receta se puede usar o no.
      */
     public abstract boolean validarYReservar(
-            String folio, Long idProducto, Integer cantidad
-    );
+            String folio, Long idProducto, Integer cantidad, Especialidades especialidadProducto);
     
     /**
      * Cancela la reserva de los productos agregados al carrito
@@ -64,8 +65,11 @@ public interface IControlRecetas {
      * Busca las productos en recetas activas.
      * @param idProducto ID de la receta activa a buscar.
      * @param cantidad La cantidad de productos en la receta.
+     * @param especialidadProducto Especialidad para recetar el Producto.
      * @return Si se encontro o no.
      */
-    public abstract String buscarEnRecetasActivas(Long idProducto, Integer cantidad);
+    public abstract String buscarEnRecetasActivas(
+            Long idProducto, Integer cantidad, Especialidades especialidadProducto
+    );
 
 }

@@ -1,7 +1,9 @@
 package DTO;
 
+import Enums.Especialidades;
 import Enums.Medida;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * DTO que representa un medicamento.
@@ -13,6 +15,7 @@ public class MedicamentoDTO extends ProductoDTO{
     private Double dosis;
     private String presentacion;
     private Boolean esControlado;
+    private List<Especialidades> especialidades;
 //    private String lote;
 //    private LocalDate caducidad;
 
@@ -36,13 +39,14 @@ public class MedicamentoDTO extends ProductoDTO{
      * @param esControlado Restriccion del medicamento.
      * @param imagen Imagen del Producto
      */
-    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, String marca, Medida medida, Double dosis, String presentacion, Boolean esControlado, Integer stock) {
+    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, String marca, Medida medida, Double dosis, String presentacion, Boolean esControlado, Integer stock, List <Especialidades> especialidades) {
         super(id, nombre, precio, imagen, stock); //stock
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;
         this.presentacion = presentacion;
         this.esControlado = esControlado;
+        this.especialidades = especialidades;
     }
 
     /** @return Obtiene la marca del medicamento. */
@@ -94,5 +98,23 @@ public class MedicamentoDTO extends ProductoDTO{
     public void setEsControlado(boolean esControlado) {
         this.esControlado = esControlado;
     }
+
+    public Boolean getEsControlado() {
+        return esControlado;
+    }
+
+    public void setEsControlado(Boolean esControlado) {
+        this.esControlado = esControlado;
+    }
+
+    public List<Especialidades> getEspecialidades() {
+        return especialidades;
+    }
+
+    public void setEspecialidades(List<Especialidades> especialidad) {
+        this.especialidades = especialidad;
+    }
+    
+    
     
 }

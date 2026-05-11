@@ -3,8 +3,6 @@ package subsistemaRecetas;
 import Bo.NegocioException;
 import DTO.RecetaDTO;
 import com.mycompany.objetos_negocio.RecetaBO;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Clase Control que se encarga de la busqueda de recetas.

@@ -33,7 +33,8 @@ public interface ICoordinador {
     void limpiarFolioReceta();
     String getFolioRecetaActual();
     void cancelarVenta();
-    Boolean validarProductoConReceta(Long idProducto, Integer cantidad);
+    Boolean validarProductoConReceta(ProductoDTO producto, Integer cantidad);
     Boolean validarInicioSesion(CuentaAccesoDTO login);    
     public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo);
+    void actualizarCarrito();
 }

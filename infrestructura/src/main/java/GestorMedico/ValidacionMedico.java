@@ -4,6 +4,7 @@
  */
 package GestorMedico;
 
+import Enums.Especialidades;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,13 +19,13 @@ import java.time.Duration;
 public class ValidacionMedico implements IValidacionMedico{
     
     @Override
-    public boolean esMedicoAutorizado(String cedula, String especialidad) {
+    public boolean esMedicoAutorizado(String cedula, Especialidades especialidad) {
         try {
             HttpClient client = HttpClient.newBuilder()
                     .connectTimeout(Duration.ofSeconds(5))
                     .build();
 
-            String url = String.format("http://localhost:5001/validar/%s/%s", cedula, especialidad);
+            String url = String.format("http://localhost:5001/validar_especialidad?cedula=%s&especialidad=%s", cedula, especialidad.name());
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
