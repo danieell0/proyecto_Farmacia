@@ -1,12 +1,17 @@
 package Clases;
 
+import ConexionMongo.IBaseMongo;
+import ConexionMongo.ManejadorConexiones;
+import static ConexionMongo.ManejadorConexiones.obtenerCodecs;
 import Entidades.DetalleReceta;
 import Entidades.Medicamento;
 import Entidades.Receta;
 import Enums.EstadoReceta;
 import Interfaces.IRecetaDAO;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.time.LocalDate;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +19,11 @@ import java.util.List;
  *
  * @author Dario
  */
-public class RecetaDAO implements IRecetaDAO{
+public class RecetaDAO implements IRecetaDAO, IBaseMongo{
     
     private List<Receta> recetas;
     private List<Medicamento> medicamentos;
+    private static final String nombreColeccion = "recetas";
     
     public RecetaDAO() {
         this.recetas = new ArrayList<>();
@@ -129,5 +135,20 @@ public class RecetaDAO implements IRecetaDAO{
             }
         }
     }
+
+    @Override
+    public MongoDatabase obtenerBaseDatos(MongoClient cliente) {
+        MongoDatabase empresaBD = cliente.getDatabase(
+                    ManejadorConexiones.baseDatos
+            ).withCodecRegistry (obtenerCodecs());
+        return empresaBD;
+    }
+
+    @Override
+    public MongoCollection obtenerColeccion(MongoDatabase baseDatos) {
+        MongoCollection<Receta> coleccionRecetas = baseDatos.getCollection(nombreColeccion, Receta.class);
+        return coleccionRecetas;
+    }
+      
     
 }
