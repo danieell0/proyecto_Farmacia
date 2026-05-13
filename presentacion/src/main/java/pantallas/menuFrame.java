@@ -1,10 +1,12 @@
 package pantallas;
 
+import componentes.panelMenuLateralEmpleado;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
+import componentes.PanelEncabezado;
 import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
@@ -78,83 +80,15 @@ public class menuFrame extends JFrame {
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(240, 243, 245));
         Coordinador.getCoordinador().setMenuFrame(this);
-        add(crearSidebar(), BorderLayout.WEST);
+        add(new panelMenuLateralEmpleado(), BorderLayout.WEST);
         add(crearMainContent(), BorderLayout.CENTER);
     }
 
-    private JPanel crearSidebar() {
-        JPanel sidebar = new JPanel();
-        sidebar.setPreferredSize(new Dimension(110, 0));
-        sidebar.setBackground(new Color(0, 121, 107));
-        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
-        sidebar.add(Box.createVerticalStrut(20));
-
-        ImageIcon iconLogo = new ImageIcon(
-                getClass().getResource("/icons/logo.png")
-        );
-        Image imgLogo = iconLogo.getImage().getScaledInstance(
-                45,
-                45,
-                Image.SCALE_SMOOTH
-        );
-
-        JLabel logo = new JLabel(new ImageIcon(imgLogo));
-        logo.setAlignmentX(Component.CENTER_ALIGNMENT);
-        sidebar.add(logo);
-        sidebar.add(Box.createVerticalStrut(50));
-
-        String[] iconos = {
-            "/icons/venta.png"
-        };
-
-        String[] tooltips = {
-            "Ventas",
-            "Historial",
-            "Clientes",
-            "Inventario",
-            "Reportes",
-            "Configuración"
-        };
-
-        for (int i = 0; i < iconos.length; i++) {
-            ImageIcon icon = new ImageIcon(
-                    getClass().getResource(iconos[i])
-            );
-
-            Image img = icon.getImage().getScaledInstance(28, 28, Image.SCALE_SMOOTH);
-
-            JButton btn = new JButton(new ImageIcon(img));
-            btn.setToolTipText(tooltips[i]);
-            btn.setMaximumSize(new Dimension(60, 60));
-            btn.setFocusPainted(false);
-            btn.setBorderPainted(false);
-            btn.setContentAreaFilled(false);
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            btn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    btn.setOpaque(true);
-                    btn.setBackground(new Color(0, 150, 136));
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    btn.setOpaque(false);
-                    btn.setBackground(null);
-                }
-            });
-            sidebar.add(btn);
-            sidebar.add(Box.createVerticalStrut(20));
-        }
-        return sidebar;
-    }
 
     private JPanel crearMainContent() {
         JPanel main = new JPanel(new BorderLayout());
         main.setBackground(new Color(245, 247, 250));
-        main.add(crearHeaderModerno(), BorderLayout.NORTH);
+        main.add(new PanelEncabezado(), BorderLayout.NORTH);
         JPanel body = new JPanel(new BorderLayout());
         body.setOpaque(false);
         body.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -166,61 +100,6 @@ public class menuFrame extends JFrame {
         body.add(crearCarritoModerno(), BorderLayout.EAST);
         main.add(body, BorderLayout.CENTER);
         return main;
-    }
-
-    private JPanel crearHeaderModerno() {
-        JPanel header = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g;
-                GradientPaint gp = new GradientPaint(
-                        0,
-                        0,
-                        new Color(0, 121, 107),
-                        getWidth(),
-                        0,
-                        new Color(0, 150, 136)
-                );
-                g2.setPaint(gp);
-                g2.fillRect(0, 0, getWidth(), getHeight());
-            }
-        };
-        header.setPreferredSize(new Dimension(0, 70));
-
-        EmpleadoDTO usuarioActivo = Coordinador.getCoordinador().getEmpleadoLogueado();
-        String saludo = "Atendiendo";
-        if (usuarioActivo != null) {
-            saludo = "Atendiendo: " + usuarioActivo.getNombre() + " (" + usuarioActivo.getRolPuesto() + ")";
-        }
-        JLabel titulo = new JLabel(saludo);
-        titulo.setForeground(Color.WHITE);
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titulo.setBorder(new EmptyBorder(0, 25, 0, 0));
-        JButton btnCerrarSesion = new JButton("Cerrar sesión");
-        btnCerrarSesion.setFocusPainted(false);
-        btnCerrarSesion.setForeground(Color.WHITE);
-        btnCerrarSesion.setBackground(new Color(239, 83, 80));
-        btnCerrarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCerrarSesion.addActionListener(e -> {
-
-            int respuesta = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Deseas cerrar sesión?",
-                    "Cerrar Sesión",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (respuesta == JOptionPane.YES_OPTION) {
-                Coordinador.getCoordinador().cerrarSesion();
-                this.dispose();
-                controlNavegacion.getcontrolNavegacion().abrirLogin();
-            }
-        });
-        JPanel right = new JPanel();
-        right.setOpaque(false);
-        right.add(btnCerrarSesion);
-        header.add(titulo, BorderLayout.WEST);
-        header.add(right, BorderLayout.EAST);
-        return header;
     }
 
     private JPanel crearBuscador() {
