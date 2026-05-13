@@ -4,11 +4,17 @@
  */
 package Clases;
 
+import ConexionMongo.ManejadorConexiones;
 import Entidades.Medicamento;
 import Entidades.Producto;
 import Enums.Especialidades;
 import Enums.Medida;
 import Interfaces.IProductoDAO;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Filters.regex;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,49 +24,35 @@ import java.util.List;
  */
 public class ProductoDAO implements IProductoDAO {
 
-    private List<Producto> productos;
+    //coleccion de productos de mongo
+    private MongoCollection<Producto> coleccionProductos;
 
     public ProductoDAO() {
-        productos = new ArrayList<>();
-        productos.add(new Producto(1L, "Agua Natural", 20.0, "/imagenes/paracetamol.png", 25));
-        productos.add(new Producto(2L, "Galletas María", 30.0, "/imagenes/ibuprofeno.png", 20));
-        productos.add(new Producto(3L, "Jugo de Naranja", 25.0, "/imagenes/omeprazol.png", 10));
-        productos.add(new Producto(4L, "Papel Higiénico", 60.0, "/imagenes/paracetamol.png", 5));
-        productos.add(new Producto(5L, "Shampoo", 75.0, "/imagenes/ibuprofeno.png", 50));
-
-        productos.add(new Medicamento("Genérico", Medida.mg, 500.0, "Tabletas", true, List.of(Especialidades.MEDICOGENERAL), 6L, "Paracetamol", 50.0, "/imagenes/omeprazol.png", 10));
-        productos.add(new Medicamento("Pfizer", Medida.mg, 400.0, "Cápsulas", true, List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA), 7L, "Ibuprofeno", 80.0, "/imagenes/paracetamol.png", 20));
-        productos.add(new Medicamento("Sandoz", Medida.mg, 500.0, "Cápsulas", true, List.of(Especialidades.PEDIATRIA), 8L, "Amoxicilina", 120.0, "/imagenes/ibuprofeno.png", 5));
-        productos.add(new Medicamento("Bayer", Medida.mg, 100.0, "Tabletas", false, List.of(Especialidades.CARDIOLOGIA), 9L, "Aspirina", 45.0, "/imagenes/omeprazol.png", 20));
-        productos.add(new Medicamento("Genérico", Medida.mg, 10.0, "Tabletas", false, List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA), 10L, "Loratadina", 90.0, "/imagenes/omeprazol.png", 10));
-
-    }
-
-    public List<Producto> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+        //obtenemos la coleccion de productos de mongo 
+        this.coleccionProductos = ManejadorConexiones.obtenerColeccionProductos();
     }
 
     @Override
     public List<Producto> obtenerProductos() {
-        return new ArrayList<>(productos);
+        //regresa todos los productos de la coleccion
+        return coleccionProductos.find().into(new ArrayList<>());
     }
 
     @Override
     public List<Producto> obtenerProductosPorNombre(String nombre) {
-        return productos.stream().filter(p -> p.getNombre() != null && p.getNombre().toLowerCase().contains(nombre.toLowerCase())).toList();
+        //regresa los productos filtrados por nombre 
+        return coleccionProductos .find(regex("nombre", nombre,"i")).into(new ArrayList<>());
     }
 
     @Override
     public List<Producto> obtenerProductoPorClave(Long clave) {
-         return productos.stream().filter(p->p.getStock()>0 && p.getIdProducto().equals(clave)).toList();
+        //regresa los productos filtrados por clave
+        return coleccionProductos.find(and(gt("stock",0),eq("idProducto",clave))).into(new ArrayList<>());
     }
 
     @Override
     public Producto obtenerProductoPorId(Long id) {
-        return productos.stream().filter(p->p.getIdProducto().equals(id)).findFirst().orElse(null);
+        //regresa el producto con ese id
+        return coleccionProductos.find(and(eq("idProducto",id))).first();
     }
 }
