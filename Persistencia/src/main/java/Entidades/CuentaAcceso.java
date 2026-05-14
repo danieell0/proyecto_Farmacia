@@ -4,13 +4,19 @@
  */
 package Entidades;
 
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
 /**
  *
  * @author Benjamin
  */
 public class CuentaAcceso {
     
+    
+    @BsonProperty("IDEmpleado")
     private Long IDEmpleado;
+    
+    @BsonProperty("contrasena")
     private String contrasena;
 
     public CuentaAcceso() {

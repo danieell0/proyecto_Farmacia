@@ -5,11 +5,16 @@
 package Clases;
 
 import ConexionMongo.ManejadorConexiones;
+import Entidades.CuentaAcceso;
+import Entidades.Empleado;
 import Entidades.Medicamento;
 import Entidades.Producto;
 import Enums.Especialidades;
+import Enums.EstatusEmpleado;
 import Enums.Medida;
+import Enums.RolPuesto;
 import com.mongodb.client.MongoCollection;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -23,7 +28,9 @@ public class inserts {
      */
     public static void main(String[] args) {
         MongoCollection<Producto> coleccionProductos = ManejadorConexiones.obtenerColeccionProductos();
-
+        
+        coleccionProductos.drop();
+        
         coleccionProductos.insertOne(new Producto(1L, "Agua Natural", 20.0, "/imagenes/paracetamol.png", 25));
         coleccionProductos.insertOne(new Producto(2L, "Galletas Maria", 30.0, "/imagenes/ibuprofeno.png", 20));
         coleccionProductos.insertOne(new Producto(3L, "Jugo de Naranja", 25.0, "/imagenes/omeprazol.png", 10));
@@ -35,6 +42,29 @@ public class inserts {
         coleccionProductos.insertOne(new Medicamento("Sandoz", Medida.mg, 500.0, "Cápsulas", true, List.of(Especialidades.PEDIATRIA), 8L, "Amoxicilina", 120.0, "/imagenes/ibuprofeno.png", 5));
         coleccionProductos.insertOne(new Medicamento("Bayer", Medida.mg, 100.0, "Tabletas", false, List.of(Especialidades.CARDIOLOGIA), 9L, "Aspirina", 45.0, "/imagenes/omeprazol.png", 20));
         coleccionProductos.insertOne(new Medicamento("Genérico", Medida.mg, 10.0, "Tabletas", false, List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA), 10L, "Loratadina", 90.0, "/imagenes/omeprazol.png", 10));
+        
+        MongoCollection<Empleado> coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
+        
+        coleccionEmpleados.drop();
+        
+        coleccionEmpleados.insertOne(new Empleado(123L, "Juan", "Perez", "Gomez", "555-0001", 
+                                     RolPuesto.LIDER, LocalDate.of(1990, 5, 20), EstatusEmpleado.ACTIVO));
+        
+        coleccionEmpleados.insertOne(new Empleado(456L, "Maria", "Lopez", "Diaz", "555-0002", 
+                                     RolPuesto.CAJERO, LocalDate.of(1995, 8, 15), EstatusEmpleado.ACTIVO));
+        
+        coleccionEmpleados.insertOne(new Empleado(789L, "Carlos", "Ruiz", "Soto", "555-0003", 
+                                     RolPuesto.CAJERO, LocalDate.of(1998, 2, 10), EstatusEmpleado.INACTIVO));
+        
+        
+        MongoCollection<CuentaAcceso> coleccionCuentas = ManejadorConexiones.obtenerColeccionCuentas();
+        
+        coleccionCuentas.drop();
+        
+        coleccionCuentas.insertOne(new CuentaAcceso(123L, "admin"));
+        coleccionCuentas.insertOne(new CuentaAcceso(456L, "caja"));
+        coleccionCuentas.insertOne(new CuentaAcceso(789L, "caja2"));
+        
     }
 
 }
