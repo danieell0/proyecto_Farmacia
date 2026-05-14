@@ -36,7 +36,9 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
-        return coleccionProductos.find().into(new ArrayList<>());
+        List<Producto> productos=coleccionProductos.find().into(new ArrayList<>());
+        productos.forEach(p-> System.out.println(p.toString()));
+        return productos;
     }
 
     @Override

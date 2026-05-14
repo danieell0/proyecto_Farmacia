@@ -4,10 +4,13 @@
  */
 package Entidades;
 
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
+
 /**
  *
  * @author Jorge
  */
+@BsonDiscriminator
 public class Producto {
 
     private Long idProducto;
@@ -66,7 +69,10 @@ public class Producto {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", Imagen=" + Imagen + ", stock=" + stock + '}';
+    }
 
 }

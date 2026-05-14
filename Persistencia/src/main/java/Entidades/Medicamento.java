@@ -7,11 +7,13 @@ package Entidades;
 import Enums.Especialidades;
 import Enums.Medida;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 /**
  *
  * @author Jorge
  */
+@BsonDiscriminator
 public class Medicamento extends Producto {
 
     private String marca;
@@ -82,4 +84,11 @@ public class Medicamento extends Producto {
         this.especialidades = especialidad;
     }
 
+    @Override
+    public String toString() {
+        return "Medicamento{" + "marca=" + marca + ", medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlada=" + esControlada + ", especialidades=" + especialidades + '}';
+    }
+
+    
+    
 }
