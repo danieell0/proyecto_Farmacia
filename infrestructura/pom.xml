@@ -16,7 +16,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.mycompany.infrestructura.Infrestructura</exec.mainClass>
     </properties>
 </project>
