@@ -25,7 +25,7 @@ public class inserts {
         MongoCollection<Producto> coleccionProductos = ManejadorConexiones.obtenerColeccionProductos();
 
         coleccionProductos.insertOne(new Producto(1L, "Agua Natural", 20.0, "/imagenes/paracetamol.png", 25));
-        coleccionProductos.insertOne(new Producto(2L, "Galletas Marea", 30.0, "/imagenes/ibuprofeno.png", 20));
+        coleccionProductos.insertOne(new Producto(2L, "Galletas Maria", 30.0, "/imagenes/ibuprofeno.png", 20));
         coleccionProductos.insertOne(new Producto(3L, "Jugo de Naranja", 25.0, "/imagenes/omeprazol.png", 10));
         coleccionProductos.insertOne(new Producto(4L, "Papel Higienico", 60.0, "/imagenes/paracetamol.png", 5));
         coleccionProductos.insertOne(new Producto(5L, "Shampoo", 75.0, "/imagenes/ibuprofeno.png", 50));
