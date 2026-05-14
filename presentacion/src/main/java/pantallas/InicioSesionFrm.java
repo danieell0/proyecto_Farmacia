@@ -140,7 +140,17 @@ public class InicioSesionFrm extends JDialog{
     private void configurarVentana(Frame parent) {
         this.setSize(350, 450);
         this.setResizable(false);
-        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        //para que no se quede corriendo el programa sin pantallas cuando se cierra el login
+        this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        // escuchador del boton X 
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // fuerza el apagado de la maquina virtual y los hilos de mongo terminando el programa
+                System.exit(0); 
+            }
+        });
+        
         // Esto hace que la ventanita aparezca exactamente en el centro de la ventana actual
         this.setLocationRelativeTo(parent); 
     }

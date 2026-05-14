@@ -7,6 +7,7 @@ package Sesion;
 
 import DTO.CuentaAccesoDTO;
 import DTO.EmpleadoDTO;
+import DTO.SesionActualDTO;
 
 import excepciones.NegocioExcepcion;
 import java.util.logging.Level;
@@ -26,7 +27,7 @@ public class ControlSesion {
         this.empleadoBO = new EmpleadoBO();
     }
     
-    protected EmpleadoDTO validarLogin(CuentaAccesoDTO credenciales) {
+    protected SesionActualDTO validarLogin(CuentaAccesoDTO credenciales) {
         
         // Validación de seguridad por si el DTO llega vacío
         if (credenciales == null || credenciales.getIDEmpleado() == null) {
@@ -41,9 +42,23 @@ public class ControlSesion {
             
             EmpleadoDTO empleado = empleadoBO.validarLogin(idEmpleado, password);
             
-            //se tira el log de que el login fue exitoso
+            if(empleado != null){
+                //concatenar el nombre para el dto de la sesion actual
+                String nombreCompleto = empleado.getNombre() + " " + empleado.getApellidoPaterno();
+                
+                // se crea el dto que es bueno para mantener la sesion sin exponer la contraseña
+                SesionActualDTO sesionSegura = new SesionActualDTO(
+                        empleado.getID(),
+                        nombreCompleto,
+                        empleado.getRolPuesto()
+                );
+                
+                //se tira el log de que el login fue exitoso
             LOGGER.log(Level.INFO, "Login exitoso para el empleado con ID: {0}", idEmpleado);
-            return empleado;
+            return sesionSegura;
+            }
+            
+            return null;
             
         } catch (NumberFormatException e) {
             // se tira el log de que uso algo no numerico
@@ -56,5 +71,8 @@ public class ControlSesion {
             return null;
         } 
     }
+    
+    
+    
     
 }

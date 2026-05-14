@@ -7,6 +7,7 @@ package Sesion;
 import Sesion.ControlSesion;
 import DTO.EmpleadoDTO;
 import DTO.CuentaAccesoDTO;
+import DTO.SesionActualDTO;
 
 /**
  *
@@ -16,15 +17,36 @@ public class FachadaSesion implements IFachadaSesion{
     
     private ControlSesion controlSesion;
     
+    private SesionActualDTO sesionActiva;
+    
     public FachadaSesion() {
         // Al instanciar la fachada, preparamos el motor interno
         this.controlSesion = new ControlSesion();
     }
     
     @Override
-    public EmpleadoDTO verificarCredenciales(CuentaAccesoDTO login) {
-        // La fachada intercepta la petición de la presentacion 
-        // y se la delega a la clase que realmente sabe cómo hacerlo.
-        return controlSesion.validarLogin(login);
+    public SesionActualDTO verificarCredenciales(CuentaAccesoDTO login) {
+        // 1. fachada llama a control para validar 
+        SesionActualDTO sesionValidada = controlSesion.validarLogin(login);
+        
+        // 2. si el login se valida entonces se almacena en la sesion activa
+        if (sesionValidada != null) {
+            this.sesionActiva = sesionValidada;
+        }
+        
+        // 3. se regresa la sesion al coordinador
+        return sesionValidada;
     }
+    
+    @Override
+    public SesionActualDTO obtenerSesionActual() {
+        return this.sesionActiva;
+    }
+
+    @Override
+    public void cerrarSesion() {
+        this.sesionActiva = null; // Destruimos el DTO al salir
+    }
+    
+    
 }

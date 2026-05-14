@@ -5,6 +5,7 @@
 package componentes;
 
 import DTO.EmpleadoDTO;
+import DTO.SesionActualDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -17,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import pantallas.control.Coordinador;
 import pantallas.control.controlNavegacion;
@@ -30,13 +32,13 @@ public class PanelEncabezado extends JPanel {
     public PanelEncabezado() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(0, 70));
-        EmpleadoDTO usuarioActivo = Coordinador.getCoordinador().getEmpleadoLogueado();
+        SesionActualDTO usuarioActivo = Coordinador.getCoordinador().getEmpleadoLogueado();
         String saludo = "Atendiendo";
         if (usuarioActivo != null) {
             saludo = "Atendiendo: "
-                    + usuarioActivo.getNombre()
+                    + usuarioActivo.getNombreCompleto()
                     + " ("
-                    + usuarioActivo.getRolPuesto()
+                    + usuarioActivo.getRol()
                     + ")";
         }
         JLabel titulo = new JLabel(saludo);
@@ -49,14 +51,27 @@ public class PanelEncabezado extends JPanel {
         btnCerrarSesion.setBackground(new Color(239, 83, 80));
         btnCerrarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCerrarSesion.addActionListener(e -> {
+            
+            java.awt.Window ventanaPrincipal = SwingUtilities.getWindowAncestor(this);
+
+            
             int respuesta = JOptionPane.showConfirmDialog(
-                    this,
+                    ventanaPrincipal,
                     "¿Deseas cerrar sesión?",
                     "Cerrar Sesión",
                     JOptionPane.YES_NO_OPTION
             );
+            
             if (respuesta == JOptionPane.YES_OPTION) {
+                // se borra la sesion
                 Coordinador.getCoordinador().cerrarSesion();
+                
+                //se cierra el menu
+                if (ventanaPrincipal != null) {
+                    ventanaPrincipal.dispose(); 
+                }
+                
+                // se abre el login 
                 controlNavegacion.getcontrolNavegacion().abrirLogin();
             }
         });

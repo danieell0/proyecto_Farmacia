@@ -7,6 +7,7 @@ import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
 import DTO.CuentaAccesoDTO;
+import DTO.SesionActualDTO;
 import fachada.FVentas;
 import fachada.IVenta;
 import interfaces.ICoordinador;
@@ -24,9 +25,7 @@ import Sesion.IFachadaSesion;
  */
 public class Coordinador implements ICoordinador {
 
-    private EmpleadoDTO empleadoLogueado;
-
-    private IFachadaSesion controlSesion;
+    private IFachadaSesion fachadaSesion;
     // Atributo de navegación
     private controlNavegacion navegacion;
 
@@ -45,7 +44,7 @@ public class Coordinador implements ICoordinador {
     public Coordinador() {
         this.catalogo = new Fachada();
         this.fVentas = new FVentas();
-        this.controlSesion = new FachadaSesion();
+        this.fachadaSesion = new FachadaSesion();
     }
 
     /**
@@ -111,13 +110,12 @@ public class Coordinador implements ICoordinador {
         return catalogo.buscarProductosNombre(nombre);
     }
 
-    public EmpleadoDTO getEmpleadoLogueado() {
-        return empleadoLogueado;
+    public SesionActualDTO getEmpleadoLogueado() {
+        return fachadaSesion.obtenerSesionActual();
     }
 
     public void cerrarSesion() {
-        this.empleadoLogueado = null;
-
+        fachadaSesion.cerrarSesion();
     }
 
     /**
@@ -136,21 +134,24 @@ public class Coordinador implements ICoordinador {
     @Override
     public Boolean validarInicioSesion(CuentaAccesoDTO login) {
         try {
-            // Llamamos a la capa de negocios (Subsistema Sesion)
-            EmpleadoDTO empleadoQueEntro = controlSesion.verificarCredenciales(login);
-
-            if (empleadoQueEntro != null) {
-
-                this.empleadoLogueado = empleadoQueEntro;
-
-                pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+            // la fachada hace todas las validaciones y el almacenamiento
+            SesionActualDTO sesion = fachadaSesion.verificarCredenciales(login);
+             
+            //si la sesion noe s nula, significa que el login fue correcto
+            if (sesion != null) {
+                
+                //hace que se espere un tiempo para que se termine de cerrar el login antes de abrir el otro (el bug raro que hacia que se fuera hacia atras del netbeans la otra pantalla)
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+                });
+                
                 return true;
             }
 
             return false;
-
+            
         } catch (Exception e) {
-            // Manejo de errores (ej. se cayó la base de datos)
+            //manejo de errores inesperados
             System.err.println("Error al validar sesión: " + e.getMessage());
             return false;
         }
