@@ -26,11 +26,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>negocios_receta</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>negocios_sesion</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -42,6 +37,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>dto_negocios</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_receta</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

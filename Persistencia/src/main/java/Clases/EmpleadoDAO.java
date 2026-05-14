@@ -4,10 +4,14 @@
  */
 package Clases;
 
+import ConexionMongo.ManejadorConexiones;
 import Entidades.Empleado;
 import Enums.EstatusEmpleado;
 import Enums.RolPuesto;
 import Interfaces.IEmpleadoDAO;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.Objects;
  * @author Benjamin
  */
 public class EmpleadoDAO implements IEmpleadoDAO{
-
+/*
    private List<Empleado> tablaEmpleados;
 
     public EmpleadoDAO() {
@@ -48,5 +52,20 @@ public class EmpleadoDAO implements IEmpleadoDAO{
         }
         return null;
     }
+    */
     
+    //coleccion de empleados de mongo
+    private MongoCollection<Empleado> coleccionEmpleados;
+    
+    public EmpleadoDAO(){
+        //se obtiene la coleccion de empleados de mongo
+        this.coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
+    }
+    
+    
+    @Override
+    public Empleado obtenerEmpleadoPorId(Long idEmpleado){
+        //regresa el empleado por el id
+        return coleccionEmpleados.find((eq("idEmpleado",idEmpleado))).first();
+    }        
 }

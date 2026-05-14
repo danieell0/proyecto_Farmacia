@@ -4,7 +4,11 @@
  */
 package Clases;
 
+import ConexionMongo.ManejadorConexiones;
 import Entidades.CuentaAcceso;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +17,7 @@ import java.util.List;
  * @author Benjamin
  */
 public class CuentaAccesoDAO {
-    
+    /*
     private List<CuentaAcceso> tablaCuentas;
     
     public CuentaAccesoDAO(){
@@ -24,9 +28,7 @@ public class CuentaAccesoDAO {
         tablaCuentas.add(new CuentaAcceso(789L, "caja2"));
     }
     
-    /**
-     * Busca en la BD si existe una cuenta que coincida con el ID y Contraseña.
-     */
+    
     public boolean validarCredenciales(Long idEmpleado, String contrasena) {
         for (CuentaAcceso cuenta : tablaCuentas) {
             if (cuenta.getIDEmpleado().equals(idEmpleado) && cuenta.getContrasena().equals(contrasena)) {
@@ -34,5 +36,30 @@ public class CuentaAccesoDAO {
             }
         }
         return false;
+    }
+    */
+    
+    //coleccion de cuentas mongo
+    private MongoCollection<CuentaAcceso> coleccionCuentas;
+    
+    public CuentaAccesoDAO(){
+        //obtiene la conexion desde el manejador
+        this.coleccionCuentas = ManejadorConexiones.obtenerColeccionCuentas();
+    }
+    
+    /**
+     * Busca en la BD si existe una cuenta que coincida con el ID y la contraseña
+     */
+    public boolean validarCredenciales(Long idEmpleado, String contrasena){
+        //busca una cuenta que tenga ese id y esa contraseña 
+        CuentaAcceso cuentaEncontrada = coleccionCuentas.find(
+        and(
+            eq("IDEmpleado", idEmpleado),
+            eq("contrasena", contrasena)
+        )
+        ).first();
+        
+        //si no es null significa que si encontra la cuenta y regresa true
+        return cuentaEncontrada != null;
     }
 }

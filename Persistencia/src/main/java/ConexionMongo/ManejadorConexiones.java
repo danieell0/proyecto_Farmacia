@@ -1,5 +1,7 @@
 package ConexionMongo;
 
+import Entidades.CuentaAcceso;
+import Entidades.Empleado;
 import Entidades.Producto;
 import Entidades.Receta;
 import Entidades.Venta;
@@ -32,9 +34,9 @@ public class ManejadorConexiones {
     private static final String COLECCION_CLIENTES = "clientes";
     private static final String COLECCION_VENTAS = "ventas";
     private static final String COLECCION_EMPLEADOS = "empleados";
+    private static final String COLECCION_CUENTAS = "cuentas_acceso";
     private static final String COLECCION_RECETAS = "recetas";
     private static final String COLECCION_FACTURAS = "facturas";
-
 
     //cliente mongo 
     private static MongoClient cliente;
@@ -77,4 +79,12 @@ public class ManejadorConexiones {
         return obtenerBaseDatos()
                 .getCollection(COLECCION_VENTAS, Venta.class);
     }
+    
+    public static MongoCollection<Empleado> obtenerColeccionEmpleados(){
+        return obtenerBaseDatos().getCollection(COLECCION_EMPLEADOS, Empleado.class);
+    }
+    
+    public static MongoCollection<CuentaAcceso> obtenerColeccionCuentas() {
+       return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAcceso.class);
+   }
 }
