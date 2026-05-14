@@ -2,7 +2,6 @@ package Clases;
 
 import ConexionMongo.IBaseMongo;
 import ConexionMongo.ManejadorConexiones;
-import static ConexionMongo.ManejadorConexiones.obtenerCodecs;
 import Entidades.DetalleReceta;
 import Entidades.Medicamento;
 import Entidades.Receta;
@@ -19,12 +18,12 @@ import java.util.List;
  *
  * @author Dario
  */
-public class RecetaDAO implements IRecetaDAO, IBaseMongo{
-    
+public class RecetaDAO implements IRecetaDAO, IBaseMongo {
+
     private List<Receta> recetas;
     private List<Medicamento> medicamentos;
     private static final String nombreColeccion = "recetas";
-    
+
     public RecetaDAO() {
         this.recetas = new ArrayList<>();
         this.medicamentos = new ArrayList<>();
@@ -41,7 +40,6 @@ public class RecetaDAO implements IRecetaDAO, IBaseMongo{
         detalles1.add(new DetalleReceta(6L, 10, 0)); // Medicamento B
         r1.setDetalles(detalles1);
         recetas.add(r1);
-        
 
         // RECETA 2: SOLO FUNCIONA UNO (Especialidad cruzada)
         Receta r2 = new Receta();
@@ -67,7 +65,7 @@ public class RecetaDAO implements IRecetaDAO, IBaseMongo{
         detalles3.add(new DetalleReceta(4L, 2, 0)); // Medicamento de Psiquiatría
         r3.setDetalles(detalles3);
         recetas.add(r3);
-        
+
         // RECETA 4: NO FUNCIONA (Validación de Negocio: Caducada)
         Receta r4 = new Receta();
         r4.setFolio("104L");
@@ -80,7 +78,7 @@ public class RecetaDAO implements IRecetaDAO, IBaseMongo{
         r4.setDetalles(detalles4);
         recetas.add(r4);
     }
-    
+
     public List<Receta> getRecetas() {
         return recetas;
     }
@@ -138,10 +136,11 @@ public class RecetaDAO implements IRecetaDAO, IBaseMongo{
 
     @Override
     public MongoDatabase obtenerBaseDatos(MongoClient cliente) {
-        MongoDatabase empresaBD = cliente.getDatabase(
-                    ManejadorConexiones.baseDatos
-            ).withCodecRegistry (obtenerCodecs());
-        return empresaBD;
+//        MongoDatabase empresaBD = cliente.getDatabase(
+//                    ManejadorConexiones.baseDatos
+//            ).withCodecRegistry (obtenerCodecs());
+//        return empresaBD;
+        return null;
     }
 
     @Override
@@ -149,6 +148,5 @@ public class RecetaDAO implements IRecetaDAO, IBaseMongo{
         MongoCollection<Receta> coleccionRecetas = baseDatos.getCollection(nombreColeccion, Receta.class);
         return coleccionRecetas;
     }
-      
-    
+
 }
