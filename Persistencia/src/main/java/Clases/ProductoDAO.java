@@ -15,6 +15,7 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gt;
 import static com.mongodb.client.model.Filters.regex;
+import static com.mongodb.client.model.Updates.set;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,4 +56,12 @@ public class ProductoDAO implements IProductoDAO {
         //regresa el producto con ese id
         return coleccionProductos.find(and(eq("idProducto",id))).first();
     }
+    @Override
+    public Boolean DisminuirStock(Long idProducto, int nuevoStock) {
+
+    return coleccionProductos.updateOne(
+            eq("idProducto", idProducto),
+            set("stock", nuevoStock)
+    ).getModifiedCount() > 0;
+}
 }

@@ -5,6 +5,7 @@
 package Interfaces;
 
 import Entidades.Venta;
+import java.util.List;
 
 /**
  *
@@ -14,4 +15,10 @@ public interface IVentaDAO {
 
     public boolean agregarVenta(Venta venta);
     
+    public List<Venta> obtenerVentas();
+
+    public Venta obtenerVentaPorId(Long idVenta);
+
+    public List<Venta> obtenerVentasPorCliente(Long idCliente);
+
 }

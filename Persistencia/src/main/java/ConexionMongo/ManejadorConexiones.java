@@ -2,6 +2,7 @@ package ConexionMongo;
 
 import Entidades.Producto;
 import Entidades.Receta;
+import Entidades.Venta;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
@@ -32,6 +33,8 @@ public class ManejadorConexiones {
     private static final String COLECCION_VENTAS = "ventas";
     private static final String COLECCION_EMPLEADOS = "empleados";
     private static final String COLECCION_RECETAS = "recetas";
+    private static final String COLECCION_FACTURAS = "facturas";
+
 
     //cliente mongo 
     private static MongoClient cliente;
@@ -69,5 +72,9 @@ public class ManejadorConexiones {
     public static MongoCollection<Receta> obtenerColeccionReceta(){
         return obtenerBaseDatos().getCollection(COLECCION_RECETAS,Receta.class);
     }
-    
+    public static MongoCollection<Venta> obtenerColeccionVentas() {
+
+        return obtenerBaseDatos()
+                .getCollection(COLECCION_VENTAS, Venta.class);
+    }
 }

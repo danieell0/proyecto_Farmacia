@@ -21,4 +21,5 @@ public interface IProductoDAO {
     
     public Producto obtenerProductoPorId(Long id);
     
+    public Boolean DisminuirStock(Long idProducto, int nuevoStock);
 }
