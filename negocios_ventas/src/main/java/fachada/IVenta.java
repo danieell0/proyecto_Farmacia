@@ -19,20 +19,11 @@ import java.util.List;
  */
 public interface IVenta {
     public void eliminarDelCarrito(Long idProducto);
-    
     public void agregarAlCarrito(DetalleCarritoDTO detalle);
-    
     public CarritoDTO obtenerCarritoActual();
-
-    public void calcularTotal(CarritoDTO carrito);
-
-    public VentaDTO registrarVenta(CarritoDTO carrito);
-
-    Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente);
-    
-    void setFolioRecetaActual(String folio);
-    
-    public Boolean validarProductoParaVenta(ProductoDTO producto, Integer cantidad);
-    
+    Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente);   
+    void setFolioRecetaActual(String folio);        
     public boolean verificarExistenciaReceta(String folio);
+    public void cancelarVentaActual();
+    public Boolean validarProductoParaVenta(ProductoDTO producto, Integer cantidad);
 }

@@ -165,33 +165,33 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad) {
-    if (producto == null || cantidad <= 0) return;
+
+        if (producto == null || cantidad == null || cantidad <= 0) {
+            JOptionPane.showMessageDialog(
+                    ventaFrame,
+                    "Cantidad inválida."
+            );
+            return;
+        }
 
         try {
+
             DetalleCarritoDTO detalle = new DetalleCarritoDTO();
             detalle.setProducto(producto);
             detalle.setCantidad(cantidad);
+
             fVentas.agregarAlCarrito(detalle);
+
             actualizarCarrito();
 
         } catch (RuntimeException e) {
-            
-            if (e.getMessage().contains("folio") || e.getMessage().contains("receta")) {
-                if (this.folioRecetaActual != null) {
-                    JOptionPane.showMessageDialog(null, "Validación fallida: " + e.getMessage());
-                    this.limpiarFolioReceta();
-                    return;
-                }
-                
-                validarRecetaDlg dlg = new validarRecetaDlg(null, true, this);
-                dlg.setVisible(true);
-                if (this.folioRecetaActual != null) {
-                    this.agregarProductoAlCarrito(producto, cantidad);
-                }
 
-            } else {
-                JOptionPane.showMessageDialog(null, e.getMessage());
-            }
+            JOptionPane.showMessageDialog(
+                    ventaFrame,
+                    e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 
@@ -203,7 +203,9 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void eliminarProductoDelCarrito(Long idProducto, Integer cantidad) {
+
         fVentas.eliminarDelCarrito(idProducto);
+
         actualizarCarrito();
     }
 
@@ -227,11 +229,30 @@ public class Coordinador implements ICoordinador {
      * @return double
      */
     @Override
-    public Double ejecutarFinalizarCompra(Double cantidadRecibida, Long idEmpleado, Long idCliente) throws Exception {
-        if (cantidadRecibida == null || idEmpleado == null || idCliente == null) {
-            return null;
+    public Double ejecutarFinalizarCompra(
+            Double cantidadRecibida,
+            Long idEmpleado,
+            Long idCliente
+    ) throws Exception {
+
+        if (cantidadRecibida == null
+                || idEmpleado == null
+                || idCliente == null) {
+
+            throw new Exception("Datos incompletos para finalizar la venta.");
         }
-        return fVentas.finalizarVenta(cantidadRecibida, idEmpleado, idCliente);
+
+        Double cambio = fVentas.finalizarVenta(
+                cantidadRecibida,
+                idEmpleado,
+                idCliente
+        );
+
+        if (cambio == null) {
+            throw new Exception("Error interno al procesar la venta.");
+        }
+
+        return cambio;
     }
 
     /**
@@ -301,18 +322,22 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void cancelarVenta() {
-        // 1. Ordenar a la fachada que devuelva el stock y limpie el carrito
-        // (Asegúrate de que FVentas tenga el método cancelarVentaActual como público)
-        if (this.fVentas instanceof FVentas) {
-            ((FVentas) this.fVentas).cancelarVentaActual();
-        }
+
+        fVentas.cancelarVentaActual();
+
         this.folioRecetaActual = null;
 
-        if (menuJFrame != null) menuJFrame.limpiarVenta();
+        if (menuJFrame != null) {
+            menuJFrame.limpiarVenta();
+        }
+
         if (ventaFrame != null) {
             ventaFrame.limpiarVenta();
-            pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
         }
+
+        pantallas.control.controlNavegacion
+                .getcontrolNavegacion()
+                .abrirMenuFrame();
     }
 
     /**
@@ -330,13 +355,17 @@ public class Coordinador implements ICoordinador {
     public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo) {
         return catalogo.buscarProductoPorCodigo(codigo);
     }
-    
+
     @Override
-    public void actualizarCarrito(){
-        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
+    public void actualizarCarrito() {
+
+        CarritoDTO carritoActualizado
+                = fVentas.obtenerCarritoActual();
+
         if (ventaFrame != null) {
             ventaFrame.actualizarTablaCarrito(carritoActualizado);
         }
+
         if (menuJFrame != null) {
             menuJFrame.actualizarTablaCarrito(carritoActualizado);
         }

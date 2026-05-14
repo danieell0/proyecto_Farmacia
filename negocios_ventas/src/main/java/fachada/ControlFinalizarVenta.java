@@ -4,12 +4,17 @@
  */
 package fachada;
 
-import DTO.DetalleVentaDTO;
-import DTO.VentaDTO;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
+import DTO.DetalleVentaDTO;
+import DTO.VentaDTO;
+
+import IBO.IVentaBO;
+
 import com.mycompany.objetos_negocio.VentaBO;
+
 import exception.VentaException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,48 +25,130 @@ import java.util.List;
  */
 public class ControlFinalizarVenta {
 
-    protected VentaBO ventaBO;
+    private IVentaBO ventaBO;
 
     protected ControlFinalizarVenta() {
 
         this.ventaBO = VentaBO.getInstance();
     }
 
-    protected boolean registrarVenta(VentaDTO ventaFinal) throws VentaException {
+    /**
+     * Registra definitivamente la venta.
+     *
+     * @param ventaFinal Venta preparada.
+     * @return true si se registró correctamente.
+     * @throws VentaException Error al registrar.
+     */
+    protected boolean registrarVenta(
+            VentaDTO ventaFinal
+    ) throws VentaException {
+
         if (ventaFinal == null) {
-            throw new VentaException("La venta no puede ser nula al registrar.");
+
+            throw new VentaException(
+                    "La venta no puede ser nula."
+            );
         }
+
         try {
+
             return ventaBO.agregarVenta(ventaFinal);
 
         } catch (Exception e) {
-            throw new VentaException("Error al registrar la venta en la base de datos: " + e.getMessage());
+
+            throw new VentaException(
+                    "Error al registrar la venta: "
+                    + e.getMessage()
+            );
         }
     }
 
-    protected VentaDTO prepararVenta(CarritoDTO carrito, Long idEmpleado, Long idCliente) throws VentaException {
-        if (carrito == null || carrito.getListaProductos() == null || carrito.getListaProductos().isEmpty()) {
-            throw new VentaException("No se puede finalizar la venta porque el carrito está vacío.");
-        }
-        if (carrito.getTotalAPagar() <= 0) {
-            throw new VentaException("El total a pagar debe ser mayor a cero.");
+    /**
+     * Convierte el carrito actual en una venta lista para guardar.
+     *
+     * @param carrito Carrito actual.
+     * @param idEmpleado Empleado que realiza la venta.
+     * @param idCliente Cliente asociado.
+     * @return Venta preparada.
+     * @throws VentaException Error de validación.
+     */
+    protected VentaDTO prepararVenta(
+            CarritoDTO carrito,
+            Long idEmpleado,
+            Long idCliente
+    ) throws VentaException {
+
+        // VALIDAR CARRITO
+        if (carrito == null
+                || carrito.getListaProductos() == null
+                || carrito.getListaProductos().isEmpty()) {
+
+            throw new VentaException(
+                    "No se puede finalizar la venta porque el carrito está vacío."
+            );
         }
 
+        // VALIDAR TOTAL
+        if (carrito.getTotalAPagar() == null
+                || carrito.getTotalAPagar() <= 0) {
+
+            throw new VentaException(
+                    "El total a pagar debe ser mayor a cero."
+            );
+        }
+
+        // VALIDAR EMPLEADO
+        if (idEmpleado == null) {
+
+            throw new VentaException(
+                    "El empleado es obligatorio."
+            );
+        }
+
+        // VALIDAR CLIENTE
+        if (idCliente == null) {
+
+            throw new VentaException(
+                    "El cliente es obligatorio."
+            );
+        }
+
+        // CREAR VENTA
         VentaDTO nuevaVenta = new VentaDTO();
+
         nuevaVenta.setFecha(LocalDate.now());
+
         nuevaVenta.setTotal(carrito.getTotalAPagar());
+
         nuevaVenta.setIdEmpleado(idEmpleado);
+
         nuevaVenta.setIdCliente(idCliente);
 
-        List<DetalleVentaDTO> detallesVenta = new ArrayList<>();
+        List<DetalleVentaDTO> detallesVenta
+                = new ArrayList<>();
 
-        for (DetalleCarritoDTO itemCarrito : carrito.getListaProductos()) {
-            DetalleVentaDTO itemVenta = new DetalleVentaDTO();
+        // CONVERTIR DETALLES
+        for (DetalleCarritoDTO itemCarrito
+                : carrito.getListaProductos()) {
 
-            itemVenta.setProducto(itemCarrito.getProducto());
-            itemVenta.setCantidad(itemCarrito.getCantidad());
-            itemVenta.setPrecioUnitario(itemCarrito.getPrecioUnitario());
-            itemVenta.setSubtotal(itemCarrito.getSubtotal());
+            DetalleVentaDTO itemVenta
+                    = new DetalleVentaDTO();
+
+            itemVenta.setProducto(
+                    itemCarrito.getProducto()
+            );
+
+            itemVenta.setCantidad(
+                    itemCarrito.getCantidad()
+            );
+
+            itemVenta.setPrecioUnitario(
+                    itemCarrito.getPrecioUnitario()
+            );
+
+            itemVenta.setSubtotal(
+                    itemCarrito.getSubtotal()
+            );
 
             detallesVenta.add(itemVenta);
         }
