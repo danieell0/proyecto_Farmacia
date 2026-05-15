@@ -1,10 +1,17 @@
-package Entidades;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package EntidadesMongo;
+
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 /**
  *
- * @author Jorge
+ * @author Dario
  */
-public class Producto {
+@BsonDiscriminator
+public class ProductoMongo {
 
     private Long idProducto;
     private String nombre;
@@ -12,10 +19,10 @@ public class Producto {
     private String Imagen;
     private Integer stock;
 
-    public Producto() {
+    public ProductoMongo() {
     }
 
-    public Producto(Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
+    public ProductoMongo(Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;

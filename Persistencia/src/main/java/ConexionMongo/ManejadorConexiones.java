@@ -5,6 +5,7 @@ import Entidades.Empleado;
 import Entidades.Producto;
 import Entidades.Receta;
 import Entidades.Venta;
+import EntidadesMongo.ProductoMongo;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
@@ -66,9 +67,9 @@ public class ManejadorConexiones {
         return obtenerCliente().getDatabase(NOMBRE_BASE_DATOS);
     }
     
-    public static MongoCollection<Producto> obtenerColeccionProductos(){
+    public static MongoCollection<ProductoMongo> obtenerColeccionProductos(){
         //regresa la coleccion de productos de la base de datos 
-        return obtenerBaseDatos().getCollection(COLECCION_PRODUCTOS,Producto.class);
+        return obtenerBaseDatos().getCollection(COLECCION_PRODUCTOS, ProductoMongo.class);
     }
     
     public static MongoCollection<Receta> obtenerColeccionReceta(){

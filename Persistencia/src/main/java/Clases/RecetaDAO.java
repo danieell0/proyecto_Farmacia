@@ -1,22 +1,13 @@
 package Clases;
 
-import ConexionMongo.IBaseMongo;
 import ConexionMongo.ManejadorConexiones;
-import Entidades.DetalleReceta;
-import Entidades.Medicamento;
 import Entidades.Receta;
-import Enums.EstadoReceta;
 import Interfaces.IRecetaDAO;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Updates;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.bson.Document;
 
 /**
