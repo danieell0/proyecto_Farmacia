@@ -13,12 +13,16 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -50,6 +54,107 @@ public class InicioSesionFrm extends JDialog{
         configurarVentana(parent);
     }
 
+    private void inicializarComponentes() {
+        // Usamos un GridLayout de 1 fila y 2 columnas para partir la ventana a la mitad exacta
+        this.setLayout(new GridLayout(1, 2));
+
+        // =========================================================
+        // PANEL IZQUIERDO (Información y Branding)
+        // =========================================================
+        JPanel pnlIzquierdo = new JPanel(new BorderLayout());
+        pnlIzquierdo.setBackground(new Color(80, 139, 107)); // Tu verde original
+        
+        // Título con formato HTML para centrarlo y separarlo en varias líneas
+        JLabel lblTitulo = new JLabel("<html><div style='text-align: center; font-family: Segoe UI;'>"
+                + "SISTEMA GESTOR<br><br>INTEGRAL<br><br>FARMACÉUTICO</div></html>", SwingConstants.CENTER);
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitulo.setBorder(BorderFactory.createEmptyBorder(40, 10, 10, 10)); // Margen superior
+        
+        // Espacio preparado para tu imagen de la farmacia
+        // Para poner tu imagen real cambia este texto por: new ImageIcon(getClass().getResource("/imagenes/tu_farmacia.png"))
+        JLabel lblImagenFarmacia = new JLabel(new ImageIcon(getClass().getResource("/Downloads/Fondo login.jpg")), SwingConstants.CENTER);
+        lblImagenFarmacia.setPreferredSize(new Dimension(300, 180));
+        lblImagenFarmacia.setOpaque(true);
+        // Simulando un ligero degradado o color de fondo para la imagen
+        lblImagenFarmacia.setBackground(new Color(65, 115, 88)); 
+        
+        pnlIzquierdo.add(lblTitulo, BorderLayout.NORTH);
+        pnlIzquierdo.add(lblImagenFarmacia, BorderLayout.SOUTH);
+
+        // =========================================================
+        // PANEL DERECHO (Formulario de Login)
+        // =========================================================
+        JPanel pnlDerecho = new JPanel(new GridBagLayout());
+        pnlDerecho.setBackground(new Color(45, 95, 70)); // Verde más oscuro
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(10, 40, 5, 40); // Margen (arriba, izquierda, abajo, derecha)
+
+        // 1. Etiqueta ID
+        JLabel lblId = new JLabel("Ingrese ID Empleado");
+        lblId.setForeground(Color.WHITE);
+        lblId.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        pnlDerecho.add(lblId, gbc);
+
+        // 2. Campo de Texto ID
+        gbc.gridy++;
+        gbc.insets = new Insets(0, 40, 25, 40); // Más margen abajo para separar del siguiente
+        txtId = new JTextField();
+        txtId.setPreferredSize(new Dimension(200, 35));
+        txtId.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtId.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Quita bordes feos
+        pnlDerecho.add(txtId, gbc);
+
+        // 3. Etiqueta Contraseña
+        gbc.gridy++;
+        gbc.insets = new Insets(10, 40, 5, 40);
+        JLabel lblContrasena = new JLabel("Ingrese Contraseña");
+        lblContrasena.setForeground(Color.WHITE);
+        lblContrasena.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        pnlDerecho.add(lblContrasena, gbc);
+
+        // 4. Campo de Texto Contraseña
+        gbc.gridy++;
+        gbc.insets = new Insets(0, 40, 40, 40); // Mucho margen abajo para separar del botón
+        txtContrasena = new JPasswordField();
+        txtContrasena.setPreferredSize(new Dimension(200, 35));
+        txtContrasena.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtContrasena.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        pnlDerecho.add(txtContrasena, gbc);
+
+        // 5. Botón Iniciar Sesión
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.NONE; // Para que el botón no se estire a lo ancho
+        gbc.anchor = GridBagConstraints.WEST; // Alineado a la izquierda como en la foto
+        gbc.insets = new Insets(0, 40, 20, 40);
+        
+        btnIniciarSesion = new JButton("Iniciar Sesión");
+        btnIniciarSesion.setPreferredSize(new Dimension(140, 40));
+        btnIniciarSesion.setBackground(Color.WHITE); // Botón blanco
+        btnIniciarSesion.setForeground(new Color(45, 95, 70)); // Letra verde oscura
+        btnIniciarSesion.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnIniciarSesion.setFocusPainted(false);
+        btnIniciarSesion.setBorder(BorderFactory.createEmptyBorder()); // Estilo plano/plástico
+        btnIniciarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnIniciarSesion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                iniciarSesion();
+            }
+        });
+        pnlDerecho.add(btnIniciarSesion, gbc);
+
+        // Añadimos las dos mitades al JDialog
+        this.add(pnlIzquierdo);
+        this.add(pnlDerecho);
+    }
+    /*
     private void inicializarComponentes() {
         // Contenedor principal con BorderLayout
         JPanel pnlFondo = new JPanel(new BorderLayout());
@@ -136,9 +241,9 @@ public class InicioSesionFrm extends JDialog{
         // Agregar al JDialog
         this.add(pnlFondo);
     }
-
+*/
     private void configurarVentana(Frame parent) {
-        this.setSize(350, 450);
+        this.setSize(650, 400);
         this.setResizable(false);
         //para que no se quede corriendo el programa sin pantallas cuando se cierra el login
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);

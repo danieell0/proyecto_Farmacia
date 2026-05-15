@@ -37,7 +37,6 @@ public class ProductoDAO implements IProductoDAO {
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
         List<Producto> productos=coleccionProductos.find().into(new ArrayList<>());
-        productos.forEach(p-> System.out.println(p.toString()));
         return productos;
     }
 

@@ -10,7 +10,6 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
  *
  * @author Jorge
  */
-@BsonDiscriminator
 public class Producto {
 
     private Long idProducto;

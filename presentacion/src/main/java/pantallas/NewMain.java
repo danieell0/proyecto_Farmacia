@@ -22,11 +22,6 @@ public class NewMain {
                 //se abre el login primero para que no se pueda interactuar con el sistema sin tener sesion iniciada
                 controlNavegacion.getcontrolNavegacion().abrirLogin();
 
-                // 2. La ventanita se cerro. Revisamos el resultado:
-                if (Coordinador.getCoordinador().getEmpleadoLogueado() == null) {
-                    System.out.println("Acceso cancelado por el usuario. Apagando sistema...");
-                    System.exit(0); // Mata el proceso de Java por completo
-                }
                 //123
                 //admin
                 //ok
