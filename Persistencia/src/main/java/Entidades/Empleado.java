@@ -11,7 +11,7 @@ import java.time.LocalDate;
 /**
  *
  * @author Benjamin
- */
+ */ 
 public class Empleado {
     private Long idEmpleado;
     private String nombre;

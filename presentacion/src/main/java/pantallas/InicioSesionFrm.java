@@ -73,14 +73,14 @@ public class InicioSesionFrm extends JDialog{
         
         // Espacio preparado para tu imagen de la farmacia
         // Para poner tu imagen real cambia este texto por: new ImageIcon(getClass().getResource("/imagenes/tu_farmacia.png"))
-        JLabel lblImagenFarmacia = new JLabel(new ImageIcon(getClass().getResource("/Downloads/Fondo login.jpg")), SwingConstants.CENTER);
-        lblImagenFarmacia.setPreferredSize(new Dimension(300, 180));
-        lblImagenFarmacia.setOpaque(true);
+        //JLabel lblImagenFarmacia = new JLabel(new ImageIcon(getClass().getResource("/Downloads/Fondo login.jpg")), SwingConstants.CENTER);
+        //lblImagenFarmacia.setPreferredSize(new Dimension(300, 180));
+        //lblImagenFarmacia.setOpaque(true);
         // Simulando un ligero degradado o color de fondo para la imagen
-        lblImagenFarmacia.setBackground(new Color(65, 115, 88)); 
+        //lblImagenFarmacia.setBackground(new Color(65, 115, 88)); 
         
         pnlIzquierdo.add(lblTitulo, BorderLayout.NORTH);
-        pnlIzquierdo.add(lblImagenFarmacia, BorderLayout.SOUTH);
+        //pnlIzquierdo.add(lblImagenFarmacia, BorderLayout.SOUTH);
 
         // =========================================================
         // PANEL DERECHO (Formulario de Login)

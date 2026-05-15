@@ -39,6 +39,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>9.2.0</version>
         </dependency>
-    </dependencies> 
+    </dependencies>
     <name>persistencia</name>
 </project>
