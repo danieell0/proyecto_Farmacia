@@ -33,7 +33,7 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @return Si la receta se puede usar o no.
      */
     @Override
-    public boolean validarYReservar(String folio, Long idProducto, Integer cantidad, Especialidades especialidadProducto) {
+    public boolean validarYReservar(String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto) {
         RecetaDTO receta = obtenerRecetaInterna(folio);
         if (receta == null) {
             receta = controlBuscar.obtenerRecetaPorFolio(folio);
@@ -64,7 +64,7 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @return Si la operacion fue exitosa.
      */
     @Override
-    public boolean cancelarReserva(String folio, Long idProducto, Integer cantidad) {
+    public boolean cancelarReserva(String folio, String idProducto, Integer cantidad) {
         RecetaDTO receta = obtenerRecetaInterna(folio);
         if (receta != null) {
             controlOperaciones.sumarMedicamentos(receta, idProducto, cantidad);
@@ -141,7 +141,7 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @return Si se encontro o no.
      */
     @Override
-    public String buscarEnRecetasActivas(Long idProducto, Integer cantidad, Especialidades especialidadProducto) {
+    public String buscarEnRecetasActivas(String idProducto, Integer cantidad, Especialidades especialidadProducto) {
         for (RecetaDTO receta : recetasActivas) {
             if (controlValidar.validarExistenciaEnReceta(receta, idProducto) && 
                 controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto)) {

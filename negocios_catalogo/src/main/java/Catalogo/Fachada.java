@@ -31,7 +31,7 @@ public class Fachada implements ICatalogo {
     }
 
     @Override
-    public List<ProductoDTO> buscarProductoPorCodigo(Long codigo) {
+    public List<ProductoDTO> buscarProductoPorCodigo(String codigo) {
         return control.obtenerProductoPorCodigo(codigo);
     }
 

@@ -33,7 +33,7 @@ public class ControlValidarReceta {
      * @param idProducto Producto que se busca en la receta.
      * @return Si el producto se encontro en la receta.
      */
-    protected boolean validarExistenciaEnReceta(RecetaDTO receta, Long idProducto) {
+    protected boolean validarExistenciaEnReceta(RecetaDTO receta, String idProducto) {
         if (receta == null || receta.getFechaCaducidad() == null){
             return false;
         }
@@ -53,7 +53,7 @@ public class ControlValidarReceta {
      * @param especialidadProducto Especialidad del producto recetado.
      * @return Si la cantidad es valida o invalida.
      */
-    protected boolean validarMedicamentosReceta(RecetaDTO receta, Long idProducto, Integer cantidadSolicitada, Especialidades especialidadProducto) {
+    protected boolean validarMedicamentosReceta(RecetaDTO receta, String idProducto, Integer cantidadSolicitada, Especialidades especialidadProducto) {
         if (receta == null || especialidadProducto == null) {
             return false;
         }

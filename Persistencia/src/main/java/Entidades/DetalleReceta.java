@@ -5,7 +5,7 @@ package Entidades;
  * @author Dario
  */
 public class DetalleReceta {
-    private Long idMedicamento;
+    private String idMedicamento;
     private Integer cantidadRecetada;
     private Integer cantidadSurtida = 0;
 
@@ -22,18 +22,18 @@ public class DetalleReceta {
      * @param cantidadPermitida Cantidad recetada del medicamento.
      * @param cantidadSurtida Cantidad surtida del producto (inicialmente es 0);
      */
-    public DetalleReceta(Long idMedicamento, Integer cantidadPermitida, Integer cantidadSurtida) {
+    public DetalleReceta(String idMedicamento, Integer cantidadPermitida, Integer cantidadSurtida) {
         this.idMedicamento = idMedicamento;
         this.cantidadRecetada = cantidadPermitida;
     }
     
     /** @return Obtiene el id del medicamento relaccionado a la receta. */
-    public Long getIdMedicamento() {
+    public String getIdMedicamento() {
         return idMedicamento;
     }
 
     /** @param idMedicamento El Id del medicamento a asignar a la receta. */
-    public void setIdMedicamento(Long idMedicamento) {
+    public void setIdMedicamento(String idMedicamento) {
         this.idMedicamento = idMedicamento;
     }
 

@@ -6,6 +6,7 @@ package EntidadesMongo;
 
 import Enums.Especialidades;
 import Enums.Medida;
+import Enums.TipoProducto;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
@@ -16,7 +17,6 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 @BsonDiscriminator
 public class MedicamentoMongo extends ProductoMongo {
 
-    private String marca;
     private Medida medida;
     private Double dosis;
     private String presentacion;
@@ -26,22 +26,13 @@ public class MedicamentoMongo extends ProductoMongo {
     public MedicamentoMongo() {
     }
 
-    public MedicamentoMongo(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
-        super(idProducto, nombre, precio, Imagen, stock);
-        this.marca = marca;
+    public MedicamentoMongo(Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, String idProducto, String nombre, String marca, Double precio, String imagen, Integer stock, TipoProducto tipo) {
+        super(idProducto, nombre, marca, precio, imagen, stock, tipo);
         this.medida = medida;
         this.dosis = dosis;
         this.presentacion = presentacion;
         this.esControlada = esControlada;
         this.especialidades = especialidades;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
     }
 
     public Medida getMedida() {
@@ -80,13 +71,13 @@ public class MedicamentoMongo extends ProductoMongo {
         return especialidades;
     }
 
-    public void setEspecialidades(List<Especialidades> especialidad) {
-        this.especialidades = especialidad;
+    public void setEspecialidades(List<Especialidades> especialidades) {
+        this.especialidades = especialidades;
     }
 
     @Override
     public String toString() {
-        return "Medicamento{" + "marca=" + marca + ", medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlada=" + esControlada + ", especialidades=" + especialidades + '}';
-    } 
+        return "MedicamentoMongo{" + "medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlada=" + esControlada + ", especialidades=" + especialidades + '}';
+    }
     
 }

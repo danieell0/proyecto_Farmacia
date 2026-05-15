@@ -2,48 +2,32 @@ package DTO;
 
 import Enums.Especialidades;
 import Enums.Medida;
-import Enums.Tipo;
+import Enums.TipoProducto;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * DTO que representa un medicamento.
+ *
  * @author Dario
  */
-public class MedicamentoDTO extends ProductoDTO{
-    private String marca;
+public class MedicamentoDTO extends ProductoDTO {
+
     private Medida medida;
     private Double dosis;
     private String presentacion;
     private Boolean esControlado;
     private List<Especialidades> especialidades;
-//    private String lote;
-//    private LocalDate caducidad;
 
     /**
      * Contructor vacio.
      */
     public MedicamentoDTO() {
-        
+
     }
 
-    /**
-     * Contructor con todos los atributos de medicamento.
-     * @param id Id del producto.
-     * @param nombre Nombre del producto.
-     * @param precio Precio del producto. 
-     * @param stock Stock del producto.
-     * @param marca Marca del medicamento.
-     * @param medida Medida del medicamento.
-     * @param dosis Dosis del medicamento.
-     * @param presentacion Presentacion del medicamento.
-     * @param esControlado Restriccion del medicamento.
-     * @param imagen Imagen del Producto
-     * @param tipo Tipo del producto.
-     */
-    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, Integer stock, Tipo tipo, String marca, Medida medida, Double dosis, String presentacion, Boolean esControlado, List <Especialidades> especialidades) {
-        super(id, nombre, precio, imagen, stock, tipo);
-        this.marca = marca;
+    public MedicamentoDTO(Medida medida, Double dosis, String presentacion, Boolean esControlado, List<Especialidades> especialidades, String idProducto, String nombre, String marca, Double precio, Integer stock, String imagen, TipoProducto tipo) {
+        super(idProducto, nombre, marca, precio, stock, imagen, tipo);
         this.medida = medida;
         this.dosis = dosis;
         this.presentacion = presentacion;
@@ -51,54 +35,28 @@ public class MedicamentoDTO extends ProductoDTO{
         this.especialidades = especialidades;
     }
 
-    /** @return Obtiene la marca del medicamento. */
-    public String getMarca() {
-        return marca;
-    }
-
-    /** @param marca La marca a asignar al medicamento. */
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    /** @return Obtiene la medida del medicamento. */
     public Medida getMedida() {
         return medida;
     }
 
-    /** @param medida La medida a asignar al medicamento. */
     public void setMedida(Medida medida) {
         this.medida = medida;
     }
 
-    /** @return Obtiene la dosis del medicamento. */
     public Double getDosis() {
         return dosis;
     }
 
-    /** @param dosis La dosis a asignar al medicamento. */
     public void setDosis(Double dosis) {
         this.dosis = dosis;
     }
 
-    /** @return Obtiene la presentacion del medicamento. */
     public String getPresentacion() {
         return presentacion;
     }
 
-    /** @param presentacion La presentacion a asignar al medicamento. */
     public void setPresentacion(String presentacion) {
         this.presentacion = presentacion;
-    }
-
-    /** @return Obtiene la restriccion del medicamento. */
-    public boolean isEsControlado() {
-        return esControlado;
-    }
-
-    /** @param esControlado La restriccion a asignar al medicamento. */
-    public void setEsControlado(boolean esControlado) {
-        this.esControlado = esControlado;
     }
 
     public Boolean getEsControlado() {
@@ -113,10 +71,13 @@ public class MedicamentoDTO extends ProductoDTO{
         return especialidades;
     }
 
-    public void setEspecialidades(List<Especialidades> especialidad) {
-        this.especialidades = especialidad;
+    public void setEspecialidades(List<Especialidades> especialidades) {
+        this.especialidades = especialidades;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "MedicamentoDTO{" + "medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlado=" + esControlado + ", especialidades=" + especialidades + '}';
+    }
     
 }

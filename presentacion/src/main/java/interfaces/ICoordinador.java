@@ -25,7 +25,7 @@ public interface ICoordinador {
     List<ProductoDTO> ObtenerProductos();
     List<ProductoDTO> ObtenerProductosPorNombre(String nombre);
     void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
-    void eliminarProductoDelCarrito(Long idProducto, Integer cantidad);
+    void eliminarProductoDelCarrito(String idProducto, Integer cantidad);
     CarritoDTO obtenerCarritoActual();
     public Double ejecutarFinalizarCompra(Double cantidadRecibida, Long idEmpleado, Long idCliente) throws Exception;
     Double procesarCalculoCambio(Double total, Double pago);
@@ -35,6 +35,6 @@ public interface ICoordinador {
     void cancelarVenta();
     Boolean validarProductoConReceta(ProductoDTO producto, Integer cantidad);
     Boolean validarInicioSesion(CuentaAccesoDTO login);    
-    public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo);
+    public List<ProductoDTO> ObtenerProductoPorCodigo(String codigo);
     void actualizarCarrito();
 }

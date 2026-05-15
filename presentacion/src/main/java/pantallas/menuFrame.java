@@ -84,7 +84,6 @@ public class menuFrame extends JFrame {
         add(crearMainContent(), BorderLayout.CENTER);
     }
 
-
     private JPanel crearMainContent() {
         JPanel main = new JPanel(new BorderLayout());
         main.setBackground(new Color(245, 247, 250));
@@ -194,16 +193,16 @@ public class menuFrame extends JFrame {
             //
             if (input != null && !input.trim().isEmpty()) {
                 try {
-    int cantidad = Integer.parseInt(input);
-    if (cantidad > 0) {
-        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);
-    }
-} catch (NumberFormatException nfe) {
-    JOptionPane.showMessageDialog(this, "Por favor, ingresa un número entero.");
-} catch (Exception ex) {
-    ex.printStackTrace(); 
-    JOptionPane.showMessageDialog(this, "Error al agregar: " + ex.getMessage());
-}
+                    int cantidad = Integer.parseInt(input);
+                    if (cantidad > 0) {
+                        Coordinador.getCoordinador().agregarProductoAlCarrito(p, cantidad);
+                    }
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(this, "Por favor, ingresa un número entero.");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error al agregar: " + ex.getMessage());
+                }
             }
         });
 
@@ -243,7 +242,7 @@ public class menuFrame extends JFrame {
                 if (carrito != null && index < carrito.getListaProductos().size()) {
 
                     DetalleCarritoDTO detalle = carrito.getListaProductos().get(index);
-                    Coordinador.getCoordinador().eliminarProductoDelCarrito(detalle.getProducto().getId(), detalle.getCantidad());
+                    Coordinador.getCoordinador().eliminarProductoDelCarrito(detalle.getProducto().getIdProducto(), detalle.getCantidad());
                 }
 
             } else {
@@ -285,13 +284,12 @@ public class menuFrame extends JFrame {
     private void filtrar() {
         String texto = txtBuscar.getText().trim();
         List<ProductoDTO> lista;
+
         if (texto.isEmpty()) {
             lista = Coordinador.getCoordinador().ObtenerProductos();
         } else {
-            try {
-                Long codigo = Long.parseLong(texto);
-                lista = Coordinador.getCoordinador().ObtenerProductoPorCodigo(codigo);
-            } catch (NumberFormatException e) {
+            lista = Coordinador.getCoordinador().ObtenerProductoPorCodigo(texto);
+            if (lista == null || lista.isEmpty()) {
                 lista = Coordinador.getCoordinador().ObtenerProductosPorNombre(texto);
             }
         }

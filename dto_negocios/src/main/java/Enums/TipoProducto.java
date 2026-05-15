@@ -4,7 +4,7 @@ package Enums;
  *
  * @author Dario
  */
-public enum Tipo {
+public enum TipoProducto {
     Producto,
     Medicamento,
     Canjeable

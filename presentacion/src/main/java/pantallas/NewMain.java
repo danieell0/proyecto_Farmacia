@@ -3,8 +3,6 @@ package pantallas;
 import pantallas.control.Coordinador;
 import pantallas.control.controlNavegacion;
 
-
-
 /**
  *
  * @author Jorge
@@ -18,7 +16,7 @@ public class NewMain {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 //se abre el login primero para que no se pueda interactuar con el sistema sin tener sesion iniciada
                 controlNavegacion.getcontrolNavegacion().abrirLogin();
 
@@ -29,5 +27,5 @@ public class NewMain {
         });
 
     }
-    
+
 }

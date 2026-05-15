@@ -216,7 +216,7 @@ public class Coordinador implements ICoordinador {
      * @param cantidad La cantidad a eliminar del producto.
      */
     @Override
-    public void eliminarProductoDelCarrito(Long idProducto, Integer cantidad) {
+    public void eliminarProductoDelCarrito(String idProducto, Integer cantidad) {
 
         fVentas.eliminarDelCarrito(idProducto);
 
@@ -366,7 +366,7 @@ public class Coordinador implements ICoordinador {
     }
 
     @Override
-    public List<ProductoDTO> ObtenerProductoPorCodigo(Long codigo) {
+    public List<ProductoDTO> ObtenerProductoPorCodigo(String codigo) {
         return catalogo.buscarProductoPorCodigo(codigo);
     }
 

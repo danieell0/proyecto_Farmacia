@@ -10,7 +10,7 @@ import DTO.DetalleCarritoDTO;
  * @author munos
  */
 public interface IVenta {
-    public void eliminarDelCarrito(Long idProducto);
+    public void eliminarDelCarrito(String idProducto);
     public void agregarAlCarrito(DetalleCarritoDTO detalle);
     public CarritoDTO obtenerCarritoActual();
     Double finalizarVenta(Double cantidadRecibida, Long idEmpleado, Long idCliente);   

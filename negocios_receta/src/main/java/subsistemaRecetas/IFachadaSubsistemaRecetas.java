@@ -22,7 +22,7 @@ public interface IFachadaSubsistemaRecetas {
      * @return Si la receta se puede usar o no.
      */
     public abstract boolean validarYReservar(
-            String folio, Long idProducto, Integer cantidad, Especialidades especialidadProducto);
+            String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto);
     
     /**
      * Cancela la reserva de los productos agregados al carrito
@@ -33,7 +33,7 @@ public interface IFachadaSubsistemaRecetas {
      * @return Si la operacion fue exitosa.
      */
     public abstract boolean cancelarReserva(
-            String folio, Long idProducto, Integer cantidad
+            String folio, String idProducto, Integer cantidad
     );
     
     /**
@@ -69,7 +69,7 @@ public interface IFachadaSubsistemaRecetas {
      * @return Si se encontro o no.
      */
     public abstract String buscarEnRecetasActivas(
-            Long idProducto, Integer cantidad, Especialidades especialidadProducto
+            String idProducto, Integer cantidad, Especialidades especialidadProducto
     );
 
 }

@@ -30,7 +30,7 @@ public class ControlObtenerProductos {
         return catalogoBO.obtenerProductosPorNombre(nombre);
     }
     
-    protected  List<ProductoDTO> obtenerProductoPorCodigo(Long codigo){
+    protected  List<ProductoDTO> obtenerProductoPorCodigo(String codigo){
         return catalogoBO.obtenerProductoPorClave(codigo);
     }
     

@@ -17,9 +17,9 @@ public interface IProductoDAO {
     
     public List<Producto> obtenerProductosPorNombre(String nombre);
      
-    public List<Producto> obtenerProductoPorClave(Long clave);
+    public List<Producto> obtenerProductoPorClave(String clave);
     
-    public Producto obtenerProductoPorId(Long id);
+    public Producto obtenerProductoPorId(String id);
     
-    public Boolean DisminuirStock(Long idProducto, int nuevoStock);
+    public Boolean DisminuirStock(String idProducto, int nuevoStock);
 }

@@ -32,6 +32,7 @@ public class ProductoDAO implements IProductoDAO {
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
         List<ProductoMongo> productosMongo = coleccionProductos.find().into(new ArrayList<>());
+        productosMongo.forEach(p-> System.out.println(ProductoMapperMongo.entityToDomain(p)));
         return productosMongo.stream().map(p->ProductoMapperMongo.entityToDomain(p)).toList();
     }
 
@@ -43,14 +44,14 @@ public class ProductoDAO implements IProductoDAO {
     }
 
     @Override
-    public List<Producto> obtenerProductoPorClave(Long clave) {
+    public List<Producto> obtenerProductoPorClave(String clave) {
         //regresa los productos filtrados por clave
         List<ProductoMongo> productosMongo = coleccionProductos.find(and(gt("stock", 0), eq("idProducto", clave))).into(new ArrayList<>());
         return productosMongo.stream().map(p->ProductoMapperMongo.entityToDomain(p)).toList();
     }
 
     @Override
-    public Producto obtenerProductoPorId(Long id) {
+    public Producto obtenerProductoPorId(String id) {
         //regresa el producto con ese id
         ProductoMongo pm = coleccionProductos.find(and(eq("idProducto", id))).first();
         if (pm != null) {
@@ -59,7 +60,7 @@ public class ProductoDAO implements IProductoDAO {
         return null;
     }
     @Override
-    public Boolean DisminuirStock(Long idProducto, int nuevoStock) {
+    public Boolean DisminuirStock(String idProducto, int nuevoStock) {
 
         return coleccionProductos.updateOne(
                 eq("idProducto", idProducto),

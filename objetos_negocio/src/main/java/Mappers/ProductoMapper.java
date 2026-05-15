@@ -21,11 +21,12 @@ public class ProductoMapper {
         }
         if (producto instanceof Medicamento m) {
             MedicamentoDTO dto = new MedicamentoDTO();
-            dto.setId(m.getIdProducto());
+            dto.setIdProducto(m.getIdProducto());
             dto.setNombre(m.getNombre());
+            dto.setMarca(m.getMarca());
+            dto.setTipo(m.getTipo());
             dto.setPrecio(m.getPrecio());
             dto.setImagen(m.getImagen());
-            dto.setMarca(m.getMarca());
             dto.setMedida(m.getMedida());
             dto.setDosis(m.getDosis());
             dto.setStock(m.getStock());
@@ -35,7 +36,9 @@ public class ProductoMapper {
             return dto;
         }
         ProductoDTO dto = new ProductoDTO();
-        dto.setId(producto.getIdProducto());
+        dto.setIdProducto(producto.getIdProducto());
+        dto.setMarca(producto.getMarca());
+        dto.setTipo(producto.getTipo());
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
         dto.setImagen(producto.getImagen());
@@ -49,7 +52,8 @@ public class ProductoMapper {
         }
         if(dto instanceof MedicamentoDTO m){
             Medicamento entity=new Medicamento();
-            entity.setIdProducto(m.getId());
+            entity.setIdProducto(m.getIdProducto());
+            entity.setTipo(m.getTipo());
             entity.setNombre(m.getNombre());
             entity.setPrecio(m.getPrecio());
             entity.setImagen(m.getImagen());
@@ -58,12 +62,14 @@ public class ProductoMapper {
             entity.setDosis(m.getDosis());
             entity.setStock(m.getStock());
             entity.setPresentacion(m.getPresentacion());
-            entity.setEsControlada(m.isEsControlado());
+            entity.setEsControlada(m.getEsControlado());
             entity.setEspecialidades(m.getEspecialidades());
             return entity;
         }
         Producto entity=new Producto();
-        entity.setIdProducto(dto.getId());
+        entity.setIdProducto(dto.getIdProducto());
+        entity.setMarca(dto.getMarca());
+        entity.setTipo(dto.getTipo());
         entity.setNombre(dto.getNombre());
         entity.setPrecio(dto.getPrecio());
         entity.setImagen(dto.getImagen());

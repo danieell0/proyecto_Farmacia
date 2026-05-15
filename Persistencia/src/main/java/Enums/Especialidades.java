@@ -13,5 +13,7 @@ public enum Especialidades {
     PSIQUIATRIA,
     ONCOLOGIA,
     PEDIATRIA,
-    CARDIOLOGIA
+    CARDIOLOGIA,
+    GASTROENTEROLOGIA,
+    NEUROLOGIA
 }

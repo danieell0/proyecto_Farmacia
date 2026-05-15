@@ -4,6 +4,7 @@
  */
 package EntidadesMongo;
 
+import Enums.TipoProducto;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 /**
@@ -13,28 +14,32 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 @BsonDiscriminator
 public class ProductoMongo {
 
-    private Long idProducto;
+    private String idProducto;
     private String nombre;
+    private String marca;
     private Double precio;
-    private String Imagen;
+    private String imagen;
     private Integer stock;
+    private TipoProducto tipo;
 
     public ProductoMongo() {
     }
 
-    public ProductoMongo(Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
+    public ProductoMongo(String idProducto, String nombre, String marca, Double precio, String imagen, Integer stock, TipoProducto tipo) {
         this.idProducto = idProducto;
         this.nombre = nombre;
+        this.marca = marca;
         this.precio = precio;
-        this.Imagen = Imagen;
+        this.imagen = imagen;
         this.stock = stock;
+        this.tipo = tipo;
     }
 
-    public Long getIdProducto() {
+    public String getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Long idProducto) {
+    public void setIdProducto(String idProducto) {
         this.idProducto = idProducto;
     }
 
@@ -46,6 +51,14 @@ public class ProductoMongo {
         this.nombre = nombre;
     }
 
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
     public Double getPrecio() {
         return precio;
     }
@@ -55,11 +68,11 @@ public class ProductoMongo {
     }
 
     public String getImagen() {
-        return Imagen;
+        return imagen;
     }
 
-    public void setImagen(String Imagen) {
-        this.Imagen = Imagen;
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public Integer getStock() {
@@ -70,9 +83,17 @@ public class ProductoMongo {
         this.stock = stock;
     }
 
-    @Override
-    public String toString() {
-        return "Producto{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", precio=" + precio + ", Imagen=" + Imagen + ", stock=" + stock + '}';
+    public TipoProducto getTipo() {
+        return tipo;
     }
 
+    public void setTipo(TipoProducto tipo) {
+        this.tipo = tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductoMongo{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", marca=" + marca + ", precio=" + precio + ", imagen=" + imagen + ", stock=" + stock + ", tipo=" + tipo + '}';
+    }
+    
 }

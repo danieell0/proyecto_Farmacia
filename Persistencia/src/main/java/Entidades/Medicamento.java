@@ -2,6 +2,7 @@ package Entidades;
 
 import Enums.Especialidades;
 import Enums.Medida;
+import Enums.TipoProducto;
 import java.util.List;
 
 /**
@@ -10,7 +11,6 @@ import java.util.List;
  */
 public class Medicamento extends Producto {
 
-    private String marca;
     private Medida medida;
     private Double dosis;
     private String presentacion;
@@ -20,22 +20,13 @@ public class Medicamento extends Producto {
     public Medicamento() {
     }
 
-    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
-        super(idProducto, nombre, precio, Imagen, stock);
-        this.marca = marca;
+    public Medicamento(Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, String idProducto, String nombre, String marca, Double precio, String imagen, Integer stock, TipoProducto tipo) {
+        super(idProducto, nombre, marca, precio, imagen, stock, tipo);
         this.medida = medida;
         this.dosis = dosis;
         this.presentacion = presentacion;
         this.esControlada = esControlada;
         this.especialidades = especialidades;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
     }
 
     public Medida getMedida() {
@@ -74,13 +65,13 @@ public class Medicamento extends Producto {
         return especialidades;
     }
 
-    public void setEspecialidades(List<Especialidades> especialidad) {
-        this.especialidades = especialidad;
+    public void setEspecialidades(List<Especialidades> especialidades) {
+        this.especialidades = especialidades;
     }
 
     @Override
     public String toString() {
-        return "Medicamento{" + "marca=" + marca + ", medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlada=" + esControlada + ", especialidades=" + especialidades + '}';
-    } 
+        return "Medicamento{" + "medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlada=" + esControlada + ", especialidades=" + especialidades + '}';
+    }
     
 }

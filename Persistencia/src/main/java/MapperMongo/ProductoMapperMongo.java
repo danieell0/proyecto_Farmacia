@@ -22,9 +22,10 @@ public class ProductoMapperMongo {
                 med.setPrecio(medMongo.getPrecio());
                 med.setImagen(medMongo.getImagen());
                 med.setStock(medMongo.getStock());
+                med.setTipo(medMongo.getTipo());
+                med.setMarca(medMongo.getMarca());
 
                 // Atributos específicos de Medicamento
-                med.setMarca(medMongo.getMarca());
                 med.setMedida(medMongo.getMedida());
                 med.setDosis(medMongo.getDosis());
                 med.setPresentacion(medMongo.getPresentacion());
@@ -43,6 +44,8 @@ public class ProductoMapperMongo {
             Producto prod = new Producto();
             prod.setIdProducto(mongo.getIdProducto());
             prod.setNombre(mongo.getNombre());
+            prod.setMarca(mongo.getMarca());
+            prod.setTipo(mongo.getTipo());
             prod.setPrecio(mongo.getPrecio());
             prod.setImagen(mongo.getImagen());
             prod.setStock(mongo.getStock());
@@ -60,8 +63,9 @@ public class ProductoMapperMongo {
                 medMongo.setPrecio(med.getPrecio());
                 medMongo.setImagen(med.getImagen());
                 medMongo.setStock(med.getStock());
-
                 medMongo.setMarca(med.getMarca());
+                medMongo.setTipo(med.getTipo());
+
                 medMongo.setMedida(med.getMedida());
                 medMongo.setDosis(med.getDosis());
                 medMongo.setPresentacion(med.getPresentacion());
@@ -77,6 +81,8 @@ public class ProductoMapperMongo {
             ProductoMongo mongo = new ProductoMongo();
             mongo.setIdProducto(dominio.getIdProducto());
             mongo.setNombre(dominio.getNombre());
+            mongo.setMarca(dominio.getMarca());
+            mongo.setTipo(dominio.getTipo());
             mongo.setPrecio(dominio.getPrecio());
             mongo.setImagen(dominio.getImagen());
             mongo.setStock(dominio.getStock());

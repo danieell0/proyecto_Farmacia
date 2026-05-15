@@ -46,7 +46,7 @@ public class FVentas implements IVenta {
         ProductoDTO producto = detalle.getProducto();
 
     // 1. Verificamos si es medicamento y si es controlado
-    if (producto instanceof MedicamentoDTO med && med.isEsControlado()) {
+    if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
         
         // --- VALIDACIÓN INMEDIATA DEL FOLIO ---
         // Si el folio es null, es porque la UI no lo capturó antes de llamar a este método
@@ -65,7 +65,7 @@ public class FVentas implements IVenta {
             // Aquí se conecta con el subsistema que busca en la colección 'recetas'
             if (fachadaReceta.validarYReservar(
                     this.folioRecetaActual, 
-                    med.getId(), 
+                    med.getIdProducto(), 
                     detalle.getCantidad(), 
                     esp)) {
                 esValido = true;
@@ -91,17 +91,17 @@ public class FVentas implements IVenta {
      * @param idProducto el producto a eliminarse del carrito.
      */
     @Override
-    public void eliminarDelCarrito(Long idProducto) {
+    public void eliminarDelCarrito(String idProducto) {
         DetalleCarritoDTO detalleEncontrado = null;
         for (DetalleCarritoDTO d : this.controlCarrito.obtenerCarrito().getListaProductos()) {
-            if (d.getProducto().getId().equals(idProducto)) {
+            if (d.getProducto().getIdProducto().equals(idProducto)) {
                 detalleEncontrado = d;
                 break;
             }
         }
         if (detalleEncontrado != null && detalleEncontrado.getProducto() instanceof MedicamentoDTO) {
             MedicamentoDTO med = (MedicamentoDTO) detalleEncontrado.getProducto();
-            if (med.isEsControlado() && this.folioRecetaActual != null) {
+            if (med.getEsControlado() && this.folioRecetaActual != null) {
                 this.fachadaReceta.cancelarReserva(this.folioRecetaActual, idProducto, detalleEncontrado.getCantidad());
             }
         }
@@ -151,7 +151,7 @@ public class FVentas implements IVenta {
     
     @Override
     public Boolean validarProductoParaVenta(ProductoDTO producto, Integer cantidad) {
-        if (producto instanceof MedicamentoDTO med && med.isEsControlado()) {
+        if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
 
         if (this.folioRecetaActual == null || this.folioRecetaActual.isEmpty()) {
             // Aquí deberías lanzar la alerta UI para pedir el folio
@@ -166,7 +166,7 @@ public class FVentas implements IVenta {
         // Validación flexible: recorre todas las especialidades permitidas del producto
         boolean esValido = false;
         for (Especialidades esp : especialidades) {
-            if (fachadaReceta.validarYReservar(this.folioRecetaActual, med.getId(), cantidad, esp)) {
+            if (fachadaReceta.validarYReservar(this.folioRecetaActual, med.getIdProducto(), cantidad, esp)) {
                 esValido = true;
                 break;
             }

@@ -1,6 +1,6 @@
 package DTO;
 
-import Enums.Tipo;
+import Enums.TipoProducto;
 
 /**
  * DTO que representa un producto.
@@ -8,12 +8,13 @@ import Enums.Tipo;
  */
 public class ProductoDTO {
 
-    private Long id;
+    private String idProducto;
     private String nombre;
+    private String marca;
     private Double precio;
     private Integer stock;
     private String imagen;
-    private Tipo tipo;
+    private TipoProducto tipo;
 
     /**
      * Contructor vacio.
@@ -22,121 +23,75 @@ public class ProductoDTO {
        
     }
 
-    /**
-     * Constructor con todos los atributos del producto.
-     * @param id Id del producto.
-     * @param nombre Nombre del producto.
-     * @param precio Precio del producto.
-     * @param stock Stock del producto.
-     * @param imagen Imagen del producto
-     * @param tipo Tipo de producto.
-     */
-    public ProductoDTO(Long id, String nombre, Double precio, String imagen, Integer stock, Tipo tipo) {
-        this.id = id;
+    public ProductoDTO(String idProducto, String nombre, String marca, Double precio, Integer stock, String imagen, TipoProducto tipo) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
+        this.marca = marca;
         this.precio = precio;
         this.stock = stock;
         this.imagen = imagen;
+        this.tipo = tipo;
     }
 
-    /**
-     * Contructor del jorge webon.
-     * @param nombre
-     * @param precio
-     * @param imagen 
-     */
-    public ProductoDTO(String nombre, Double precio, String imagen) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.imagen = imagen;
+    public String getIdProducto() {
+        return idProducto;
     }
 
-    /**
-     * @return Obtiene el Id del producto.
-     */
-    public Long getId() {
-        return id;
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
-    /**
-     * @param id El Id a asignar al producto.
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * @return Obtiene el nombre del producto.
-     */
     public String getNombre() {
         return nombre;
     }
 
-    /**
-     * @param nombre El nombre a asignar al producto.
-     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    /**
-     * @return Obtiene el precio del producto.
-     */
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
     public Double getPrecio() {
         return precio;
     }
 
-    /**
-     * @param precio El precio a asignar al producto.
-     */
     public void setPrecio(Double precio) {
         this.precio = precio;
     }
 
-    /**
-    * @return Obtiene el stock del producto.
-     */
     public Integer getStock() {
         return stock;
     }
 
-      /**
-     * @param stock El stock a asignar al producto.
-     */
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-    
-    /**
-     * @return La imagen del producto.
-     */
+
     public String getImagen() {
         return imagen;
     }
 
-    /**
-     * La imagen a asignar al producto.
-     * @param imagen 
-     */
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 
-    /**
-     * @return El tipo del producto del producto.
-     */
-    public Tipo getTipo() {
+    public TipoProducto getTipo() {
         return tipo;
     }
 
-    /**
-     * El tipo a asignar al producto.
-     * @param tipo
-     */
-    public void setTipo(Tipo tipo) {
+    public void setTipo(TipoProducto tipo) {
         this.tipo = tipo;
     }
 
-    
+    @Override
+    public String toString() {
+        return "ProductoDTO{" + "idProducto=" + idProducto + ", nombre=" + nombre + ", marca=" + marca + ", precio=" + precio + ", stock=" + stock + ", imagen=" + imagen + ", tipo=" + tipo + '}';
+    }
     
 }

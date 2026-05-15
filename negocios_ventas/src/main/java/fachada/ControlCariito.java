@@ -59,8 +59,8 @@ public class ControlCariito {
                 : this.carritoActual.getListaProductos()) {
 
             if (existente.getProducto()
-                    .getId()
-                    .equals(producto.getId())) {
+                    .getIdProducto()
+                    .equals(producto.getIdProducto())) {
 
                 int nuevaCantidad
                         = existente.getCantidad()
@@ -118,14 +118,14 @@ public class ControlCariito {
      * @param idProductoAEliminar Producto a eliminar.
      */
     protected void eliminarProductoDelCarrito(
-            Long idProductoAEliminar
+            String idProductoAEliminar
     ) {
 
         for (DetalleCarritoDTO detalle
                 : this.carritoActual.getListaProductos()) {
 
             if (detalle.getProducto()
-                    .getId()
+                    .getIdProducto()
                     .equals(idProductoAEliminar)) {
 
                 int cantidadARegresar = detalle.getCantidad();
@@ -139,7 +139,7 @@ public class ControlCariito {
 
         this.carritoActual.getListaProductos().removeIf(
                 detalle -> detalle.getProducto()
-                        .getId()
+                        .getIdProducto()
                         .equals(idProductoAEliminar)
         );
 
