@@ -1,5 +1,6 @@
 package subsistemaRecetas;
 
+import Bo.NegocioException;
 import DTO.RecetaDTO;
 import Enums.Especialidades;
 
@@ -19,10 +20,12 @@ public interface IFachadaSubsistemaRecetas {
      * @param idProducto ID de los productos involucrados en la receta.
      * @param cantidad Cantidad de los productos involucrados en la receta.
      * @param especialidadProducto Especialidad necesaria para recetar el Producto.
+     *  @throws NegocioException La causa del error en la capa de negocio.
      * @return Si la receta se puede usar o no.
      */
-    public abstract boolean validarYReservar(
-            String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto);
+    public abstract Boolean validarYReservar(
+            String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto
+    ) throws NegocioException;
     
     /**
      * Cancela la reserva de los productos agregados al carrito
@@ -30,22 +33,26 @@ public interface IFachadaSubsistemaRecetas {
      * @param folio Folio de la receta.
      * @param idProducto ID del producto que se se devolveran sus unidades reservadas.
      * @param cantidad Cantidad del producto.
+     *  @throws NegocioException La causa del error en la capa de negocio.
      * @return Si la operacion fue exitosa.
      */
-    public abstract boolean cancelarReserva(
+    public abstract Boolean cancelarReserva(
             String folio, String idProducto, Integer cantidad
-    );
+    ) throws NegocioException;
     
     /**
      * Confirma los descuentos que se hicieron en el metodo de validarYReservar
      * (Cuando se confirma una venta).
+     * @throws NegocioException La causa del error en la capa de negocio.
+     * @return Si la operacion fue exitosa.
      */
-    public abstract void confirmarDescuentoReceta();
+    public abstract Boolean confirmarDescuentoReceta() throws NegocioException;
     
     /**
      * Limpia las recetas guardadas temporalmente.
+     * @return Si la operacion fue exitosa.
      */
-    public abstract void limpiarRecetasGuardadas();
+    public abstract Boolean limpiarRecetasGuardadas();
     
     /**
      * Obtiene las recetas guardadas temporalmente.
@@ -59,17 +66,18 @@ public interface IFachadaSubsistemaRecetas {
      * @param folio Folio de la receta.
      * @return Si la receta existe.
      */
-    public abstract boolean existeReceta(String folio);
+    public abstract Boolean existeReceta(String folio);
     
     /**
      * Busca las productos en recetas activas.
      * @param idProducto ID de la receta activa a buscar.
      * @param cantidad La cantidad de productos en la receta.
      * @param especialidadProducto Especialidad para recetar el Producto.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @return Si se encontro o no.
      */
     public abstract String buscarEnRecetasActivas(
             String idProducto, Integer cantidad, Especialidades especialidadProducto
-    );
+    ) throws NegocioException;
 
 }

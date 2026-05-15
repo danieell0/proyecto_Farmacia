@@ -4,8 +4,6 @@
  */
 package DTO;
 
-import DTO.ProductoDTO;
-
 /**
  *
  * @author munos

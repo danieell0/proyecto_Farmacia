@@ -1,5 +1,6 @@
 package pantallas.control;
 
+import Bo.NegocioException;
 import Catalogo.Fachada;
 import Catalogo.ICatalogo;
 import DTO.ProductoDTO;
@@ -182,7 +183,7 @@ public class Coordinador implements ICoordinador {
 
             actualizarCarrito();
 
-        } catch (RuntimeException e) {
+        } catch (NegocioException e) {
             // 2. Aquí atrapamos el error que viene del subsistema (FVentas)
             String mensaje = e.getMessage();
 
@@ -217,10 +218,12 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void eliminarProductoDelCarrito(String idProducto, Integer cantidad) {
-
-        fVentas.eliminarDelCarrito(idProducto);
-
-        actualizarCarrito();
+        try {
+            fVentas.eliminarDelCarrito(idProducto);
+            actualizarCarrito();
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(ventaFrame, e.getMessage(), "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -300,26 +303,6 @@ public class Coordinador implements ICoordinador {
     }
 
     /**
-     * Valida si un producto requiere receta y si hay disponibilidad en la
-     * misma.
-     *
-     * @param producto Producto a validar.
-     * @param cantidad Cantidad a validar.
-     * @return Si es valido.
-     */
-    @Override
-    public Boolean validarProductoConReceta(ProductoDTO producto, Integer cantidad) {
-        boolean esValido = fVentas.validarProductoParaVenta(producto, cantidad);
-        if (!esValido) {
-            JOptionPane.showMessageDialog(ventaFrame,
-                    "El producto no está en la receta, el folio es inexistente o la cantidad excede lo recetado.",
-                    "Validación de Receta", JOptionPane.WARNING_MESSAGE);
-            this.folioRecetaActual = null;
-        }
-        return esValido;
-    }
-
-    /**
      * Muestra la pantalla de venta.
      */
     public void mostrarPantallaVenta() {
@@ -384,4 +367,5 @@ public class Coordinador implements ICoordinador {
             menuJFrame.actualizarTablaCarrito(carritoActualizado);
         }
     }
+
 }

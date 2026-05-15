@@ -1,5 +1,6 @@
 package subsistemaRecetas;
 
+import Bo.NegocioException;
 import DTO.DetalleRecetaDTO;
 import DTO.RecetaDTO;
 import Enums.Especialidades;
@@ -30,28 +31,48 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @param idProducto ID de los productos involucrados en la receta.
      * @param cantidad Cantidad de los productos involucrados en la receta.
      * @param especialidadProducto Especialidad necesaria para recetar el Producto.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @return Si la receta se puede usar o no.
      */
     @Override
-    public boolean validarYReservar(String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto) {
-        RecetaDTO receta = obtenerRecetaInterna(folio);
+    public Boolean validarYReservar(String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto) throws NegocioException {
+        RecetaDTO receta = null;
+        for (RecetaDTO r : recetasActivas) {
+            if (r.getFolio().equals(folio)) {
+                receta = r;
+                break;
+            }
+        }
         if (receta == null) {
             receta = controlBuscar.obtenerRecetaPorFolio(folio);
         }
-
         if (receta != null) {
-            boolean esValida = controlValidar.validarFechaReceta(receta) &&
-                               controlEstado.obtenerEstadoDeReceta(receta) == EstadoReceta.ACTIVA &&
-                               controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto);
-
-            if (esValida) {
-                if (obtenerRecetaInterna(folio) == null) {
-                    recetasActivas.add(receta);
+            boolean vigenciaValida = controlValidar.validarFechaReceta(receta) &&
+                                     controlEstado.obtenerEstadoDeReceta(receta) == EstadoReceta.ACTIVA;
+            if (!vigenciaValida) {
+                if (!controlValidar.validarFechaReceta(receta) && controlEstado.obtenerEstadoDeReceta(receta) == EstadoReceta.ACTIVA) {
+                    controlEstado.actualizarEstadoReceta(receta, EstadoReceta.CADUCADA);
                 }
-                controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
-                return true;
+                return false; 
             }
+            boolean tieneMedicamento = controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto);
+            if (!tieneMedicamento) {
+                throw new IllegalArgumentException("El folio es válido, pero la receta no autoriza el medicamento seleccionado.");
+            }
+            boolean yaEstaEnLista = false;
+            for (RecetaDTO r : recetasActivas) {
+                if (r.getFolio().equals(folio)) {
+                    yaEstaEnLista = true;
+                    break;
+                }
+            }
+            if (!yaEstaEnLista) {
+                recetasActivas.add(receta);
+            }
+            controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
+            return true;
         }
+
         return false;
     }
 
@@ -61,10 +82,11 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @param folio Folio de la receta.
      * @param idProducto ID del producto que se se devolveran sus unidades reservadas.
      * @param cantidad Cantidad del producto.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @return Si la operacion fue exitosa.
      */
     @Override
-    public boolean cancelarReserva(String folio, String idProducto, Integer cantidad) {
+    public Boolean cancelarReserva(String folio, String idProducto, Integer cantidad) throws NegocioException {
         RecetaDTO receta = obtenerRecetaInterna(folio);
         if (receta != null) {
             controlOperaciones.sumarMedicamentos(receta, idProducto, cantidad);
@@ -76,9 +98,11 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
     /**
      * Confirma los descuentos que se hicieron en el metodo de validarYReservar
      * (Cuando se confirma una venta).
+     * @throws NegocioException La causa del error en la capa de negocio.
+     * @return Si la operacion fue exitosa.
      */
     @Override
-    public void confirmarDescuentoReceta() {
+    public Boolean confirmarDescuentoReceta() throws NegocioException {
         for (RecetaDTO receta : recetasActivas) {
             boolean surtidaCompletamente = true;
             for (DetalleRecetaDTO detalles : receta.getDetalles()) {
@@ -92,14 +116,17 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
             }
         }
         limpiarRecetasGuardadas();
+        return true;
     }
 
     /**
      * Limpia las recetas guardadas temporalmente.
+     * @return Si la operacion fue exitosa.
      */
     @Override
-    public void limpiarRecetasGuardadas() {
+    public Boolean limpiarRecetasGuardadas() {
         this.recetasActivas.clear();
+        return this.recetasActivas.isEmpty();
     }
     
     /**
@@ -124,13 +151,9 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @return Si la receta existe.
      */
     @Override
-    public boolean existeReceta(String folio) {
+    public Boolean existeReceta(String folio) {
         RecetaDTO receta = controlBuscar.obtenerRecetaPorFolio(folio);
-        if (receta != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return receta != null;
     }
     
     /**
@@ -138,10 +161,11 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      * @param idProducto ID de la receta activa a buscar.
      * @param cantidad La cantidad de productos en la receta.
      * @param especialidadProducto Especialidad para recetar el Producto.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @return Si se encontro o no.
      */
     @Override
-    public String buscarEnRecetasActivas(String idProducto, Integer cantidad, Especialidades especialidadProducto) {
+    public String buscarEnRecetasActivas(String idProducto, Integer cantidad, Especialidades especialidadProducto) throws NegocioException {
         for (RecetaDTO receta : recetasActivas) {
             if (controlValidar.validarExistenciaEnReceta(receta, idProducto) && 
                 controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto)) {

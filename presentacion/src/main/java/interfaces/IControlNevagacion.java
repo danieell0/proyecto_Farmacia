@@ -6,7 +6,6 @@ package interfaces;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import pantallas.control.Coordinador;
 
 /**
  *

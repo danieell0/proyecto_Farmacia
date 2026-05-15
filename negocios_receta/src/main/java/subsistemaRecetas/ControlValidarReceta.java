@@ -1,5 +1,6 @@
 package subsistemaRecetas;
 
+import Bo.NegocioException;
 import DTO.RecetaDTO;
 import DTO.DetalleRecetaDTO;
 import Enums.Especialidades;
@@ -20,7 +21,7 @@ public class ControlValidarReceta {
      * @param receta Receta a las que se la validara.
      * @return Si la receta es valida o invalida.
      */
-    protected boolean validarFechaReceta(RecetaDTO receta) {
+    protected Boolean validarFechaReceta(RecetaDTO receta) {
         if (receta == null || receta.getFechaCaducidad() == null){
             return false;
         } 
@@ -33,7 +34,7 @@ public class ControlValidarReceta {
      * @param idProducto Producto que se busca en la receta.
      * @return Si el producto se encontro en la receta.
      */
-    protected boolean validarExistenciaEnReceta(RecetaDTO receta, String idProducto) {
+    protected Boolean validarExistenciaEnReceta(RecetaDTO receta, String idProducto) {
         if (receta == null || receta.getFechaCaducidad() == null){
             return false;
         }
@@ -51,28 +52,26 @@ public class ControlValidarReceta {
      * @param idProducto Producto que se validara.
      * @param cantidadSolicitada Cantidad solicitada del producto.
      * @param especialidadProducto Especialidad del producto recetado.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @return Si la cantidad es valida o invalida.
      */
-    protected boolean validarMedicamentosReceta(RecetaDTO receta, String idProducto, Integer cantidadSolicitada, Especialidades especialidadProducto) {
+    protected Boolean validarMedicamentosReceta(RecetaDTO receta, String idProducto, Integer cantidadSolicitada, Especialidades especialidadProducto) throws NegocioException{
         if (receta == null || especialidadProducto == null) {
-            return false;
-        }
-        boolean autorizado = validadorMedico.esMedicoAutorizado(
-                receta.getCedulaMedico(),
-                especialidadProducto
-        );
-
-        if (!autorizado) {
-            System.out.println("Bloqueo: Médico no autorizado por especialidad o permisos");
-            return false;
-        }
-        for (DetalleRecetaDTO d : receta.getDetalles()) {
-            if (Objects.equals(d.getIdMedicamento(), idProducto)) {
-                int disponible = d.getCantidadRecetada() - d.getCantidadSurtida();
-                return disponible >= cantidadSolicitada;
+                throw new NegocioException("Datos de validacion incompletos.");
             }
-        }
-        return false;
+            if (!validadorMedico.esMedicoAutorizado(receta.getCedulaMedico(), especialidadProducto)) {
+                throw new NegocioException("El medico no esta autorizado para recetar productos de esta especialidad.");
+            }
+            for (DetalleRecetaDTO d : receta.getDetalles()) {
+                if (Objects.equals(d.getIdMedicamento(), idProducto)) {
+                    int disponible = d.getCantidadRecetada() - d.getCantidadSurtida();
+                    if (disponible < cantidadSolicitada) {
+                        throw new NegocioException("Saldo insuficiente en la receta.");
+                    }
+                    return true;
+                }
+            }
+        throw new NegocioException("El medicamento seleccionado no pertenece a esta receta.");
     }
     
 }

@@ -4,6 +4,7 @@
  */
 package fachada;
 
+import Bo.NegocioException;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.MedicamentoDTO;
@@ -39,59 +40,51 @@ public class FVentas implements IVenta {
      /**
      * Agrega un producto al carrito y descuenta el stock de forma temporal 
      * en el DTO para evitar sobreventas.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @param detalle La especificacion de cantidad y producto que se agregara al carrito.
      */
     @Override
-    public void agregarAlCarrito(DetalleCarritoDTO detalle) {
+    public void agregarAlCarrito(DetalleCarritoDTO detalle) throws NegocioException{
         ProductoDTO producto = detalle.getProducto();
-
-    // 1. Verificamos si es medicamento y si es controlado
-    if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
         
-        // --- VALIDACIÓN INMEDIATA DEL FOLIO ---
-        // Si el folio es null, es porque la UI no lo capturó antes de llamar a este método
-        if (this.folioRecetaActual == null || this.folioRecetaActual.isEmpty()) {
-            throw new RuntimeException("Es obligatorio ingresar un folio de receta para: " + med.getNombre());
+        if (producto.getStock() < detalle.getCantidad()) {
+            throw new NegocioException("No hay suficiente stock para el producto: " + producto.getNombre());
         }
 
-        List<Especialidades> especialidadesMedicamento = med.getEspecialidades();
-        if (especialidadesMedicamento == null || especialidadesMedicamento.isEmpty()) {
-            throw new RuntimeException("El medicamento " + med.getNombre() + " no tiene especialidades configuradas.");
-        }
+        if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
 
-        // 2. BUSCAR EN LA BASE DE DATOS (FachadaReceta debe ir a MongoDB)
-        boolean esValido = false;
-        for (Especialidades esp : especialidadesMedicamento) {
-            // Aquí se conecta con el subsistema que busca en la colección 'recetas'
-            if (fachadaReceta.validarYReservar(
-                    this.folioRecetaActual, 
-                    med.getIdProducto(), 
-                    detalle.getCantidad(), 
-                    esp)) {
-                esValido = true;
-                break; 
+            if (this.folioRecetaActual == null || this.folioRecetaActual.isEmpty()) {
+                throw new NegocioException("Es obligatorio ingresar un folio de receta para: " + med.getNombre());
+            }
+
+            boolean esValido = false;
+            if (med.getEspecialidades() != null && !med.getEspecialidades().isEmpty()) {
+                for (Especialidades esp : med.getEspecialidades()) {
+                    if (fachadaReceta.validarYReservar(this.folioRecetaActual, med.getIdProducto(), detalle.getCantidad(), esp)) {
+                        esValido = true;
+                        break; 
+                    }
+                }
+            }
+
+            if (!esValido) {
+                String folioError = this.folioRecetaActual;
+                this.folioRecetaActual = null;
+                throw new NegocioException("La receta con folio [" + folioError + "] no es válida para este medicamento.");
             }
         }
-
-        if (!esValido) {
-            // Si llegamos aquí es porque el folio existe pero no para este producto/especialidad
-            String folioError = this.folioRecetaActual;
-            this.folioRecetaActual = null; // Limpiamos para el siguiente intento
-            throw new RuntimeException("La receta con folio [" + folioError + "] no es válida para este medicamento o especialidad.");
-        }
-    }
-    
-    // 3. Si pasó las validaciones (o no es controlado), se agrega al carrito
-    this.controlCarrito.agregarProductoAlCarrito(detalle);
+        
+        this.controlCarrito.agregarProductoAlCarrito(detalle);
     }
 
 
     /**
      * Elimina un producto y devuelve el stock temporal al DTO.
+     * @throws NegocioException La causa del error en la capa de negocio.
      * @param idProducto el producto a eliminarse del carrito.
      */
     @Override
-    public void eliminarDelCarrito(String idProducto) {
+    public void eliminarDelCarrito(String idProducto) throws NegocioException {
         DetalleCarritoDTO detalleEncontrado = null;
         for (DetalleCarritoDTO d : this.controlCarrito.obtenerCarrito().getListaProductos()) {
             if (d.getProducto().getIdProducto().equals(idProducto)) {
@@ -99,9 +92,8 @@ public class FVentas implements IVenta {
                 break;
             }
         }
-        if (detalleEncontrado != null && detalleEncontrado.getProducto() instanceof MedicamentoDTO) {
-            MedicamentoDTO med = (MedicamentoDTO) detalleEncontrado.getProducto();
-            if (med.getEsControlado() && this.folioRecetaActual != null) {
+        if (detalleEncontrado != null && detalleEncontrado.getProducto() instanceof MedicamentoDTO med) {
+            if (med.getEsControlado()&& this.folioRecetaActual != null) {
                 this.fachadaReceta.cancelarReserva(this.folioRecetaActual, idProducto, detalleEncontrado.getCantidad());
             }
         }
@@ -147,41 +139,6 @@ public class FVentas implements IVenta {
         }
         return null;
     }
-    
-    
-    @Override
-    public Boolean validarProductoParaVenta(ProductoDTO producto, Integer cantidad) {
-        if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
-
-        if (this.folioRecetaActual == null || this.folioRecetaActual.isEmpty()) {
-            // Aquí deberías lanzar la alerta UI para pedir el folio
-            return false; 
-        }
-
-        List<Especialidades> especialidades = med.getEspecialidades();
-        if (especialidades == null || especialidades.isEmpty()) {
-            return false;
-        }
-
-        // Validación flexible: recorre todas las especialidades permitidas del producto
-        boolean esValido = false;
-        for (Especialidades esp : especialidades) {
-            if (fachadaReceta.validarYReservar(this.folioRecetaActual, med.getIdProducto(), cantidad, esp)) {
-                esValido = true;
-                break;
-            }
-        }
-
-        if (!esValido) {
-            this.folioRecetaActual = null; // Limpiamos el folio si no sirvió para este producto
-        }
-
-        return esValido;
-    }
-
-    return true;
-    }
-
 
     /**
      * Finaliza venta. El stock definitivo se descuenta en BO.

@@ -8,8 +8,6 @@ import ConexionMongo.ManejadorConexiones;
 import Entidades.CuentaAcceso;
 import Entidades.DetalleReceta;
 import Entidades.Empleado;
-import Entidades.Medicamento;
-import Entidades.Producto;
 import Entidades.Receta;
 import EntidadesMongo.MedicamentoMongo;
 import EntidadesMongo.ProductoMongo;
@@ -102,7 +100,7 @@ public class inserts {
             Connection conexion = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/",
                     "root",
-                    "Jorge"
+                    "357642"
             );
 
             // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea
