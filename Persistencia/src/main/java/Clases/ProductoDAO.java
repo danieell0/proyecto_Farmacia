@@ -32,38 +32,21 @@ public class ProductoDAO implements IProductoDAO {
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
         List<ProductoMongo> productosMongo = coleccionProductos.find().into(new ArrayList<>());
-        List<Producto> productos = new ArrayList<>();
-        for (ProductoMongo pm : productosMongo) {
-            productos.add(ProductoMapperMongo.entityToDomain(pm));
-        }
-        productos.forEach(p-> System.out.println(p.toString()));
-        return productos;
+        return productosMongo.stream().map(p->ProductoMapperMongo.entityToDomain(p)).toList();
     }
 
     @Override
     public List<Producto> obtenerProductosPorNombre(String nombre) {
         //regresa los productos filtrados por nombre 
         List<ProductoMongo> productosMongo = coleccionProductos.find(regex("nombre", nombre, "i")).into(new ArrayList<>());
-        List<Producto> productos = new ArrayList<>();
-
-        for (ProductoMongo pm : productosMongo) {
-            productos.add(ProductoMapperMongo.entityToDomain(pm));
-        }
-
-        return productos;
+        return productosMongo.stream().map(p->ProductoMapperMongo.entityToDomain(p)).toList();
     }
 
     @Override
     public List<Producto> obtenerProductoPorClave(Long clave) {
         //regresa los productos filtrados por clave
         List<ProductoMongo> productosMongo = coleccionProductos.find(and(gt("stock", 0), eq("idProducto", clave))).into(new ArrayList<>());
-        List<Producto> productos = new ArrayList<>();
-
-        for (ProductoMongo pm : productosMongo) {
-            productos.add(ProductoMapperMongo.entityToDomain(pm));
-        }
-
-        return productos;
+        return productosMongo.stream().map(p->ProductoMapperMongo.entityToDomain(p)).toList();
     }
 
     @Override
@@ -73,7 +56,6 @@ public class ProductoDAO implements IProductoDAO {
         if (pm != null) {
             return ProductoMapperMongo.entityToDomain(pm);
         }
-
         return null;
     }
     @Override
