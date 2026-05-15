@@ -2,6 +2,7 @@ package DTO;
 
 import Enums.Especialidades;
 import Enums.Medida;
+import Enums.Tipo;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,9 +39,10 @@ public class MedicamentoDTO extends ProductoDTO{
      * @param presentacion Presentacion del medicamento.
      * @param esControlado Restriccion del medicamento.
      * @param imagen Imagen del Producto
+     * @param tipo Tipo del producto.
      */
-    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, String marca, Medida medida, Double dosis, String presentacion, Boolean esControlado, Integer stock, List <Especialidades> especialidades) {
-        super(id, nombre, precio, imagen, stock); //stock
+    public MedicamentoDTO(Long id, String nombre, Double precio, String imagen, Integer stock, Tipo tipo, String marca, Medida medida, Double dosis, String presentacion, Boolean esControlado, List <Especialidades> especialidades) {
+        super(id, nombre, precio, imagen, stock, tipo);
         this.marca = marca;
         this.medida = medida;
         this.dosis = dosis;

@@ -1,14 +1,20 @@
-package Entidades;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package EntidadesMongo;
 
 import Enums.Especialidades;
 import Enums.Medida;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
 /**
  *
- * @author Jorge
+ * @author Dario
  */
-public class Medicamento extends Producto {
+@BsonDiscriminator
+public class MedicamentoMongo extends ProductoMongo {
 
     private String marca;
     private Medida medida;
@@ -17,10 +23,10 @@ public class Medicamento extends Producto {
     private Boolean esControlada;
     private List<Especialidades> especialidades;
 
-    public Medicamento() {
+    public MedicamentoMongo() {
     }
 
-    public Medicamento(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
+    public MedicamentoMongo(String marca, Medida medida, Double dosis, String presentacion, Boolean esControlada, List<Especialidades> especialidades, Long idProducto, String nombre, Double precio, String Imagen, Integer stock) {
         super(idProducto, nombre, precio, Imagen, stock);
         this.marca = marca;
         this.medida = medida;

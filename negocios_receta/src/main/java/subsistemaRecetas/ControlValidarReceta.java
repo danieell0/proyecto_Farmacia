@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class ControlValidarReceta {
     
-    private final ValidacionMedico validadorMedico = new ValidacionMedico();
+    protected final ValidacionMedico validadorMedico = new ValidacionMedico();
     
     /**
      * Valida si la fecha de la receta no esta expirada.
