@@ -3,7 +3,6 @@ package Entidades;
 import Enums.EstadoReceta;
 import java.time.LocalDate;
 import java.util.List;
-import org.bson.codecs.pojo.annotations.BsonId;
 
 /**
  * Entidad que representa una receta.
@@ -11,7 +10,6 @@ import org.bson.codecs.pojo.annotations.BsonId;
  */
 
 public class Receta {    
-    @BsonId
     private String folio;
     private String cedulaMedico;
     private Integer usos;

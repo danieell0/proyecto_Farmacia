@@ -1,5 +1,7 @@
 package DTO;
 
+import Enums.Tipo;
+
 /**
  * DTO que representa un producto.
  * @author Dario
@@ -11,6 +13,7 @@ public class ProductoDTO {
     private Double precio;
     private Integer stock;
     private String imagen;
+    private Tipo tipo;
 
     /**
      * Contructor vacio.
@@ -26,8 +29,9 @@ public class ProductoDTO {
      * @param precio Precio del producto.
      * @param stock Stock del producto.
      * @param imagen Imagen del producto
+     * @param tipo Tipo de producto.
      */
-    public ProductoDTO(Long id, String nombre, Double precio, String imagen, Integer stock) {
+    public ProductoDTO(Long id, String nombre, Double precio, String imagen, Integer stock, Tipo tipo) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -118,4 +122,21 @@ public class ProductoDTO {
         this.imagen = imagen;
     }
 
+    /**
+     * @return El tipo del producto del producto.
+     */
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    /**
+     * El tipo a asignar al producto.
+     * @param tipo
+     */
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    
+    
 }

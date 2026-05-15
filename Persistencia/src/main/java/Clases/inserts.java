@@ -6,15 +6,19 @@ package Clases;
 
 import ConexionMongo.ManejadorConexiones;
 import Entidades.CuentaAcceso;
+import Entidades.DetalleReceta;
 import Entidades.Empleado;
 import Entidades.Medicamento;
 import Entidades.Producto;
+import Entidades.Receta;
 import Enums.Especialidades;
+import Enums.EstadoReceta;
 import Enums.EstatusEmpleado;
 import Enums.Medida;
 import Enums.RolPuesto;
 import com.mongodb.client.MongoCollection;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,6 +46,13 @@ public class inserts {
         coleccionProductos.insertOne(new Medicamento("Sandoz", Medida.mg, 500.0, "Cápsulas", true, List.of(Especialidades.PEDIATRIA), 8L, "Amoxicilina", 120.0, "/imagenes/ibuprofeno.png", 5));
         coleccionProductos.insertOne(new Medicamento("Bayer", Medida.mg, 100.0, "Tabletas", false, List.of(Especialidades.CARDIOLOGIA), 9L, "Aspirina", 45.0, "/imagenes/omeprazol.png", 20));
         coleccionProductos.insertOne(new Medicamento("Genérico", Medida.mg, 10.0, "Tabletas", false, List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA), 10L, "Loratadina", 90.0, "/imagenes/omeprazol.png", 10));
+        
+        
+        MongoCollection<Receta> coleccionRecetas = ManejadorConexiones.obtenerColeccionReceta();
+        coleccionRecetas.insertOne(new Receta("101L", "MG01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 12, 31), Arrays.asList(new DetalleReceta(8L, 10, 0), new DetalleReceta(6L, 10, 0))));
+        coleccionRecetas.insertOne(new Receta("102L", "CA01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 12, 31), Arrays.asList(new DetalleReceta(1L, 5, 0), new DetalleReceta(9L, 5, 0))));
+        coleccionRecetas.insertOne(new Receta("103L", "PS03", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 6, 15), Arrays.asList(new DetalleReceta(4L, 2, 0))));
+        coleccionRecetas.insertOne(new Receta("104L", "ON01", 0, EstadoReceta.CADUCADA, LocalDate.of(2023, 12, 31), Arrays.asList(new DetalleReceta(5L, 10, 0))));
         
         MongoCollection<Empleado> coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
         

@@ -11,7 +11,7 @@ def get_db_connection():
         user="root",
         password="357642",
         database="medicos",
-        connect_timeout=5 # Evita que Java espere eternamente si la DB no responde
+        connect_timeout=5
     )
 
 @app.route('/validar_especialidad', methods=['GET'])
@@ -32,12 +32,9 @@ def validar_especialidad():
         cursor.close()
 
         if medico:
-            # Limpieza y comparación segura
             db_esp = str(medico.get('especialidad') or "").strip().upper()
             req_esp = str(especialidad_requerida or "").strip().upper()
             
-            # El campo permisos en MySQL suele ser TINYINT(1)
-            # Aseguramos la conversión a booleano real
             tiene_permiso = bool(medico.get('permisos', 0))
             especialidad_ok = (db_esp == req_esp)
 
