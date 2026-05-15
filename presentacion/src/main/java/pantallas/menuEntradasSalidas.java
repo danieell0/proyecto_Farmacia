@@ -10,12 +10,14 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Window;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 /**
@@ -86,52 +88,63 @@ public class menuEntradasSalidas extends JFrame {
         setVisible(true);
     }
 
-    private JPanel crearTarjeta(String rutaIcono,String titulo,String texto1,String texto2,Color colorTitulo,Color colorBoton) {
+    private JPanel crearTarjeta(String rutaIcono, String titulo, String texto1, String texto2, Color colorTitulo, Color colorBoton) {
         JPanel tarjeta = new JPanel();
         tarjeta.setLayout(null);
         tarjeta.setBackground(Color.WHITE);
-        tarjeta.setBorder(new LineBorder(new Color(235, 235, 235),2,true));
+        tarjeta.setBorder(new LineBorder(new Color(235, 235, 235), 2, true));
         JLabel lblIcono = new JLabel();
-        lblIcono.setBounds(120,20,260,260);
+        lblIcono.setBounds(120, 20, 260, 260);
         ImageIcon icon = new ImageIcon(getClass().getResource(rutaIcono));
-        Image img = icon.getImage().getScaledInstance(220,220,Image.SCALE_SMOOTH);
+        Image img = icon.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH);
         lblIcono.setIcon(new ImageIcon(img));
         lblIcono.setHorizontalAlignment(SwingConstants.CENTER);
         tarjeta.add(lblIcono);
-        
+
         JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setBounds(70,255,360,40);
+        lblTitulo.setBounds(70, 255, 360, 40);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitulo.setForeground(colorTitulo);
-        lblTitulo.setFont(new Font("Segoe UI",Font.BOLD,34));
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 34));
         tarjeta.add(lblTitulo);
-        
+
         JPanel linea = new JPanel();
-        linea.setBounds(190,320,120,4);
+        linea.setBounds(190, 320, 120, 4);
         linea.setBackground(colorBoton);
         tarjeta.add(linea);
-        
+
         JLabel descripcion1 = new JLabel(texto1);
-        descripcion1.setBounds(60,360,380,30);
+        descripcion1.setBounds(60, 360, 380, 30);
         descripcion1.setHorizontalAlignment(SwingConstants.CENTER);
         descripcion1.setForeground(Color.GRAY);
-        descripcion1.setFont(new Font("Segoe UI",Font.PLAIN,20));
+        descripcion1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         tarjeta.add(descripcion1);
-        
+
         JLabel descripcion2 = new JLabel(texto2);
-        descripcion2.setBounds(60,395,380,30);
+        descripcion2.setBounds(60, 395, 380, 30);
         descripcion2.setHorizontalAlignment(SwingConstants.CENTER);
         descripcion2.setForeground(Color.GRAY);
-        descripcion2.setFont(new Font("Segoe UI",Font.PLAIN,20));
+        descripcion2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         tarjeta.add(descripcion2);
-        
+
         JButton btn = new JButton(titulo);
-        btn.setBounds(110,440,280,50);
+        btn.setBounds(110, 440, 280, 50);
         btn.setFocusPainted(false);
         btn.setForeground(Color.WHITE);
         btn.setBackground(colorBoton);
-        btn.setFont(new Font("Segoe UI",Font.BOLD,22));
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 22));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.addActionListener(e -> {
+            Window ventana = SwingUtilities.getWindowAncestor(tarjeta);
+            ventana.dispose();
+
+            if (titulo.equals("Registrar entrada")) {
+                new registrarEntradaFame();
+            }else{
+                new registrarSalidaFrame();
+            }
+
+        });
         tarjeta.add(btn);
 
         return tarjeta;
