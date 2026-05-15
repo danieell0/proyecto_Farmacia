@@ -87,8 +87,6 @@ public class Medicamento extends Producto {
     @Override
     public String toString() {
         return "Medicamento{" + "marca=" + marca + ", medida=" + medida + ", dosis=" + dosis + ", presentacion=" + presentacion + ", esControlada=" + esControlada + ", especialidades=" + especialidades + '}';
-    }
-
-    
+    } 
     
 }

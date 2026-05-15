@@ -3,13 +3,14 @@ import mysql.connector
 from mysql.connector import Error
 
 app = Flask(__name__)
+password = input("Ingresa la contraseña de MySQL: ")
 
 # Configuración directa a la DB de Médicos
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="357642",
+        password=password,
         database="medicos",
         connect_timeout=5
     )
@@ -60,5 +61,5 @@ def validar_especialidad():
             conn.close()
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=False, port=5001)
 
