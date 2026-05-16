@@ -38,7 +38,7 @@ public class VentaBO implements IVentaBO {
     }
 
     @Override
-public boolean agregarVenta(VentaDTO ventaDTO) {
+    public boolean agregarVenta(VentaDTO ventaDTO) {
 
     try {
 
@@ -48,13 +48,11 @@ public boolean agregarVenta(VentaDTO ventaDTO) {
 
         Venta venta = mapperVenta.toEntity(ventaDTO);
 
-        // VALIDAR DETALLES
         if (venta.getDetalles() == null || venta.getDetalles().isEmpty()) {
             System.out.println("Detalles vacíos");
             return false;
         }
 
-        // VALIDAR STOCK REAL EN BD
         for (DetalleVenta dv : venta.getDetalles()) {
 
             if (dv.getProducto() == null) {
@@ -79,10 +77,8 @@ public boolean agregarVenta(VentaDTO ventaDTO) {
             }
         }
 
-        // GUARDAR VENTA
         boolean ventaGuardada = ventaDAO.agregarVenta(venta);
 
-        // SI SE GUARDÓ, DESCONTAR STOCK DEFINITIVO
         if (ventaGuardada) {
 
             for (DetalleVenta dv : venta.getDetalles()) {

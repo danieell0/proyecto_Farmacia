@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author Jorge
+ * @author munos
  */
 public class Venta {
     private String idVenta;

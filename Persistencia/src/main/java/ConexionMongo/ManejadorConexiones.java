@@ -6,6 +6,7 @@ import Entidades.Producto;
 import Entidades.Receta;
 import Entidades.Venta;
 import EntidadesMongo.ProductoMongo;
+import EntidadesMongo.VentaMongo;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
@@ -75,10 +76,8 @@ public class ManejadorConexiones {
     public static MongoCollection<Receta> obtenerColeccionReceta(){
         return obtenerBaseDatos().getCollection(COLECCION_RECETAS,Receta.class);
     }
-    public static MongoCollection<Venta> obtenerColeccionVentas() {
-
-        return obtenerBaseDatos()
-                .getCollection(COLECCION_VENTAS, Venta.class);
+    public static MongoCollection<VentaMongo> obtenerColeccionVentas() {
+        return obtenerBaseDatos().getCollection(COLECCION_VENTAS, VentaMongo.class);
     }
     
     public static MongoCollection<Empleado> obtenerColeccionEmpleados(){

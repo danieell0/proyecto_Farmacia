@@ -6,7 +6,7 @@ package Entidades;
 
 /**
  *
- * @author Jorge
+ * @author munos
  */
 public class DetalleVenta {
      private String idDetalle;
