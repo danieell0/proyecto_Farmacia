@@ -12,11 +12,9 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
  */
 public class CuentaAcceso {
     
-    
-    @BsonProperty("IDEmpleado")
     private String IDEmpleado;
     
-    @BsonProperty("contrasena")
+    
     private String contrasena;
 
     public CuentaAcceso() {

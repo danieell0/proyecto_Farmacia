@@ -6,6 +6,8 @@ package Clases;
 
 import ConexionMongo.ManejadorConexiones;
 import Entidades.CuentaAcceso;
+import EntidadesMongo.CuentaAccesoMongo;
+import MapperMongo.CuentaAccesoMapperMongo;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -61,5 +63,16 @@ public class CuentaAccesoDAO {
         
         //si no es null significa que si encontra la cuenta y regresa true
         return cuentaEncontrada != null;
+    }
+    
+    public CuentaAcceso obtenerCuenta(String idEmpleado) {
+        // 1. Mongo te devuelve su entidad especial con las etiquetas @BsonProperty
+        CuentaAccesoMongo resultadoMongo = coleccionCuentas.find(eq("iDEmpleado", idEmpleado)).first();
+
+        // 2. Usas tu Mapper para convertirlo a la entidad pura de Java que usa tu capa de Negocio
+        CuentaAcceso cuentaLimpia = CuentaAccesoMapperMongo.aEntidadJava(resultadoMongo);
+
+        // 3. Regresas la cuenta limpia
+        return cuentaLimpia;
     }
 }
