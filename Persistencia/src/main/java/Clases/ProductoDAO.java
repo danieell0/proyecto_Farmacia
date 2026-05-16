@@ -50,7 +50,7 @@ public class ProductoDAO implements IProductoDAO {
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
         List<ProductoMongo> productosMongo = coleccionProductos.find().into(new ArrayList<>());
-        productosMongo.forEach(p -> System.out.println(ProductoMapperMongo.entityToDomain(p)));
+       
         return productosMongo.stream().map(p -> ProductoMapperMongo.entityToDomain(p)).toList();
     }
 

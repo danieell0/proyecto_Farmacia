@@ -64,7 +64,12 @@ public class EmpleadoDAO implements IEmpleadoDAO{
         this.coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
     }
     
-    
+    /**
+     * Metodo que obtiene un empleado por id, lo busca en la base de datos y 
+     * recupera la entidad mongo y regresa la entidad convertida usando el mapper
+     * @param idEmpleado
+     * @return 
+     */
     @Override
     public Empleado obtenerEmpleadoPorId(String idEmpleado){
         // lo busca en la bd y lo devuelve como mongo empleado
