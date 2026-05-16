@@ -11,10 +11,25 @@ import Entidades.Producto;
 
 /**
  *
+ * Clase encargada de realizar la conversión entre entidades del dominio
+ * {@link Producto} y objetos DTO {@link ProductoDTO}.
+ *
+ * También permite convertir objetos de tipo {@link Medicamento} y
+ * {@link MedicamentoDTO}.
+ *
  * @author Jorge
  */
 public class ProductoMapper {
 
+    /**
+     * Convierte una entidad {@link Producto} a un objeto {@link ProductoDTO}.
+     *
+     * Si el producto es una instancia de {@link Medicamento}, se convierte a
+     * {@link MedicamentoDTO}.
+     *
+     * @param producto Entidad de producto a convertir.
+     * @return Objeto DTO correspondiente o {@code null} si el producto es nulo.
+     */
     public ProductoDTO toDTO(Producto producto) {
         if (producto == null) {
             return null;
@@ -42,16 +57,25 @@ public class ProductoMapper {
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
         dto.setImagen(producto.getImagen());
-        dto.setStock(producto.getStock()); 
+        dto.setStock(producto.getStock());
         return dto;
     }
-    
-    public Producto toEntity(ProductoDTO dto){
-        if(dto==null){
+
+    /**
+     * Convierte un objeto {@link ProductoDTO} a una entidad {@link Producto}.
+     *
+     * Si el DTO es una instancia de {@link MedicamentoDTO}, se convierte a
+     * {@link Medicamento}.
+     *
+     * @param dto DTO del producto a convertir.
+     * @return Entidad correspondiente o {@code null} si el DTO es nulo.
+     */
+    public Producto toEntity(ProductoDTO dto) {
+        if (dto == null) {
             return null;
         }
-        if(dto instanceof MedicamentoDTO m){
-            Medicamento entity=new Medicamento();
+        if (dto instanceof MedicamentoDTO m) {
+            Medicamento entity = new Medicamento();
             entity.setIdProducto(m.getIdProducto());
             entity.setTipo(m.getTipo());
             entity.setNombre(m.getNombre());
@@ -66,14 +90,14 @@ public class ProductoMapper {
             entity.setEspecialidades(m.getEspecialidades());
             return entity;
         }
-        Producto entity=new Producto();
+        Producto entity = new Producto();
         entity.setIdProducto(dto.getIdProducto());
         entity.setMarca(dto.getMarca());
         entity.setTipo(dto.getTipo());
         entity.setNombre(dto.getNombre());
         entity.setPrecio(dto.getPrecio());
         entity.setImagen(dto.getImagen());
-        entity.setStock(dto.getStock()); 
+        entity.setStock(dto.getStock());
         return entity;
     }
 

@@ -73,5 +73,4 @@ public class VentaMongo {
     public void setDetalles(List<DetalleVentaMongo> detalles) {
         this.detalles = detalles;
     }
-    
 }

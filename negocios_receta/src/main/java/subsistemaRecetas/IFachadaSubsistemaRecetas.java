@@ -80,4 +80,10 @@ public interface IFachadaSubsistemaRecetas {
             String idProducto, Integer cantidad, Especialidades especialidadProducto
     ) throws NegocioException;
 
+    /**
+     * Devuelve los productos a la receta si se cancela la venta.
+     * @throws NegocioException La causa del error en la capa de negocio.
+     * @return El resultado de la operacion.
+     */
+    public Boolean cancelarYDevolverRecetas() throws NegocioException;
 }
