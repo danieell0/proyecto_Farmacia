@@ -308,8 +308,7 @@ public class Coordinador implements ICoordinador {
      * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
      */
     @Override
-    public void cancelarVenta() {
-
+    public void cancelarVenta(){
         fVentas.cancelarVentaActual();
 
         this.folioRecetaActual = null;

@@ -7,8 +7,10 @@ package fachada;
 import Bo.NegocioException;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
+import DTO.DetalleRecetaDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
+import DTO.RecetaDTO;
 import DTO.VentaDTO;
 import Enums.Especialidades;
 import java.util.List;
@@ -129,7 +131,11 @@ public class FVentas implements IVenta {
      */
     @Override
     public void cancelarVentaActual() {
-        this.fachadaReceta.limpiarRecetasGuardadas();
+        try {
+            this.fachadaReceta.cancelarYDevolverRecetas();
+        } catch (NegocioException e) {
+            this.fachadaReceta.limpiarRecetasGuardadas();
+        }
         this.controlCarrito.devolverTodoElStockTemporal();
         this.controlCarrito.limpiarCarrito();
         this.folioRecetaActual = null;

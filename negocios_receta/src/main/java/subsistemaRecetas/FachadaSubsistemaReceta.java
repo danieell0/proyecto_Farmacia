@@ -172,4 +172,23 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
         return null;
     }
     
+    /**
+     * Devuelve los productos a la receta si se cancela la venta.
+     * @throws NegocioException La causa del error en la capa de negocio.
+     * @return El resultado de la operacion.
+     */
+    @Override
+    public Boolean cancelarYDevolverRecetas() throws NegocioException{
+        for (RecetaDTO receta : recetasActivas) {
+            for (DetalleRecetaDTO detalle : receta.getDetalles()) {
+                int surtido = detalle.getCantidadSurtida();
+                if (surtido > 0) {
+                    controlOperaciones.sumarMedicamentos(receta, detalle.getIdMedicamento(), surtido);
+                }
+            }
+        }
+        this.recetasActivas.clear();
+        return this.recetasActivas.isEmpty();
+    }
+    
 }
