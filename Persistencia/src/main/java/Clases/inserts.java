@@ -100,7 +100,7 @@ public class inserts {
             Connection conexion = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/",
                     "root",
-                    "Jorge"
+                    "Gasparin08"
             );
 
             // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea
