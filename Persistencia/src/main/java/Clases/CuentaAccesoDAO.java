@@ -42,7 +42,7 @@ public class CuentaAccesoDAO {
     */
     
     //coleccion de cuentas mongo
-    private MongoCollection<CuentaAcceso> coleccionCuentas;
+    private MongoCollection<CuentaAccesoMongo> coleccionCuentas;
     
     public CuentaAccesoDAO(){
         //obtiene la conexion desde el manejador
@@ -54,7 +54,7 @@ public class CuentaAccesoDAO {
      */
     public boolean validarCredenciales(String idEmpleado, String contrasena){
         //busca una cuenta que tenga ese id y esa contraseña 
-        CuentaAcceso cuentaEncontrada = coleccionCuentas.find(
+        CuentaAccesoMongo cuentaEncontrada = coleccionCuentas.find(
         and(
             eq("iDEmpleado", idEmpleado),
             eq("contrasena", contrasena)

@@ -14,7 +14,6 @@ public class CuentaAcceso {
     
     private String IDEmpleado;
     
-    
     private String contrasena;
 
     public CuentaAcceso() {

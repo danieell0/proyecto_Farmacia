@@ -7,6 +7,7 @@ package pantallas;
 import DTO.DetalleVentaDTO;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
+import Sesion.IFachadaSesion;
 import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
@@ -271,8 +272,11 @@ public class VentaFrame extends JFrame {
 
         if (this.coordinador != null) {
             // Pedimos el resultado al coordinador
-            Double resultado = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, "1L", "1L");
-
+            String idCajeroActivo = String.valueOf(this.coordinador.obtenerSesionActual().getIdEmpleado());
+            String idCliente = "1L";
+            
+           
+            Double resultado = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, idCajeroActivo, idCliente);
             // 3. Evaluar la respuesta del subsistema
             if (resultado == null) {
                 JOptionPane.showMessageDialog(this, "Error interno al procesar la venta.", "Error", JOptionPane.ERROR_MESSAGE);

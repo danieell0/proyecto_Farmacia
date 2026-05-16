@@ -37,7 +37,7 @@ public class Coordinador implements ICoordinador {
     private String folioRecetaActual;
     private validarRecetaDlg recetaDlg;
     private menuFrame menuJFrame;
-
+    
     /**
      * Constructor del coordinador. Inicializa el acceso al subsistema de ventas
      * a través de la fachada.
@@ -48,6 +48,13 @@ public class Coordinador implements ICoordinador {
         this.fachadaSesion = new FachadaSesion();
     }
 
+    // Agrega este método:
+    @Override
+    public SesionActualDTO obtenerSesionActual() {
+        // El coordinador solo le pasa el recado a la fachada
+        return fachadaSesion.obtenerSesionActual(); 
+    }
+    
     /**
      * Asigna la referencia de la pantalla de ventas.
      *

@@ -1,6 +1,7 @@
 package DTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class VentaDTO {
     private String idVenta;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private Double total;
     private String idEmpleado;
     private String idCliente;
@@ -28,11 +29,11 @@ public class VentaDTO {
         this.idVenta = idVenta;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

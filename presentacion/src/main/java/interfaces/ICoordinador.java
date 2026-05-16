@@ -7,6 +7,7 @@ package interfaces;
 import DTO.ProductoDTO;
 import DTO.CarritoDTO;
 import DTO.CuentaAccesoDTO;
+import DTO.SesionActualDTO;
 import java.util.List;
 import pantallas.VentaFrame;
 import pantallas.control.Coordinador;
@@ -36,4 +37,6 @@ public interface ICoordinador {
     Boolean validarInicioSesion(CuentaAccesoDTO login);    
     public List<ProductoDTO> ObtenerProductoPorCodigo(String codigo);
     void actualizarCarrito();
+    
+    public SesionActualDTO obtenerSesionActual();
 }

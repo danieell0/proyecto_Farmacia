@@ -10,12 +10,15 @@ import DTO.DetalleVentaDTO;
 import DTO.VentaDTO;
 
 import IBO.IVentaBO;
+import Sesion.FachadaSesion;
+import Sesion.IFachadaSesion;
 
 import com.mycompany.objetos_negocio.VentaBO;
 
 import exception.VentaException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +29,12 @@ import java.util.List;
 public class ControlFinalizarVenta {
 
     private IVentaBO ventaBO;
+    
 
     protected ControlFinalizarVenta() {
 
         this.ventaBO = VentaBO.getInstance();
+       
     }
 
     /**
@@ -116,7 +121,7 @@ public class ControlFinalizarVenta {
         // CREAR VENTA
         VentaDTO nuevaVenta = new VentaDTO();
 
-        nuevaVenta.setFecha(LocalDate.now());
+        nuevaVenta.setFecha(LocalDateTime.now());
 
         nuevaVenta.setTotal(carrito.getTotalAPagar());
 

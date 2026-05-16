@@ -9,6 +9,8 @@ import Entidades.CuentaAcceso;
 import Entidades.DetalleReceta;
 import Entidades.Empleado;
 import Entidades.Receta;
+import EntidadesMongo.CuentaAccesoMongo;
+import EntidadesMongo.EmpleadoMongo;
 import EntidadesMongo.MedicamentoMongo;
 import EntidadesMongo.ProductoMongo;
 import Enums.Especialidades;
@@ -82,17 +84,17 @@ public class inserts {
         coleccionRecetas.insertOne(new Receta("109L","ON01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 11, 11),Arrays.asList(new DetalleReceta("MC001", 1, 0))));
         coleccionRecetas.insertOne(new Receta("110L","MG01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 4, 14),Arrays.asList(new DetalleReceta("M001", 10, 0),new DetalleReceta("M002", 6, 0),new DetalleReceta("M006", 3, 0))));
 
-        MongoCollection<Empleado> coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
+        MongoCollection<EmpleadoMongo> coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
         coleccionEmpleados.drop();
-        coleccionEmpleados.insertOne(new Empleado("123", "Juan", "Perez", "Gomez", "555-0001", RolPuesto.LIDER, LocalDate.of(1990, 5, 20), EstatusEmpleado.ACTIVO));
-        coleccionEmpleados.insertOne(new Empleado("456", "Maria", "Lopez", "Diaz", "555-0002", RolPuesto.CAJERO, LocalDate.of(1995, 8, 15), EstatusEmpleado.ACTIVO));
-        coleccionEmpleados.insertOne(new Empleado("789", "Carlos", "Ruiz", "Soto", "555-0003", RolPuesto.CAJERO, LocalDate.of(1998, 2, 10), EstatusEmpleado.INACTIVO));
+        coleccionEmpleados.insertOne(new EmpleadoMongo("123", "Juan", "Perez", "Gomez", "555-0001", RolPuesto.LIDER, LocalDate.of(1990, 5, 20), EstatusEmpleado.ACTIVO));
+        coleccionEmpleados.insertOne(new EmpleadoMongo("456", "Maria", "Lopez", "Diaz", "555-0002", RolPuesto.CAJERO, LocalDate.of(1995, 8, 15), EstatusEmpleado.ACTIVO));
+        coleccionEmpleados.insertOne(new EmpleadoMongo("789", "Carlos", "Ruiz", "Soto", "555-0003", RolPuesto.CAJERO, LocalDate.of(1998, 2, 10), EstatusEmpleado.INACTIVO));
 
-        MongoCollection<CuentaAcceso> coleccionCuentas = ManejadorConexiones.obtenerColeccionCuentas();
+        MongoCollection<CuentaAccesoMongo> coleccionCuentas = ManejadorConexiones.obtenerColeccionCuentas();
         coleccionCuentas.drop();
-        coleccionCuentas.insertOne(new CuentaAcceso("123", "admin"));
-        coleccionCuentas.insertOne(new CuentaAcceso("456", "caja"));
-        coleccionCuentas.insertOne(new CuentaAcceso("789", "caja2"));
+        coleccionCuentas.insertOne(new CuentaAccesoMongo("123", "admin"));
+        coleccionCuentas.insertOne(new CuentaAccesoMongo("456", "caja"));
+        coleccionCuentas.insertOne(new CuentaAccesoMongo("789", "caja2"));
 
         try {
             //aqui creamos la conexion con la base de datos 
@@ -100,7 +102,7 @@ public class inserts {
             Connection conexion = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/",
                     "root",
-                    "Gasparin08"
+                    "rAgfiw-z"
             );
 
             // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea

@@ -11,6 +11,7 @@ import Entidades.Venta;
 import EntidadesMongo.VentaMongo;
 import com.mongodb.client.MongoCollection;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -39,7 +40,7 @@ public class VentaDAOTest {
         
         Venta ventaPrueba = new Venta();
         ventaPrueba.setIdVenta("V001"); 
-        ventaPrueba.setFecha(LocalDate.now());
+        ventaPrueba.setFecha(LocalDateTime.now());
         ventaPrueba.setTotal(30.0);
         ventaPrueba.setIdEmpleado("E001");
         ventaPrueba.setIdCliente("C001");
@@ -68,7 +69,7 @@ public class VentaDAOTest {
     public void testAgregarVenta_VentaValida_RetornaTrue() {
         Venta nuevaVenta = new Venta();
         nuevaVenta.setIdVenta("V999"); 
-        nuevaVenta.setFecha(LocalDate.now());
+        nuevaVenta.setFecha(LocalDateTime.now());
         nuevaVenta.setTotal(1500.0);
         nuevaVenta.setIdEmpleado("EMP001"); 
         nuevaVenta.setIdCliente("C001");   

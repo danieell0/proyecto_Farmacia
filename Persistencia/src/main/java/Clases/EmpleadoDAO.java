@@ -6,9 +6,11 @@ package Clases;
 
 import ConexionMongo.ManejadorConexiones;
 import Entidades.Empleado;
+import EntidadesMongo.EmpleadoMongo;
 import Enums.EstatusEmpleado;
 import Enums.RolPuesto;
 import Interfaces.IEmpleadoDAO;
+import MapperMongo.EmpleadoMapperMongo;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -55,7 +57,7 @@ public class EmpleadoDAO implements IEmpleadoDAO{
     */
     
     //coleccion de empleados de mongo
-    private MongoCollection<Empleado> coleccionEmpleados;
+    private MongoCollection<EmpleadoMongo> coleccionEmpleados;
     
     public EmpleadoDAO(){
         //se obtiene la coleccion de empleados de mongo
@@ -65,7 +67,10 @@ public class EmpleadoDAO implements IEmpleadoDAO{
     
     @Override
     public Empleado obtenerEmpleadoPorId(String idEmpleado){
-        //regresa el empleado por el id
-        return coleccionEmpleados.find((eq("idEmpleado",idEmpleado))).first();
+        // lo busca en la bd y lo devuelve como mongo empleado
+        EmpleadoMongo resultadoMongo = coleccionEmpleados.find(eq("idEmpleado", idEmpleado)).first();
+        
+        // el mapper lo pasa a entidad java para que todo fluya bien
+        return EmpleadoMapperMongo.aEntidadJava(resultadoMongo);
     }        
 }

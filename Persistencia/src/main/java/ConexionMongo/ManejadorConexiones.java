@@ -5,6 +5,8 @@ import Entidades.Empleado;
 import Entidades.Producto;
 import Entidades.Receta;
 import Entidades.Venta;
+import EntidadesMongo.CuentaAccesoMongo;
+import EntidadesMongo.EmpleadoMongo;
 import EntidadesMongo.ProductoMongo;
 import EntidadesMongo.VentaMongo;
 import com.mongodb.ConnectionString;
@@ -80,11 +82,11 @@ public class ManejadorConexiones {
         return obtenerBaseDatos().getCollection(COLECCION_VENTAS, VentaMongo.class);
     }
     
-    public static MongoCollection<Empleado> obtenerColeccionEmpleados(){
-        return obtenerBaseDatos().getCollection(COLECCION_EMPLEADOS, Empleado.class);
+    public static MongoCollection<EmpleadoMongo> obtenerColeccionEmpleados(){
+        return obtenerBaseDatos().getCollection(COLECCION_EMPLEADOS, EmpleadoMongo.class);
     }
     
-    public static MongoCollection<CuentaAcceso> obtenerColeccionCuentas() {
-       return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAcceso.class);
+    public static MongoCollection<CuentaAccesoMongo> obtenerColeccionCuentas() {
+       return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAccesoMongo.class);
    }
 }

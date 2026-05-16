@@ -11,6 +11,8 @@ import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
 import DTO.VentaDTO;
 import Enums.Especialidades;
+import Sesion.FachadaSesion;
+import Sesion.IFachadaSesion;
 import java.util.List;
 import subsistemaRecetas.FachadaSubsistemaReceta;
 import subsistemaRecetas.IFachadaSubsistemaRecetas;
@@ -24,12 +26,14 @@ public class FVentas implements IVenta {
     private final ControlCariito controlCarrito;
     private final ControlFinalizarVenta controlFinalizar;
     private final IFachadaSubsistemaRecetas fachadaReceta;
+    private final IFachadaSesion fachadaSesion;
     private String folioRecetaActual;
 
     public FVentas() {
         this.controlCarrito = new ControlCariito();
         this.controlFinalizar = new ControlFinalizarVenta();
         this.fachadaReceta = new FachadaSubsistemaReceta();
+        this.fachadaSesion = new FachadaSesion();
     }
 
     @Override
@@ -152,7 +156,8 @@ public class FVentas implements IVenta {
     @Override
     public VentaDTO registrarVenta(CarritoDTO carrito) {
         try {
-            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, "1L", "1L");
+            String idEmpleado = fachadaSesion.obtenerSesionActual().getIdEmpleado(); //MODIFICADO PARA GUARDAR ID
+            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, "1L");
             if (this.controlFinalizar.registrarVenta(ventaEmpacada)) {
                 this.controlCarrito.limpiarCarrito();
                 return ventaEmpacada;
