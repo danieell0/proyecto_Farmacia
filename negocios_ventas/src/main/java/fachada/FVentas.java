@@ -46,36 +46,59 @@ public class FVentas implements IVenta {
     @Override
     public void agregarAlCarrito(DetalleCarritoDTO detalle) throws NegocioException{
         ProductoDTO producto = detalle.getProducto();
-        
-        if (producto.getStock() < detalle.getCantidad()) {
-            throw new NegocioException("No hay suficiente stock para el producto: " + producto.getNombre());
+
+    if (producto.getStock() < detalle.getCantidad()) {
+        throw new NegocioException("No hay suficiente stock para: " + producto.getNombre());
+    }
+
+    if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
+
+        String folioEncontrado = null;
+        if (med.getEspecialidades() != null) {
+            for (Especialidades esp : med.getEspecialidades()) {
+                folioEncontrado = fachadaReceta.buscarEnRecetasActivas(
+                    med.getIdProducto(), detalle.getCantidad(), esp
+                );
+                if (folioEncontrado != null) break;
+            }
         }
-
-        if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
-
-            if (this.folioRecetaActual == null || this.folioRecetaActual.isEmpty()) {
+        if (folioEncontrado == null) {
+            if (this.folioRecetaActual == null || this.folioRecetaActual.trim().isEmpty()) {
                 throw new NegocioException("Es obligatorio ingresar un folio de receta para: " + med.getNombre());
             }
 
             boolean esValido = false;
-            if (med.getEspecialidades() != null && !med.getEspecialidades().isEmpty()) {
+            NegocioException ultimaExcepcion = null;
+
+            if (med.getEspecialidades() != null) {
                 for (Especialidades esp : med.getEspecialidades()) {
-                    if (fachadaReceta.validarYReservar(this.folioRecetaActual, med.getIdProducto(), detalle.getCantidad(), esp)) {
-                        esValido = true;
-                        break; 
+                    try {
+                        if (fachadaReceta.validarYReservar(
+                                this.folioRecetaActual,
+                                med.getIdProducto(),
+                                detalle.getCantidad(),
+                                esp)) {
+                            esValido = true;
+                            break;
+                        }
+                    } catch (NegocioException e) {
+                        ultimaExcepcion = e;
                     }
                 }
             }
 
             if (!esValido) {
-                String folioError = this.folioRecetaActual;
-                this.folioRecetaActual = null;
-                throw new NegocioException("La receta con folio [" + folioError + "] no es válida para este medicamento.");
+                String mensaje = ultimaExcepcion != null
+                    ? ultimaExcepcion.getMessage()
+                    : "La receta [" + this.folioRecetaActual + "] no es válida para: " + med.getNombre();
+                throw new NegocioException(mensaje);
             }
         }
-        
-        this.controlCarrito.agregarProductoAlCarrito(detalle);
     }
+
+    this.controlCarrito.agregarProductoAlCarrito(detalle);
+    }
+
 
 
     /**

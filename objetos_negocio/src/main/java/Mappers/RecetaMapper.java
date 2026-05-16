@@ -8,11 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * Clase mapper que convierte una Receta a RecetaDTO.
  * @author Dario
  */
 public class RecetaMapper {
     
+    /**
+     * Convierte una receta a DTO.
+     * @param receta a convertir a DTO.
+     * @return DTO.
+     */
     public static RecetaDTO adaptarADTO(Receta receta) {
         if (receta == null) {
             return null;

@@ -36,44 +36,34 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      */
     @Override
     public Boolean validarYReservar(String folio, String idProducto, Integer cantidad, Especialidades especialidadProducto) throws NegocioException {
-        RecetaDTO receta = null;
-        for (RecetaDTO r : recetasActivas) {
-            if (r.getFolio().equals(folio)) {
-                receta = r;
-                break;
-            }
-        }
+        RecetaDTO receta = recetasActivas.stream()
+            .filter(r -> r.getFolio().equals(folio))
+            .findFirst()
+            .orElseGet(() -> controlBuscar.obtenerRecetaPorFolio(folio));
         if (receta == null) {
-            receta = controlBuscar.obtenerRecetaPorFolio(folio);
+            return false;
         }
-        if (receta != null) {
-            boolean vigenciaValida = controlValidar.validarFechaReceta(receta) &&
-                                     controlEstado.obtenerEstadoDeReceta(receta) == EstadoReceta.ACTIVA;
-            if (!vigenciaValida) {
-                if (!controlValidar.validarFechaReceta(receta) && controlEstado.obtenerEstadoDeReceta(receta) == EstadoReceta.ACTIVA) {
-                    controlEstado.actualizarEstadoReceta(receta, EstadoReceta.CADUCADA);
-                }
-                return false; 
+        boolean fechaValida = controlValidar.validarFechaReceta(receta);
+        EstadoReceta estadoActual = controlEstado.obtenerEstadoDeReceta(receta);
+        if (!fechaValida || estadoActual != EstadoReceta.ACTIVA) {
+            if (!fechaValida && estadoActual == EstadoReceta.ACTIVA) {
+                controlEstado.actualizarEstadoReceta(receta, EstadoReceta.CADUCADA);
             }
-            boolean tieneMedicamento = controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto);
-            if (!tieneMedicamento) {
-                throw new IllegalArgumentException("El folio es válido, pero la receta no autoriza el medicamento seleccionado.");
-            }
-            boolean yaEstaEnLista = false;
-            for (RecetaDTO r : recetasActivas) {
-                if (r.getFolio().equals(folio)) {
-                    yaEstaEnLista = true;
-                    break;
-                }
-            }
-            if (!yaEstaEnLista) {
-                recetasActivas.add(receta);
-            }
-            controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
-            return true;
+            return false;
         }
-
-        return false;
+        controlValidar.validarMedicamentosReceta(
+                receta,
+                idProducto,
+                cantidad,
+                especialidadProducto
+        );
+        controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
+        boolean yaExiste = recetasActivas.stream()
+                .anyMatch(r -> r.getFolio().equals(folio));
+        if (!yaExiste) {
+            recetasActivas.add(receta);
+        }
+        return true;
     }
 
     /**
@@ -167,10 +157,16 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
     @Override
     public String buscarEnRecetasActivas(String idProducto, Integer cantidad, Especialidades especialidadProducto) throws NegocioException {
         for (RecetaDTO receta : recetasActivas) {
-            if (controlValidar.validarExistenciaEnReceta(receta, idProducto) && 
-                controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto)) {
-                controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
-                return receta.getFolio();
+            if (controlValidar.validarExistenciaEnReceta(receta, idProducto)) {
+                try {
+                    boolean valido = controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto);
+                    if (valido) {
+                        controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
+                        return receta.getFolio();
+                    }
+                } catch (NegocioException e) {
+                    
+                }
             }
         }
         return null;

@@ -167,39 +167,29 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad) {
-
-        if (producto == null || cantidad == null || cantidad <= 0) {
+    if (producto == null || cantidad == null || cantidad <= 0) {
             JOptionPane.showMessageDialog(ventaFrame, "Cantidad inválida.");
             return;
         }
-
         try {
             DetalleCarritoDTO detalle = new DetalleCarritoDTO();
             detalle.setProducto(producto);
             detalle.setCantidad(cantidad);
-
-            // 1. El subsistema valida. Si falta folio, lanza la RuntimeException que ya vimos.
             fVentas.agregarAlCarrito(detalle);
-
             actualizarCarrito();
-
         } catch (NegocioException e) {
-            // 2. Aquí atrapamos el error que viene del subsistema (FVentas)
             String mensaje = e.getMessage();
 
-            // 3. Si el mensaje indica que falta folio, abrimos el Dialog
             if (mensaje.contains("Es obligatorio ingresar un folio")) {
-
-                // Usamos el JDialog que ya creaste
                 validarRecetaDlg dlg = new validarRecetaDlg(null, true, this);
                 dlg.setVisible(true);
-
-                // 4. Una vez cerrado el dialog, si el usuario ingresó un folio, reintentamos
                 if (this.folioRecetaActual != null) {
-                    this.agregarProductoAlCarrito(producto, cantidad); 
+                    this.agregarProductoAlCarrito(producto, cantidad);
                 }
             } else {
-                // Si es cualquier otro error (como que el folio no existe en Mongo), se muestra normal
+                this.folioRecetaActual = null;
+                fVentas.setFolioRecetaActual(null);
+
                 JOptionPane.showMessageDialog(
                         ventaFrame != null ? ventaFrame : menuJFrame,
                         mensaje,

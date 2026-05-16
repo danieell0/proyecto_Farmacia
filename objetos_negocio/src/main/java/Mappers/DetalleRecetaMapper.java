@@ -4,11 +4,16 @@ import DTO.DetalleRecetaDTO;
 import Entidades.DetalleReceta;
 
 /**
- *
+ * Clase Mapper que adapta un DetalleReceta a un DetalleRecetaDTO.
  * @author Dario
  */
 public class DetalleRecetaMapper {
     
+    /**
+     * Convierte un DetalleReceta a un DetalleRecetaDTO.
+     * @param detalleReceta entidad a convertir a DTO.
+     * @return DTO.
+     */
     public static DetalleRecetaDTO adaptarADTO(DetalleReceta detalleReceta) {
         if (detalleReceta == null) {
             return null;
