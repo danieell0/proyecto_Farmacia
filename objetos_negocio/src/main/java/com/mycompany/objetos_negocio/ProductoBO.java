@@ -4,7 +4,6 @@
  */
 package com.mycompany.objetos_negocio;
 
-
 import Clases.ProductoDAO;
 import DTO.ProductoDTO;
 import Entidades.Producto;
@@ -14,35 +13,67 @@ import Mappers.ProductoMapper;
 import java.util.List;
 
 /**
+ * Clase que implementa la lógica de negocio relacionada con los productos.
+ *
+ * Se encarga de comunicarse con la capa DAO y convertir las entidades del
+ * dominio a objetos DTO mediante el uso de {@link ProductoMapper}.
+ *
+ * Implementa la interfaz {@link IProductoBO}.
  *
  * @author Jorge
  */
 public class ProductoBO implements IProductoBO {
 
+    //Objeto DAO para acceder a los datos de productos
     private IProductoDAO productoDAO;
+
+    //Mapper encargado de convertir entidades y DTOs
     private ProductoMapper mapper = new ProductoMapper();
 
+    /**
+     * Constructor de la clase ProductoBO.
+     *
+     * Inicializa el objeto DAO de productos.
+     */
     public ProductoBO() {
         this.productoDAO = new ProductoDAO();
     }
 
+    /**
+     * Obtiene todos los productos registrados.
+     *
+     * Convierte cada entidad {@link Producto} a un objeto {@link ProductoDTO}.
+     *
+     * @return Lista de productos en formato DTO.
+     */
     @Override
     public List<ProductoDTO> obtenerProductos() {
-        List<Producto> productos=productoDAO.obtenerProductos();
-        return productos.stream().map(p-> mapper.toDTO(p)).toList();
+        List<Producto> productos = productoDAO.obtenerProductos();
+        return productos.stream().map(p -> mapper.toDTO(p)).toList();
     }
 
+    /**
+     * Obtiene los productos que coincidan con el nombre proporcionado.
+     *
+     * @param nombre Nombre del producto a buscar.
+     * @return Lista de productos encontrados en formato DTO.
+     */
     @Override
     public List<ProductoDTO> obtenerProductosPorNombre(String nombre) {
-        List<Producto> productoN=productoDAO.obtenerProductosPorNombre(nombre);
-        return productoN.stream().map(p->mapper.toDTO(p)).toList();
+        List<Producto> productoN = productoDAO.obtenerProductosPorNombre(nombre);
+        return productoN.stream().map(p -> mapper.toDTO(p)).toList();
     }
 
+    /**
+     * Obtiene los productos filtrados por su clave.
+     *
+     * @param clave Clave del producto.
+     * @return Lista de productos encontrados en formato DTO.
+     */
     @Override
     public List<ProductoDTO> obtenerProductoPorClave(String clave) {
-        List<Producto> productoC=productoDAO.obtenerProductoPorClave(clave);
-        return productoC.stream().map(p->mapper.toDTO(p)).toList();
+        List<Producto> productoC = productoDAO.obtenerProductoPorClave(clave);
+        return productoC.stream().map(p -> mapper.toDTO(p)).toList();
     }
-    
-    
+
 }
