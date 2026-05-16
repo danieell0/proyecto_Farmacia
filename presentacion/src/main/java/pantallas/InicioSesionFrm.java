@@ -273,7 +273,7 @@ public class InicioSesionFrm extends JDialog{
         
         try {
             // 3. AHORA SÍ convertimos a número (porque ya sabemos que no está vacío)
-            Long idUsuario = Long.parseLong(idTexto.trim());
+            String idUsuario = idTexto.trim();
             
             // 4. Armamos el DTO
             CuentaAccesoDTO credenciales = new CuentaAccesoDTO();

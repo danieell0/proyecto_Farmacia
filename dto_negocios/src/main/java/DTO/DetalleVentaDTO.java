@@ -5,8 +5,8 @@ package DTO;
  * @author munos
  */
 public class DetalleVentaDTO {
-    private Long idDetalle;
-    private Long idVenta; 
+    private String idDetalle;
+    private String idVenta; 
     private ProductoDTO producto; 
     private Integer cantidad;
     private Double precioUnitario;
@@ -15,19 +15,19 @@ public class DetalleVentaDTO {
     public DetalleVentaDTO() {
     }
 
-    public Long getIdDetalle() {
+    public String getIdDetalle() {
         return idDetalle;
     }
 
-    public void setIdDetalle(Long idDetalle) {
+    public void setIdDetalle(String idDetalle) {
         this.idDetalle = idDetalle;
     }
 
-    public Long getIdVenta() {
+    public String getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(Long idVenta) {
+    public void setIdVenta(String idVenta) {
         this.idVenta = idVenta;
     }
 

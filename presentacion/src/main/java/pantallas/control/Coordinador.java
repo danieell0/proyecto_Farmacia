@@ -238,8 +238,8 @@ public class Coordinador implements ICoordinador {
     @Override
     public Double ejecutarFinalizarCompra(
             Double cantidadRecibida,
-            Long idEmpleado,
-            Long idCliente
+            String idEmpleado,
+            String idCliente
     ) throws Exception {
 
         if (cantidadRecibida == null

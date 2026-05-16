@@ -74,8 +74,8 @@ public class ControlFinalizarVenta {
      */
     protected VentaDTO prepararVenta(
             CarritoDTO carrito,
-            Long idEmpleado,
-            Long idCliente
+            String idEmpleado,
+            String idCliente
     ) throws VentaException {
 
         // VALIDAR CARRITO

@@ -21,7 +21,7 @@ public class DetalleVentaMapper {
             return null;
         }
         DetalleVenta detalle= new DetalleVenta();
-        detalle.setIdDetalle(dto.getIdDetalle());
+        detalle.setIdDetalle(dto.getIdVenta());
         detalle.setIdVenta(dto.getIdVenta());
         Producto producto=mapper.toEntity(dto.getProducto());
         detalle.setProducto(producto);

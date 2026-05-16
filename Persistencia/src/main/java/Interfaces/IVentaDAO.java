@@ -17,8 +17,8 @@ public interface IVentaDAO {
     
     public List<Venta> obtenerVentas();
 
-    public Venta obtenerVentaPorId(Long idVenta);
+    public Venta obtenerVentaPorId(String idVenta);
 
-    public List<Venta> obtenerVentasPorCliente(Long idCliente);
+    public List<Venta> obtenerVentasPorCliente(String idCliente);
 
 }

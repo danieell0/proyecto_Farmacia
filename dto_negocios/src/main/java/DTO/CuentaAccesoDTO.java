@@ -10,22 +10,22 @@ package DTO;
  */
 public class CuentaAccesoDTO {
     
-    private Long IDEmpleado;
+    private String IDEmpleado;
     private String contraseña;
     
     public CuentaAccesoDTO() {
     }
 
-    public CuentaAccesoDTO(Long IDEmpleado, String contraseña) {
+    public CuentaAccesoDTO(String IDEmpleado, String contraseña) {
         this.IDEmpleado = IDEmpleado;
         this.contraseña = contraseña;
     }
 
-    public Long getIDEmpleado() {
+    public String getIDEmpleado() {
         return IDEmpleado;
     }
 
-    public void setIDEmpleado(Long IDEmpleado) {
+    public void setIDEmpleado(String IDEmpleado) {
         this.IDEmpleado = IDEmpleado;
     }
 

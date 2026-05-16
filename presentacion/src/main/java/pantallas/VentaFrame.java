@@ -271,7 +271,7 @@ public class VentaFrame extends JFrame {
 
         if (this.coordinador != null) {
             // Pedimos el resultado al coordinador
-            Double resultado = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, 1L, 1L);
+            Double resultado = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, "1L", "1L");
 
             // 3. Evaluar la respuesta del subsistema
             if (resultado == null) {

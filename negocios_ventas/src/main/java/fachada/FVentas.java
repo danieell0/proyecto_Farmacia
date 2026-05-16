@@ -152,7 +152,7 @@ public class FVentas implements IVenta {
     @Override
     public VentaDTO registrarVenta(CarritoDTO carrito) {
         try {
-            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, 1L, 1L);
+            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, "1L", "1L");
             if (this.controlFinalizar.registrarVenta(ventaEmpacada)) {
                 this.controlCarrito.limpiarCarrito();
                 return ventaEmpacada;
@@ -174,8 +174,8 @@ public class FVentas implements IVenta {
     @Override
     public Double finalizarVenta(
             Double cantidadRecibida,
-            Long idEmpleado,
-            Long idCliente
+            String idEmpleado,
+            String idCliente
     ) {
         try {
             CarritoDTO carrito = this.controlCarrito.obtenerCarrito();

@@ -27,7 +27,7 @@ public interface ICoordinador {
     void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad);
     void eliminarProductoDelCarrito(String idProducto, Integer cantidad);
     CarritoDTO obtenerCarritoActual();
-    public Double ejecutarFinalizarCompra(Double cantidadRecibida, Long idEmpleado, Long idCliente) throws Exception;
+    public Double ejecutarFinalizarCompra(Double cantidadRecibida, String idEmpleado, String idCliente) throws Exception;
     Double procesarCalculoCambio(Double total, Double pago);
     void setFolioRecetaActual(String folio);
     void limpiarFolioReceta();

@@ -43,12 +43,12 @@ public class VentaDAO implements IVentaDAO {
     }
 
     @Override
-    public Venta obtenerVentaPorId(Long idVenta) {
+    public Venta obtenerVentaPorId(String idVenta) {
         return coleccionVentas.find(eq("idVenta", idVenta)).first();
     }
 
     @Override
-    public List<Venta> obtenerVentasPorCliente(Long idCliente) {
+    public List<Venta> obtenerVentasPorCliente(String idCliente) {
         return coleccionVentas
                 .find(eq("idCliente", idCliente))
                 .into(new ArrayList<>());

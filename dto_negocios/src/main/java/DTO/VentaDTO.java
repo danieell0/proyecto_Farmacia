@@ -9,22 +9,22 @@ import java.util.List;
  * @author munos
  */
 public class VentaDTO {
-    private Long idVenta;
+    private String idVenta;
     private LocalDate fecha;
     private Double total;
-    private Long idEmpleado;
-    private Long idCliente;
+    private String idEmpleado;
+    private String idCliente;
     private List<DetalleVentaDTO> detalles;
 
     public VentaDTO() {
         this.detalles = new ArrayList<>();
     }
 
-    public Long getIdVenta() {
+    public String getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(Long idVenta) {
+    public void setIdVenta(String idVenta) {
         this.idVenta = idVenta;
     }
 
@@ -44,19 +44,19 @@ public class VentaDTO {
         this.total = total;
     }
 
-    public Long getIdEmpleado() {
+    public String getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
+    public void setIdEmpleado(String idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
-    public Long getIdCliente() {
+    public String getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Long idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 

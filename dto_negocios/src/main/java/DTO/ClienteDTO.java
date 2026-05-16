@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author munos
  */
 public class ClienteDTO {
-    private long idCliente;
+    private String idCliente;
     private String nombre;
     private String telefono;
     private double puntos;
@@ -20,11 +20,11 @@ public class ClienteDTO {
     public ClienteDTO() {
     }
 
-    public long getIdCliente() {
+    public String getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(long idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 

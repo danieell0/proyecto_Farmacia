@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author Benjamin
  */
 public class EmpleadoDTO {
-    private Long ID;
+    private String ID;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -35,7 +35,7 @@ public class EmpleadoDTO {
         this.estatus = estatus;
     }
 
-    public EmpleadoDTO(Long ID, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDateTime fechaNacimiento, EstatusEmpleado estatus) {
+    public EmpleadoDTO(String ID, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDateTime fechaNacimiento, EstatusEmpleado estatus) {
         this.ID = ID;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -46,11 +46,11 @@ public class EmpleadoDTO {
         this.estatus = estatus;
     }
 
-    public Long getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(Long ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 

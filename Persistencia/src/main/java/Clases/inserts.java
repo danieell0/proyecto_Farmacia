@@ -84,15 +84,15 @@ public class inserts {
 
         MongoCollection<Empleado> coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
         coleccionEmpleados.drop();
-        coleccionEmpleados.insertOne(new Empleado(123L, "Juan", "Perez", "Gomez", "555-0001", RolPuesto.LIDER, LocalDate.of(1990, 5, 20), EstatusEmpleado.ACTIVO));
-        coleccionEmpleados.insertOne(new Empleado(456L, "Maria", "Lopez", "Diaz", "555-0002", RolPuesto.CAJERO, LocalDate.of(1995, 8, 15), EstatusEmpleado.ACTIVO));
-        coleccionEmpleados.insertOne(new Empleado(789L, "Carlos", "Ruiz", "Soto", "555-0003", RolPuesto.CAJERO, LocalDate.of(1998, 2, 10), EstatusEmpleado.INACTIVO));
+        coleccionEmpleados.insertOne(new Empleado("123", "Juan", "Perez", "Gomez", "555-0001", RolPuesto.LIDER, LocalDate.of(1990, 5, 20), EstatusEmpleado.ACTIVO));
+        coleccionEmpleados.insertOne(new Empleado("456", "Maria", "Lopez", "Diaz", "555-0002", RolPuesto.CAJERO, LocalDate.of(1995, 8, 15), EstatusEmpleado.ACTIVO));
+        coleccionEmpleados.insertOne(new Empleado("789", "Carlos", "Ruiz", "Soto", "555-0003", RolPuesto.CAJERO, LocalDate.of(1998, 2, 10), EstatusEmpleado.INACTIVO));
 
         MongoCollection<CuentaAcceso> coleccionCuentas = ManejadorConexiones.obtenerColeccionCuentas();
         coleccionCuentas.drop();
-        coleccionCuentas.insertOne(new CuentaAcceso(123L, "admin"));
-        coleccionCuentas.insertOne(new CuentaAcceso(456L, "caja"));
-        coleccionCuentas.insertOne(new CuentaAcceso(789L, "caja2"));
+        coleccionCuentas.insertOne(new CuentaAcceso("123", "admin"));
+        coleccionCuentas.insertOne(new CuentaAcceso("456", "caja"));
+        coleccionCuentas.insertOne(new CuentaAcceso("789", "caja2"));
 
         try {
             //aqui creamos la conexion con la base de datos 
@@ -100,7 +100,7 @@ public class inserts {
             Connection conexion = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/",
                     "root",
-                    "357642"
+                    "Jorge"
             );
 
             // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea

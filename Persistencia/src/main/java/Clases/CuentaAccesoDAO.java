@@ -50,7 +50,7 @@ public class CuentaAccesoDAO {
     /**
      * Busca en la BD si existe una cuenta que coincida con el ID y la contraseña
      */
-    public boolean validarCredenciales(Long idEmpleado, String contrasena){
+    public boolean validarCredenciales(String idEmpleado, String contrasena){
         //busca una cuenta que tenga ese id y esa contraseña 
         CuentaAcceso cuentaEncontrada = coleccionCuentas.find(
         and(

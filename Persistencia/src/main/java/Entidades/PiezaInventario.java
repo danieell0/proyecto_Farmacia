@@ -9,24 +9,24 @@ package Entidades;
  * @author Jorge
  */
 public class PiezaInventario {
-    private Long idInventario;
+    private String idInventario;
     private Producto producto; 
     private Integer stockActual; 
 
     public PiezaInventario() {
     }
 
-    public PiezaInventario(Long idInventario, Producto producto, Integer stockActual) {
+    public PiezaInventario(String idInventario, Producto producto, Integer stockActual) {
         this.idInventario = idInventario;
         this.producto = producto;
         this.stockActual = stockActual;
     }
 
-    public Long getIdInventario() {
+    public String getIdInventario() {
         return idInventario;
     }
 
-    public void setIdInventario(Long idInventario) {
+    public void setIdInventario(String idInventario) {
         this.idInventario = idInventario;
     }
 

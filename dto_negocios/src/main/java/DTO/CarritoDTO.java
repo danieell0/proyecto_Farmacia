@@ -14,7 +14,7 @@ import java.util.List;
  * @author munos
  */
 public class CarritoDTO {
-    private Long idEmpleado;
+    private String idEmpleado;
     private LocalDate fecha;
     private List<DetalleCarritoDTO> listaProductos; 
     private Double totalAPagar;
@@ -25,10 +25,10 @@ public class CarritoDTO {
         this.totalAPagar = 0.0;
         this.totalArticulos = 0;
     }
-    public Long getIdEmpleado() { 
+    public String getIdEmpleado() { 
         return idEmpleado; 
     }
-    public void setIdEmpleado(Long idEmpleado) { 
+    public void setIdEmpleado(String idEmpleado) { 
         this.idEmpleado = idEmpleado; 
     }
 

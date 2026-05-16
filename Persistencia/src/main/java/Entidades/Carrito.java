@@ -12,7 +12,7 @@ import java.util.List;
  * @author Jorge
  */
 public class Carrito {
-    private Long idEmpleado;
+    private String idEmpleado;
     private LocalDate fecha;
     private List<DetalleCarrito> listaProductos; 
     private Double totalAPagar;
@@ -21,11 +21,11 @@ public class Carrito {
     public Carrito() {
     }
 
-    public Long getIdEmpleado() {
+    public String getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
+    public void setIdEmpleado(String idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 

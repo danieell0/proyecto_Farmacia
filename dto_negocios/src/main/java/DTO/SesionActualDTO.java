@@ -11,17 +11,17 @@ import Enums.RolPuesto;
  * @author Benjamin
  */
 public class SesionActualDTO {
-    private Long idEmpleado;
+    private String idEmpleado;
     private String nombreCompleto;
     private RolPuesto rol;
     
-    public SesionActualDTO(Long idEmpleado, String nombreCompleto, RolPuesto rol) {
+    public SesionActualDTO(String idEmpleado, String nombreCompleto, RolPuesto rol) {
         this.idEmpleado = idEmpleado;
         this.nombreCompleto = nombreCompleto;
         this.rol = rol;
     }
 
-    public Long getIdEmpleado() {
+    public String getIdEmpleado() {
         return idEmpleado;
     }
 

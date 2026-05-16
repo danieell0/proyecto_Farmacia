@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 public class ReporteBajaDTO {
     
-    private Long idEmpleado;
+    private String idEmpleado;
     private TipoBaja tipoBaja;
     private String descripcion;
     private LocalDateTime fechaBaja;

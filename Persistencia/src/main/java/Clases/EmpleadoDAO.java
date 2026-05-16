@@ -64,7 +64,7 @@ public class EmpleadoDAO implements IEmpleadoDAO{
     
     
     @Override
-    public Empleado obtenerEmpleadoPorId(Long idEmpleado){
+    public Empleado obtenerEmpleadoPorId(String idEmpleado){
         //regresa el empleado por el id
         return coleccionEmpleados.find((eq("idEmpleado",idEmpleado))).first();
     }        

@@ -9,8 +9,8 @@ package Entidades;
  * @author Jorge
  */
 public class DetalleVenta {
-     private Long idDetalle;
-    private Long idVenta; 
+     private String idDetalle;
+    private String idVenta; 
     private Producto producto; 
     private Integer cantidad;
     private Double precioUnitario;
@@ -19,7 +19,7 @@ public class DetalleVenta {
     public DetalleVenta() {
     }
 
-    public DetalleVenta(Long idDetalle, Long idVenta, Producto producto, Integer cantidad, Double precioUnitario, Double subtotal) {
+    public DetalleVenta(String idDetalle, String idVenta, Producto producto, Integer cantidad, Double precioUnitario, Double subtotal) {
         this.idDetalle = idDetalle;
         this.idVenta = idVenta;
         this.producto = producto;
@@ -28,19 +28,19 @@ public class DetalleVenta {
         this.subtotal = subtotal;
     }
 
-    public Long getIdDetalle() {
+    public String getIdDetalle() {
         return idDetalle;
     }
 
-    public void setIdDetalle(Long idDetalle) {
+    public void setIdDetalle(String idDetalle) {
         this.idDetalle = idDetalle;
     }
 
-    public Long getIdVenta() {
+    public String getIdVenta() {
         return idVenta;
     }
 
-    public void setIdVenta(Long idVenta) {
+    public void setIdVenta(String idVenta) {
         this.idVenta = idVenta;
     }
 

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 public class ReporteDTO {
     
-    private Long IDEmpleado;
+    private String IDEmpleado;
     private String tituloReporte;
     private LocalDateTime fechaReporte;
     private String descripcion;
@@ -20,18 +20,18 @@ public class ReporteDTO {
     public ReporteDTO() {
     }
 
-    public ReporteDTO(Long IDEmpleado, String tituloReporte, LocalDateTime fechaReporte, String descripcion) {
+    public ReporteDTO(String IDEmpleado, String tituloReporte, LocalDateTime fechaReporte, String descripcion) {
         this.IDEmpleado = IDEmpleado;
         this.tituloReporte = tituloReporte;
         this.fechaReporte = fechaReporte;
         this.descripcion = descripcion;
     }
 
-    public Long getIDEmpleado() {
+    public String getIDEmpleado() {
         return IDEmpleado;
     }
 
-    public void setIDEmpleado(Long IDEmpleado) {
+    public void setIDEmpleado(String IDEmpleado) {
         this.IDEmpleado = IDEmpleado;
     }
 

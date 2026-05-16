@@ -17,7 +17,7 @@ import objetosNegocio.EmpleadoBO;
  *
  * @author Benjamin
  */
-public class ControlSesion {
+public class ControlSesion{
     
     private static final Logger LOGGER = Logger.getLogger(ControlSesion.class.getName());
     protected EmpleadoBO empleadoBO;
@@ -34,14 +34,12 @@ public class ControlSesion {
             LOGGER.log(Level.WARNING, "Se intentó procesar un login con credenciales nulas.");
             return null;
         }
-
         try {
             //se extraen los datos del dto
-            Long idEmpleado = credenciales.getIDEmpleado();
+            String idEmpleado = credenciales.getIDEmpleado();
             String password = credenciales.getContraseña();
-            
             EmpleadoDTO empleado = empleadoBO.validarLogin(idEmpleado, password);
-            
+           
             if(empleado != null){
                 //concatenar el nombre para el dto de la sesion actual
                 String nombreCompleto = empleado.getNombre() + " " + empleado.getApellidoPaterno();
@@ -70,9 +68,6 @@ public class ControlSesion {
             LOGGER.log(Level.SEVERE, "Error crítico al intentar validar el login", e);
             return null;
         } 
-    }
-    
-    
-    
+    }    
     
 }

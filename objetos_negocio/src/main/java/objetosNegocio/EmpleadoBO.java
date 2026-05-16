@@ -36,10 +36,10 @@ public class EmpleadoBO {
         this.mapper = new EmpleadoMapper(); 
     }
     
-    public EmpleadoDTO validarLogin(Long idEmpleado, String contrasena) throws NegocioExcepcion {
+    public EmpleadoDTO validarLogin(String idEmpleado, String contrasena) throws NegocioExcepcion {
         
         // Validaciones iniciales
-        if (idEmpleado == null || idEmpleado <= 0) { 
+        if (idEmpleado == null || idEmpleado.isEmpty() || idEmpleado.startsWith("-")) { 
             throw new NegocioExcepcion("El ID ingresado no es válido.");
         }
         if (contrasena == null || contrasena.trim().isEmpty()) {

@@ -20,7 +20,7 @@ public interface IEmpleadoDAO {
      * @param idEmpleado El identificador único del empleado.
      * @return La entidad Empleado si se encuentra, null si no existe.
      */
-    Empleado obtenerEmpleadoPorId(Long idEmpleado);
+    Empleado obtenerEmpleadoPorId(String idEmpleado);
     
     
     

@@ -10,7 +10,7 @@ package DTO;
  */
 public class PermisosDTO {
     
-    private Long IDEmpleado;
+    private String IDEmpleado;
     private String modulosHabilitados;
     
 }

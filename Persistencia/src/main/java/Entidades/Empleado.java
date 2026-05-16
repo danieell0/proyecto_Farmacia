@@ -13,7 +13,7 @@ import java.time.LocalDate;
  * @author Benjamin
  */ 
 public class Empleado {
-    private Long idEmpleado;
+    private String idEmpleado;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -25,7 +25,7 @@ public class Empleado {
     public Empleado() {
     }
 
-    public Empleado(Long idEmpleado, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDate fechaNacimiento, EstatusEmpleado empleadoEstatus) {
+    public Empleado(String idEmpleado, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDate fechaNacimiento, EstatusEmpleado empleadoEstatus) {
         this.idEmpleado = idEmpleado;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -36,11 +36,11 @@ public class Empleado {
         this.empleadoEstatus = empleadoEstatus;
     }
 
-    public Long getIdEmpleado() {
+    public String getIdEmpleado() {
         return idEmpleado;
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
+    public void setIdEmpleado(String idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 

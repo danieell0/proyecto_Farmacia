@@ -14,7 +14,7 @@ public class CuentaAcceso {
     
     
     @BsonProperty("IDEmpleado")
-    private Long IDEmpleado;
+    private String IDEmpleado;
     
     @BsonProperty("contrasena")
     private String contrasena;
@@ -22,16 +22,16 @@ public class CuentaAcceso {
     public CuentaAcceso() {
     }
 
-    public CuentaAcceso(Long IDEmpleado, String contrasena) {
+    public CuentaAcceso(String IDEmpleado, String contrasena) {
         this.IDEmpleado = IDEmpleado;
         this.contrasena = contrasena;
     }
 
-    public Long getIDEmpleado() {
+    public String getIDEmpleado() {
         return IDEmpleado;
     }
 
-    public void setIDEmpleado(Long IDEmpleado) {
+    public void setIDEmpleado(String IDEmpleado) {
         this.IDEmpleado = IDEmpleado;
     }
 
