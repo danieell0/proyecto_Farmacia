@@ -50,7 +50,7 @@ public class ProductoDAO implements IProductoDAO {
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
         List<ProductoMongo> productosMongo = coleccionProductos.find().into(new ArrayList<>());
-       
+
         return productosMongo.stream().map(p -> ProductoMapperMongo.entityToDomain(p)).toList();
     }
 
@@ -111,6 +111,11 @@ public class ProductoDAO implements IProductoDAO {
      */
     @Override
     public Boolean DisminuirStock(String idProducto, int nuevoStock) {
+        return coleccionProductos.updateOne(eq("idProducto", idProducto), set("stock", nuevoStock)).getModifiedCount() > 0;
+    }
+
+    @Override
+    public Boolean aumentarStock(String idProducto, Integer nuevoStock) {
         return coleccionProductos.updateOne(eq("idProducto", idProducto), set("stock", nuevoStock)).getModifiedCount() > 0;
     }
 }

@@ -7,7 +7,10 @@ import Entidades.Receta;
 import Entidades.Venta;
 import EntidadesMongo.CuentaAccesoMongo;
 import EntidadesMongo.EmpleadoMongo;
+import EntidadesMongo.LoteMongo;
+import EntidadesMongo.MovimientoMongo;
 import EntidadesMongo.ProductoMongo;
+import EntidadesMongo.SolicitudMongo;
 import EntidadesMongo.VentaMongo;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -41,6 +44,9 @@ public class ManejadorConexiones {
     private static final String COLECCION_CUENTAS = "cuentas_acceso";
     private static final String COLECCION_RECETAS = "recetas";
     private static final String COLECCION_FACTURAS = "facturas";
+    private static final String COLECCION_MOVIMIENTOS = "movimientos";
+    private static final String COLECCION_LOTES = "lotes";
+    private static final String COLECCION_SOLICITUDES = "solicitudes";
 
     //cliente mongo 
     private static MongoClient cliente;
@@ -69,24 +75,38 @@ public class ManejadorConexiones {
         //regresa la base de datos configurada 
         return obtenerCliente().getDatabase(NOMBRE_BASE_DATOS);
     }
-    
-    public static MongoCollection<ProductoMongo> obtenerColeccionProductos(){
+
+    public static MongoCollection<ProductoMongo> obtenerColeccionProductos() {
         //regresa la coleccion de productos de la base de datos 
         return obtenerBaseDatos().getCollection(COLECCION_PRODUCTOS, ProductoMongo.class);
     }
-    
-    public static MongoCollection<Receta> obtenerColeccionReceta(){
-        return obtenerBaseDatos().getCollection(COLECCION_RECETAS,Receta.class);
+
+    public static MongoCollection<Receta> obtenerColeccionReceta() {
+        return obtenerBaseDatos().getCollection(COLECCION_RECETAS, Receta.class);
     }
+
     public static MongoCollection<VentaMongo> obtenerColeccionVentas() {
         return obtenerBaseDatos().getCollection(COLECCION_VENTAS, VentaMongo.class);
     }
-    
-    public static MongoCollection<EmpleadoMongo> obtenerColeccionEmpleados(){
+
+    public static MongoCollection<EmpleadoMongo> obtenerColeccionEmpleados() {
         return obtenerBaseDatos().getCollection(COLECCION_EMPLEADOS, EmpleadoMongo.class);
     }
-    
+
     public static MongoCollection<CuentaAccesoMongo> obtenerColeccionCuentas() {
-       return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAccesoMongo.class);
-   }
+        return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAccesoMongo.class);
+    }
+    
+    public static MongoCollection<MovimientoMongo> obtenerColeccionMovimientos(){
+        return obtenerBaseDatos().getCollection(COLECCION_MOVIMIENTOS,MovimientoMongo.class);
+    }
+    
+    public static MongoCollection<LoteMongo> obtenerColeccionLotes(){
+        return obtenerBaseDatos().getCollection(COLECCION_LOTES,LoteMongo.class);
+    }
+    
+    public static MongoCollection<SolicitudMongo> obtenerColeccionSolicitudes(){
+        return obtenerBaseDatos().getCollection(COLECCION_SOLICITUDES,SolicitudMongo.class);
+    }
+    
 }

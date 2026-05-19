@@ -58,4 +58,6 @@ public interface IProductoDAO {
      * {@code false} en caso contrario.
      */
     public Boolean DisminuirStock(String idProducto, int nuevoStock);
+    
+    public Boolean aumentarStock(String idProducto, Integer nuevoStock);
 }
