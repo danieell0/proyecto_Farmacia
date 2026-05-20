@@ -19,4 +19,6 @@ public interface IVentaStrategy {
      */
     Double finalizarVenta(Double monto, String idCliente, CarritoDTO carrito) throws Exception;
     
+    Boolean requiereConfirmarReceta();
+    
 }

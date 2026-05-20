@@ -1,16 +1,14 @@
 package Clases;
 
 import ConexionMongo.ManejadorConexiones;
-import Entidades.Cliente;
-import Entidades.CuentaAcceso;
-import Entidades.DetalleReceta;
-import Entidades.Empleado;
-import Entidades.Receta;
 import EntidadesMongo.CanjeableMongo;
+import EntidadesMongo.ClienteMongo;
 import EntidadesMongo.CuentaAccesoMongo;
+import EntidadesMongo.DetalleRecetaMongo;
 import EntidadesMongo.EmpleadoMongo;
 import EntidadesMongo.MedicamentoMongo;
 import EntidadesMongo.ProductoMongo;
+import EntidadesMongo.RecetaMongo;
 import Enums.Especialidades;
 import Enums.EstadoReceta;
 import Enums.EstatusEmpleado;
@@ -78,19 +76,18 @@ public class inserts {
         coleccionProductos.insertOne(new CanjeableMongo(0.0, "C008", "Guante Beisbol", "Rawlings", 3000.0, "/imagenes/glove.png", 20, TipoProducto.PUNTOS));
         coleccionProductos.insertOne(new CanjeableMongo(0.0, "C009", "Cargador Telefono", "Generico", 2000.0, "/imagenes/cargador.png", 20, TipoProducto.PUNTOS));
 
-        MongoCollection<Receta> coleccionRecetas = ManejadorConexiones.obtenerColeccionReceta();
+        MongoCollection<RecetaMongo> coleccionRecetas = ManejadorConexiones.obtenerColeccionReceta();
         coleccionRecetas.drop();
-        coleccionRecetas.insertOne(new Receta("101L","MG01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 12, 31),Arrays.asList(new DetalleReceta("M001", 10, 0),new DetalleReceta("M007", 10, 0))));
-        coleccionRecetas.insertOne(new Receta("101L","MG01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 12, 31),Arrays.asList(new DetalleReceta("M001", 10, 0),new DetalleReceta("M007", 10, 0))));
-        coleccionRecetas.insertOne(new Receta("102L","CA01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 12, 31),Arrays.asList(new DetalleReceta("M004", 5, 0),new DetalleReceta("M008", 5, 0))));
-        coleccionRecetas.insertOne(new Receta("103L","PS03",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 6, 15),Arrays.asList(new DetalleReceta("MC002", 2, 0),new DetalleReceta("MC004", 1, 0))));
-        coleccionRecetas.insertOne(new Receta("104L","ON01",0,EstadoReceta.CADUCADA,LocalDate.of(2023, 12, 31),Arrays.asList(new DetalleReceta("MC001", 10, 0))));
-        coleccionRecetas.insertOne(new Receta("105L","MG02",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 10, 15),Arrays.asList(new DetalleReceta("M005", 4, 0),new DetalleReceta("M009", 3, 0))));
-        coleccionRecetas.insertOne(new Receta("106L","PD01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 8, 10),Arrays.asList(new DetalleReceta("M003", 2, 0),new DetalleReceta("M010", 1, 0))));
-        coleccionRecetas.insertOne(new Receta("107L","PS03",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 9, 30),Arrays.asList(new DetalleReceta("MC002", 1, 0))));
-        coleccionRecetas.insertOne(new Receta("108L","CA01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 5, 18),Arrays.asList(new DetalleReceta("M008", 4, 0))));
-        coleccionRecetas.insertOne(new Receta("109L","ON01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 11, 11),Arrays.asList(new DetalleReceta("MC001", 1, 0))));
-        coleccionRecetas.insertOne(new Receta("110L","MG01",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 4, 14),Arrays.asList(new DetalleReceta("M001", 10, 0),new DetalleReceta("M002", 6, 0),new DetalleReceta("M006", 3, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("101L", "MG01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 12, 31), Arrays.asList(new DetalleRecetaMongo("M001", 10, 0), new DetalleRecetaMongo("M007", 10, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("102L", "CA01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 12, 31), Arrays.asList(new DetalleRecetaMongo("M004", 5, 0), new DetalleRecetaMongo("M008", 5, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("103L", "PS03", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 6, 15), Arrays.asList(new DetalleRecetaMongo("MC002", 2, 0), new DetalleRecetaMongo("MC004", 1, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("104L", "ON01", 0, EstadoReceta.CADUCADA, LocalDate.of(2023, 12, 31), Arrays.asList(new DetalleRecetaMongo("MC001", 10, 0))));        coleccionRecetas.insertOne(new RecetaMongo("105L","MG02",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 10, 15),Arrays.asList(new DetalleRecetaMongo("M005", 4, 0),new DetalleRecetaMongo("M009", 3, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("105L", "MG02", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 10, 15), Arrays.asList(new DetalleRecetaMongo("M005", 4, 0), new DetalleRecetaMongo("M009", 3, 0)))); 
+        coleccionRecetas.insertOne(new RecetaMongo("106L", "PD01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 8, 10), Arrays.asList(new DetalleRecetaMongo("M003", 2, 0), new DetalleRecetaMongo("M010", 1, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("107L", "PS03", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 9, 30), Arrays.asList(new DetalleRecetaMongo("MC002", 1, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("108L", "CA01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 5, 18), Arrays.asList(new DetalleRecetaMongo("M008", 4, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("109L", "ON01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 11, 11), Arrays.asList(new DetalleRecetaMongo("MC001", 1, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("110L", "MG01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 4, 14), Arrays.asList(new DetalleRecetaMongo("M001", 10, 0), new DetalleRecetaMongo("M002", 6, 0), new DetalleRecetaMongo("M006", 3, 0))));
 
         MongoCollection<EmpleadoMongo> coleccionEmpleados = ManejadorConexiones.obtenerColeccionEmpleados();
         coleccionEmpleados.drop();
@@ -104,12 +101,12 @@ public class inserts {
         coleccionCuentas.insertOne(new CuentaAccesoMongo("456", "caja"));
         coleccionCuentas.insertOne(new CuentaAccesoMongo("789", "caja2"));
         
-        MongoCollection<Cliente> coleccionClientes = ManejadorConexiones.obtenerColeccionCliente();
+        MongoCollection<ClienteMongo> coleccionClientes = ManejadorConexiones.obtenerColeccionCliente();
         coleccionClientes.drop();
-        coleccionClientes.insertOne(new Cliente("0", "VentaSinCliente", "1", 0.0, LocalDate.of(2000, 1, 1)));
-        coleccionClientes.insertOne(new Cliente("1", "nombre", "6441000665", 10000.0, LocalDate.of(2000, 5, 2)));
-        coleccionClientes.insertOne(new Cliente("2", "pepe", "6442134730", 5000.0, LocalDate.of(2006, 6, 27)));
-        coleccionClientes.insertOne(new Cliente("3", "juanito", "6441000664", 2000.0, LocalDate.of(2000, 8, 2)));
+        coleccionClientes.insertOne(new ClienteMongo("0", "VentaSinCliente", "1", 0.0, LocalDate.of(2000, 1, 1)));
+        coleccionClientes.insertOne(new ClienteMongo("1", "nombre", "6441000665", 10000.0, LocalDate.of(2000, 5, 2)));
+        coleccionClientes.insertOne(new ClienteMongo("2", "pepe", "6442134730", 5000.0, LocalDate.of(2006, 6, 27)));
+        coleccionClientes.insertOne(new ClienteMongo("3", "juanito", "6441000664", 2000.0, LocalDate.of(2000, 8, 2)));
 
         try {
             //aqui creamos la conexion con la base de datos 

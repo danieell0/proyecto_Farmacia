@@ -1,7 +1,6 @@
 package fachada;
 
 import Bo.NegocioException;
-import DTO.ProductoDTO;
 import DTO.VentaDTO;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;

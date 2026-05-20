@@ -157,9 +157,6 @@ public class VentaPuntosFrame extends JFrame {
         return btn;
     }
 
-    /**
-     * Mismo método de refresco pero procesando el modelo de datos de Puntos de manera polimórfica
-     */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
         if (this.coordinador != null) {
             this.clienteActual = this.coordinador.getClienteActual();
@@ -212,9 +209,6 @@ public class VentaPuntosFrame extends JFrame {
         }
     }
     
-    /**
-     * Reemplazo lógico a tu método calcularCambio(). Hace la resta automática instantánea.
-     */
     private void calcularRestaPuntos() {
         double saldoCliente = (clienteActual != null) ? clienteActual.getPuntos() : 0.0;
         double saldoRestante = saldoCliente - totalPuntosCanje;
@@ -235,9 +229,6 @@ public class VentaPuntosFrame extends JFrame {
         lblSaldoRestante.setForeground(colorVerde);
     }
 
-    /**
-     * Adaptación limpia de tu método finalizarCompra() enfocado en lógica de puntos
-     */
     private void finalizarCanje() {
         if (modelo.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "La lista de productos está vacía.", "Aviso", JOptionPane.WARNING_MESSAGE);

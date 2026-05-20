@@ -109,6 +109,15 @@ public class Coordinador implements ICoordinador {
     public void setMenuPuntosFrame(menuPuntosFrame menuPuntos) {
         this.menuPuntos = menuPuntos;
     }
+    
+    @Override
+    public void regresarTiendaNormal() {
+        this.limpiarClienteActual(); 
+        this.cancelarVenta();
+        if (this.navegacion != null) {
+            this.navegacion.abrirMenuFrame();
+        }
+    }
 
     /**
      * Singelton del coordinador.
@@ -305,13 +314,18 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public Double ejecutarFinalizarCompra(String tipoPago, Double cantidadRecibida, String idEmpleado, String idCliente) throws Exception {
-        if (cantidadRecibida == null || idEmpleado == null || idCliente == null) {
-            throw new Exception("Datos incompletos para finalizar la venta.");
+        if (cantidadRecibida == null || idEmpleado == null) {
+            throw new Exception("Datos incompletas para finalizar la venta (Falta Empleado o Pago).");
         }
-        Double cambio = fVentas.finalizarVenta(tipoPago, cantidadRecibida, idEmpleado, idCliente);
+        
+        String idClienteValido = (idCliente == null || idCliente.trim().isEmpty()) ? "0" : idCliente.trim();
+        
+        Double cambio = fVentas.finalizarVenta(tipoPago, cantidadRecibida, idEmpleado, idClienteValido);
         if (cambio == null) {
             throw new Exception("Error interno al procesar la venta.");
         }
+        
+        this.limpiarClienteActual();
         return cambio;
     }
 
@@ -414,8 +428,13 @@ public class Coordinador implements ICoordinador {
     
     @Override
     public Boolean setClientePorId(String idCliente) {
-        ClienteDTO cliente = ingreso.ingresarCliente(idCliente);
+        if (idCliente == null || idCliente.trim().isEmpty() || idCliente.trim().equals("0")) {
+            return false; // Retorna falso inmediatamente si intentan buscar un cliente nulo o Público General
+        }
+        
+        ClienteDTO cliente = ingreso.ingresarCliente(idCliente.trim());
         if (cliente == null) return false;
+        
         this.clienteActual = cliente;
         return true;
     }

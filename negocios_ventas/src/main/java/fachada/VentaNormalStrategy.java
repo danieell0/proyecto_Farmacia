@@ -25,8 +25,15 @@ public class VentaNormalStrategy implements IVentaStrategy {
         if (monto < total) {
             throw new Exception("Dinero insuficiente para completar el cobro en efectivo.");
         }
-        Double puntosAAsignar = total * 0.10;
-        controlClientePuntos.sumarPuntosClientes(idCliente, puntosAAsignar);
+        if (idCliente != null && !idCliente.equals("0")) {
+            Double puntosAAsignar = total * 0.10;
+            controlClientePuntos.sumarPuntosClientes(idCliente, puntosAAsignar);
+        }
         return monto - total;
+    }
+
+    @Override
+    public Boolean requiereConfirmarReceta() {
+        return true;
     }
 }

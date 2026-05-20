@@ -1,21 +1,18 @@
 package ConexionMongo;
 
 import Entidades.Cliente;
-import Entidades.CuentaAcceso;
-import Entidades.Empleado;
-import Entidades.Producto;
 import Entidades.Receta;
-import Entidades.Venta;
+import EntidadesMongo.ClienteMongo;
 import EntidadesMongo.CuentaAccesoMongo;
 import EntidadesMongo.EmpleadoMongo;
 import EntidadesMongo.LoteMongo;
 import EntidadesMongo.MovimientoMongo;
 import EntidadesMongo.ProductoMongo;
+import EntidadesMongo.RecetaMongo;
 import EntidadesMongo.SolicitudMongo;
 import EntidadesMongo.VentaMongo;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -82,8 +79,8 @@ public class ManejadorConexiones {
         return obtenerBaseDatos().getCollection(COLECCION_PRODUCTOS, ProductoMongo.class);
     }
 
-    public static MongoCollection<Receta> obtenerColeccionReceta() {
-        return obtenerBaseDatos().getCollection(COLECCION_RECETAS, Receta.class);
+    public static MongoCollection<RecetaMongo> obtenerColeccionReceta() {
+        return obtenerBaseDatos().getCollection(COLECCION_RECETAS, RecetaMongo.class);
     }
 
     public static MongoCollection<VentaMongo> obtenerColeccionVentas() {
@@ -98,8 +95,8 @@ public class ManejadorConexiones {
         return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAccesoMongo.class);
     }
     
-    public static MongoCollection<Cliente> obtenerColeccionCliente() {
-        return obtenerBaseDatos().getCollection(COLECCION_CLIENTES, Cliente.class);
+    public static MongoCollection<ClienteMongo> obtenerColeccionCliente() {
+        return obtenerBaseDatos().getCollection(COLECCION_CLIENTES, ClienteMongo.class);
     }
     
     public static MongoCollection<MovimientoMongo> obtenerColeccionMovimientos(){

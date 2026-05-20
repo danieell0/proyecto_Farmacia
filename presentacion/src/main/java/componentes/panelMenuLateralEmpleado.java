@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package componentes;
 
 import java.awt.Color;
@@ -12,10 +8,13 @@ import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -59,6 +58,8 @@ public class panelMenuLateralEmpleado extends JPanel {
             "Ventas",
             "Puntos"
         };
+        
+        List<JButton> botonesCreados = new ArrayList<>();
 
         for (int i = 0; i < iconos.length; i++) {
             final int index = i;
@@ -77,8 +78,10 @@ public class panelMenuLateralEmpleado extends JPanel {
             btn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    btn.setOpaque(true);
-                    btn.setBackground(new Color(0, 150, 136));
+                    if (btn.isEnabled()) { // Solo hace hover si el botón está activo
+                        btn.setOpaque(true);
+                        btn.setBackground(new Color(0, 150, 136));
+                    }
                 }
 
                 @Override
@@ -89,19 +92,26 @@ public class panelMenuLateralEmpleado extends JPanel {
             });
             
             btn.addActionListener(e -> {
-                // 1. Cerramos la ventana en la que está montada actualmente este menú
                 Window ventana = SwingUtilities.getWindowAncestor(this);
                 
                 switch (tooltips[index]) {
-//                  case "Ventas":
-//                        // Utiliza tu control de navegación global
-//                        controlNavegacion.getcontrolNavegacion().abrirMenuFrame(); 
-//                        break;
+                  case "Ventas":
+                        int confirmar = JOptionPane.showConfirmDialog(this, 
+                                "¿Desea regresar a la tienda normal? Se quitará el cliente y se vaciará el carrito de puntos.", 
+                                "Salir de Puntos", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        
+                        if (confirmar == JOptionPane.YES_OPTION) {
+                            if (ventana != null) {
+                                ventana.dispose();
+                            }
+                            Coordinador.getCoordinador().regresarTiendaNormal();
+                        }
+                        break;
                         
                     case "Puntos":
                     String idCliente = JOptionPane.showInputDialog(
                         this,
-                        "Ingrese el ID o Cédula del Cliente:",
+                        "Ingrese el ID:",
                         "Validar Cliente",
                         JOptionPane.QUESTION_MESSAGE
                     );
@@ -124,9 +134,23 @@ public class panelMenuLateralEmpleado extends JPanel {
                 }
             });
             
+            botonesCreados.add(btn);
             add(btn);
             add(Box.createVerticalStrut(20));
         }
+        
+        SwingUtilities.invokeLater(() -> {
+            JFrame ventanaActiva = Coordinador.getCoordinador().getVentanaActiva();
+            if (ventanaActiva != null) {
+                String nombreVentana = ventanaActiva.getClass().getSimpleName();              
+                if (nombreVentana.equalsIgnoreCase("menuFrame")) {
+                    botonesCreados.get(0).setEnabled(false);
+                }
+                else if (nombreVentana.equalsIgnoreCase("menuPuntosFrame")) {
+                    botonesCreados.get(1).setEnabled(false);
+                }
+            }
+        });
 
     }
 

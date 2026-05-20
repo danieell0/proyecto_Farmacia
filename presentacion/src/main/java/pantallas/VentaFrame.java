@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pantallas;
 
-import DTO.DetalleVentaDTO;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
-import Sesion.IFachadaSesion;
 import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
@@ -30,8 +24,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import pantallas.control.Coordinador;
-import pantallas.control.controlNavegacion;
-import pantallas.menuFrame;
 
 /**
  *
@@ -137,6 +129,10 @@ public class VentaFrame extends JFrame {
                 if (control != null) {
                     control.abrirMenuFrame();
                 }
+                limpiarVenta();
+                if (control != null) {
+                    control.abrirMenuFrame();
+                }
             }
         });
         btnFinalizar.addActionListener(e -> finalizarCompra());
@@ -181,9 +177,6 @@ public class VentaFrame extends JFrame {
         return btn;
     }
 
-    /**
-     * Este método actualiza la JTable de la pantalla final de cobro.
-     */
     public void actualizarTablaCarrito(CarritoDTO carrito) {
         ((javax.swing.table.DefaultTableModel) tabla.getModel()).setRowCount(0);
         
@@ -249,10 +242,6 @@ public class VentaFrame extends JFrame {
         
     }
 
-    /**
-     * Procesa la finalización de la compra, registra la venta en el sistema
-     * y redirige al usuario de vuelta al catálogo de productos.
-     */
    private void finalizarCompra() {
     if (modelo.getRowCount() == 0) {
         JOptionPane.showMessageDialog(this, "La lista de productos está vacía.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -288,6 +277,10 @@ public class VentaFrame extends JFrame {
                         "Venta registrada con éxito.\nEntregar cambio: $" + String.format("%.2f", resultado), 
                         "Venta Exitosa", 
                         JOptionPane.INFORMATION_MESSAGE);
+                
+                this.coordinador.limpiarClienteActual(); 
+                limpiarVenta();
+                
                 if (this.control != null) {
                     this.control.abrirMenuFrame();
                 } else {

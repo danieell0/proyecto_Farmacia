@@ -32,4 +32,9 @@ public class VentaPuntosStrategy implements IVentaStrategy {
         ClienteDTO clienteActualizado = controlClientePuntos.restarPuntosClientes(idCliente, monto);
         return clienteActualizado.getPuntos();
     }
+
+    @Override
+    public Boolean requiereConfirmarReceta() {
+        return false;
+    }
 }

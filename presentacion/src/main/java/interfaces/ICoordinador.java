@@ -41,4 +41,5 @@ public interface ICoordinador {
     public SesionActualDTO obtenerSesionActual();
     public Boolean setClientePorId(String idCliente);
     public Boolean limpiarClienteActual();
+    void regresarTiendaNormal();
 }

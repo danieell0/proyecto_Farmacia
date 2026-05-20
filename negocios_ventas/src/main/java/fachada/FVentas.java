@@ -197,7 +197,7 @@ public class FVentas implements IVenta {
             
             Double resultadoOperacion = this.ventaStrategy.finalizarVenta(monto, idCliente, carrito);
             
-            if (this.ventaStrategy instanceof VentaNormalStrategy) {
+            if (this.ventaStrategy.requiereConfirmarReceta()) {
                 this.fachadaReceta.confirmarDescuentoReceta();
             }
             
@@ -219,5 +219,5 @@ public class FVentas implements IVenta {
     public Boolean verificarExistenciaReceta(String folio) {
         return fachadaReceta.existeReceta(folio);
     }
-
+    
 }

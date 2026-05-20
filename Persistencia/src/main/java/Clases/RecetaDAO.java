@@ -2,13 +2,13 @@ package Clases;
 
 import ConexionMongo.ManejadorConexiones;
 import Entidades.Receta;
+import EntidadesMongo.RecetaMongo;
 import Interfaces.IRecetaDAO;
+import MapperMongo.RecetaMapperMongo;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Updates;
-import java.util.Arrays;
-import org.bson.Document;
 
 /**
  * Clase DAO donde estan todas las operaciones de recetas con la base de datos.
@@ -16,7 +16,7 @@ import org.bson.Document;
  */
 public class RecetaDAO implements IRecetaDAO {
 
-    private final MongoCollection<Receta> coleccionRecetas;
+    private final MongoCollection<RecetaMongo> coleccionRecetas;
 
     /**
      * Contructor de la clase.
@@ -32,8 +32,8 @@ public class RecetaDAO implements IRecetaDAO {
      */
     @Override
     public Receta obtenerRecetaPorFolio(String folio) {
-        Receta receta = coleccionRecetas.find(eq("folio", folio)).first();
-        return receta;
+        RecetaMongo receta = coleccionRecetas.find(eq("folio", folio)).first();
+        return RecetaMapperMongo.entityToDomain(receta);
     }
 
     /**
@@ -43,29 +43,9 @@ public class RecetaDAO implements IRecetaDAO {
      */
     @Override
     public void actualizarEstadoReceta(Receta receta) {
-        java.util.Date fechaActual = new java.util.Date();
         coleccionRecetas.updateOne(
-            eq("folio", receta.getFolio()), Arrays.asList(
-                new Document("$set", new Document("estado", 
-                    new Document("$cond", Arrays.asList(
-                        new Document("$gt", Arrays.asList(fechaActual, "$fechaCaducidad")), "CADUCADO",
-                        new Document("$cond", Arrays.asList(
-                            new Document("$allElementsTrue", Arrays.asList(
-                                new Document("$map", new Document()
-                                    .append("input", "$detalles")
-                                    .append("as", "detalle")
-                                    .append("in", new Document("$gte", Arrays.asList(
-                                        "$$detalle.cantidadSurtida", 
-                                        "$$detalle.cantidadRecetada"
-                                    )))
-                                )
-                            )),
-                            "SURTIDA",
-                            "ACTIVA"
-                        ))
-                    ))
-                ))
-            )
+            eq("folio", receta.getFolio()),
+            Updates.set("estado", receta.getEstado())
         );
     }
 

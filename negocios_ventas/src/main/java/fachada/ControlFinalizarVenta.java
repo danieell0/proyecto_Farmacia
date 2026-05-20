@@ -35,7 +35,7 @@ public class ControlFinalizarVenta {
      * @return true si se registró correctamente.
      * @throws VentaException Error al registrar.
      */
-    protected boolean registrarVenta(VentaDTO ventaFinal) throws VentaException {
+    protected Boolean registrarVenta(VentaDTO ventaFinal) throws VentaException {
         if (ventaFinal == null) {
             throw new VentaException("La venta no puede ser nula.");
         }
@@ -51,6 +51,7 @@ public class ControlFinalizarVenta {
      * @param idEmpleado ID del empleado asociado.
      * @param idCliente ID del cliente asociado.
      * @param carrito Conjunto de productos que se venderan.
+     * @param tipoPago Tipo de pago 
      * @return La venta lista nomas para persistir si se confirma.
      * @throws VentaException 
      */
@@ -89,7 +90,12 @@ public class ControlFinalizarVenta {
             nuevaVenta.setPuntosGenerados(0.0);
         } else {
             nuevaVenta.setTipo(TipoVenta.NORMAL);
-            nuevaVenta.setPuntosGenerados(carrito.getTotalAPagar() * 0.10); 
+            boolean tieneCliente = idCliente != null && !idCliente.equals("0");
+            if (tieneCliente == true) {
+                nuevaVenta.setPuntosGenerados(carrito.getTotalAPagar() * 0.10); 
+            } else {
+                nuevaVenta.setPuntosGenerados(0.0);
+            }
         }
         
         List<DetalleVentaDTO> detallesVenta = new ArrayList<>();
@@ -106,23 +112,4 @@ public class ControlFinalizarVenta {
         return nuevaVenta;
     }
     
-    /**
-     * Ejecuta la finalizacion de una venta.
-     * @param monto Monto de la venta.
-     * @param idEmpleado ID del empleado que realizo la venta.
-     * @param idCliente ID del cliente que realizo la compra.
-     * @param carrito Conjunto de productos que se venderan.
-     * @return La feria de la venta o los puntos del cliente,
-     * dependiendo el tipo de venta.
-     * @throws Exception 
-     */
-    public Double ejecutarFinalizacionConStrategy(Double monto, String idEmpleado, String idCliente, CarritoDTO carrito) throws Exception {
-        String tipoPago = "EFECTIVO"; 
-        if (this.ventaStrategy.getClass().getSimpleName().toLowerCase().contains("puntos")) {
-            tipoPago = "PUNTOS";
-        }
-        VentaDTO ventaPreparada = this.prepararVenta(carrito, idEmpleado, idCliente, tipoPago);
-        this.registrarVenta(ventaPreparada);
-        return this.ventaStrategy.finalizarVenta(monto, idCliente, carrito);
-    }
 }

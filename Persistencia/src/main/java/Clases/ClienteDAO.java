@@ -2,7 +2,9 @@ package Clases;
 
 import ConexionMongo.ManejadorConexiones;
 import Entidades.Cliente;
+import EntidadesMongo.ClienteMongo;
 import Interfaces.IClienteDAO;
+import MapperMongo.ClienteMapperMongo;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.model.Updates;
@@ -13,7 +15,7 @@ import com.mongodb.client.model.Updates;
  */
 public class ClienteDAO implements IClienteDAO {
     
-    private final MongoCollection<Cliente> coleccionClientes;
+    private final MongoCollection<ClienteMongo> coleccionClientes;
 
     public ClienteDAO() {
         this.coleccionClientes = ManejadorConexiones.obtenerColeccionCliente();
@@ -21,16 +23,17 @@ public class ClienteDAO implements IClienteDAO {
 
     @Override
     public Cliente obtenerCliente(String idCliente) {
-        return coleccionClientes.find(eq("idCliente", idCliente)).first();
+        ClienteMongo cliente = coleccionClientes.find(eq("idCliente", idCliente)).first();
+        return ClienteMapperMongo.entityToDomain(cliente);
     }
 
     @Override
     public Double obtenerPuntos(String idCliente) {
-        Cliente encontrado = coleccionClientes.find(eq("idCliente", idCliente)).first();
-        if (encontrado == null) {
+        ClienteMongo cliente = coleccionClientes.find(eq("idCliente", idCliente)).first();
+        if (cliente == null) {
             return null;
         }
-        return encontrado.getPuntos();
+        return cliente.getPuntos();
     }
 
     @Override

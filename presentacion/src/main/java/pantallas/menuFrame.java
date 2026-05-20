@@ -279,7 +279,7 @@ public class menuFrame extends JFrame {
             if (opcion == JOptionPane.YES_OPTION) {
                 String idCliente = JOptionPane.showInputDialog(
                     this,
-                    "Ingrese el ID o Cédula del Cliente:",
+                    "Ingrese el ID:",
                     "Buscar Cliente",
                     JOptionPane.QUESTION_MESSAGE
                 );

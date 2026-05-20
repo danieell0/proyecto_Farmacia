@@ -18,7 +18,7 @@ public class ControlClientePuntos {
     /**
      * Contructor de la clase.
      */
-    public ControlClientePuntos() {
+    protected ControlClientePuntos() {
         this.clienteBO = new ClienteBO(); 
     }
 
@@ -28,7 +28,7 @@ public class ControlClientePuntos {
      * @return Los puntos del cliente.
      * @throws NegocioException 
      */
-    public Double obtenerPuntosClientes(String idCliente) throws NegocioException {
+    protected Double obtenerPuntosClientes(String idCliente) throws NegocioException {
         if (idCliente == null || idCliente.trim().isEmpty()) {
             throw new NegocioException("El ID del cliente es requerido.");
         }
@@ -47,7 +47,7 @@ public class ControlClientePuntos {
      * @return El cliente con sus puntos sumados.
      * @throws NegocioException 
      */
-    public ClienteDTO sumarPuntosClientes(String idCliente, Double puntosASumar) throws NegocioException {
+    protected ClienteDTO sumarPuntosClientes(String idCliente, Double puntosASumar) throws NegocioException {
         if (puntosASumar == null || puntosASumar <= 0) {
             throw new NegocioException("La cantidad de puntos a sumar debe ser mayor a cero.");
         }
@@ -67,7 +67,7 @@ public class ControlClientePuntos {
      * @return El cliente con sus puntos restados.
      * @throws NegocioException 
      */
-    public ClienteDTO restarPuntosClientes(String idCliente, Double puntosARestar) throws NegocioException {
+    protected ClienteDTO restarPuntosClientes(String idCliente, Double puntosARestar) throws NegocioException {
         if (puntosARestar == null || puntosARestar <= 0) {
             throw new NegocioException("La cantidad de puntos a restar debe ser mayor a cero.");
         }
