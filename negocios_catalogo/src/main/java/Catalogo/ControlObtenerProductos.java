@@ -63,4 +63,7 @@ public class ControlObtenerProductos {
         return catalogoBO.obtenerProductoPorClave(codigo);
     }
     
+    protected List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
+        return catalogoBO.obtenerProductosConcordantes(idCliente, puntos);
+    }
 }

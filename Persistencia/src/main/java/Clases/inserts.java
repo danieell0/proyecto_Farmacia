@@ -1,14 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package Clases;
 
 import ConexionMongo.ManejadorConexiones;
+import Entidades.Cliente;
 import Entidades.CuentaAcceso;
 import Entidades.DetalleReceta;
 import Entidades.Empleado;
 import Entidades.Receta;
+import EntidadesMongo.CanjeableMongo;
 import EntidadesMongo.CuentaAccesoMongo;
 import EntidadesMongo.EmpleadoMongo;
 import EntidadesMongo.MedicamentoMongo;
@@ -69,6 +67,16 @@ public class inserts {
         coleccionProductos.insertOne(new MedicamentoMongo(Medida.mg, 10.0, "Tabletas", true, List.of(Especialidades.NEUROLOGIA), "MC003", "Ritalin", "Novartis", 320.0, "/imagenes/ritalin.png", 4, TipoProducto.MEDICAMENTO));
         coleccionProductos.insertOne(new MedicamentoMongo(Medida.mg, 5.0, "Tabletas", true, List.of(Especialidades.PSIQUIATRIA), "MC004", "Alprazolam", "Pfizer", 0.5, "/imagenes/alprazolam.png", 7, TipoProducto.MEDICAMENTO));
         coleccionProductos.insertOne(new MedicamentoMongo(Medida.mg, 30.0, "Cápsulas", true, List.of(Especialidades.NEUROLOGIA), "MC005", "Vyvanse", "Takeda", 450.0, "/imagenes/vyvanse.png", 3, TipoProducto.MEDICAMENTO));
+        
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C001", "Telefono Xiaomi", "Xiaomi", 5000.0, "/imagenes/phone.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C002", "Smartwatch", "Generico", 1500.0, "/imagenes/smartwatch.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C003", "Balon", "Adidas", 1000.0, "/imagenes/balon.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C004", "Audifonos", "Generico", 2000.0, "/imagenes/audifonos.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C005", "Television", "Generico", 10000.0, "/imagenes/tele.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C006", "Mouse Inalambrico", "Generico", 1000.0, "/imagenes/mouse.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C007", "Raqueta", "Wilson", 2500.0, "/imagenes/raqueta.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C008", "Guante Beisbol", "Rawlings", 3000.0, "/imagenes/glove.png", 20, TipoProducto.PUNTOS));
+        coleccionProductos.insertOne(new CanjeableMongo(0.0, "C009", "Cargador Telefono", "Generico", 2000.0, "/imagenes/cargador.png", 20, TipoProducto.PUNTOS));
 
         MongoCollection<Receta> coleccionRecetas = ManejadorConexiones.obtenerColeccionReceta();
         coleccionRecetas.drop();
@@ -95,6 +103,13 @@ public class inserts {
         coleccionCuentas.insertOne(new CuentaAccesoMongo("123", "admin"));
         coleccionCuentas.insertOne(new CuentaAccesoMongo("456", "caja"));
         coleccionCuentas.insertOne(new CuentaAccesoMongo("789", "caja2"));
+        
+        MongoCollection<Cliente> coleccionClientes = ManejadorConexiones.obtenerColeccionCliente();
+        coleccionClientes.drop();
+        coleccionClientes.insertOne(new Cliente("0", "VentaSinCliente", "1", 0.0, LocalDate.of(2000, 1, 1)));
+        coleccionClientes.insertOne(new Cliente("1", "nombre", "6441000665", 10000.0, LocalDate.of(2000, 5, 2)));
+        coleccionClientes.insertOne(new Cliente("2", "pepe", "6442134730", 5000.0, LocalDate.of(2006, 6, 27)));
+        coleccionClientes.insertOne(new Cliente("3", "juanito", "6441000664", 2000.0, LocalDate.of(2000, 8, 2)));
 
         try {
             //aqui creamos la conexion con la base de datos 
@@ -102,7 +117,7 @@ public class inserts {
             Connection conexion = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/",
                     "root",
-                    "rAgfiw-z"
+                    "357642"
             );
 
             // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea

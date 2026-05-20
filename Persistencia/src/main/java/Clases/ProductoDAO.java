@@ -3,16 +3,23 @@ package Clases;
 import ConexionMongo.ManejadorConexiones;
 import Entidades.Producto;
 import EntidadesMongo.ProductoMongo;
+import Enums.TipoProducto;
 import Interfaces.IProductoDAO;
 import MapperMongo.ProductoMapperMongo;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Aggregates;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Filters.in;
+import static com.mongodb.client.model.Filters.lte;
 import static com.mongodb.client.model.Filters.regex;
+import com.mongodb.client.model.Sorts;
 import static com.mongodb.client.model.Updates.set;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.bson.conversions.Bson;
 
 /**
  * Clase DAO encargada de realizar las operaciones relacionadas con los
@@ -49,9 +56,10 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public List<Producto> obtenerProductos() {
         //regresa todos los productos de la coleccion
-        List<ProductoMongo> productosMongo = coleccionProductos.find().into(new ArrayList<>());
-
-        return productosMongo.stream().map(p -> ProductoMapperMongo.entityToDomain(p)).toList();
+        List<ProductoMongo> productosMongo = coleccionProductos.find(
+            in("tipo", TipoProducto.PRODUCTO, TipoProducto.MEDICAMENTO)
+        ).into(new ArrayList<>());
+        return productosMongo.stream().map(ProductoMapperMongo::entityToDomain).toList();
     }
 
     /**
@@ -65,9 +73,13 @@ public class ProductoDAO implements IProductoDAO {
      */
     @Override
     public List<Producto> obtenerProductosPorNombre(String nombre) {
-        //regresa los productos filtrados por nombre 
-        List<ProductoMongo> productosMongo = coleccionProductos.find(regex("nombre", nombre, "i")).into(new ArrayList<>());
-        return productosMongo.stream().map(p -> ProductoMapperMongo.entityToDomain(p)).toList();
+        List<ProductoMongo> productosMongo = coleccionProductos.find(
+            and(
+                regex("nombre", nombre, "i"),
+                in("tipo", TipoProducto.PRODUCTO, TipoProducto.MEDICAMENTO)
+            )
+        ).into(new ArrayList<>());
+        return productosMongo.stream().map(ProductoMapperMongo::entityToDomain).toList();
     }
 
     /**
@@ -80,8 +92,14 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public List<Producto> obtenerProductoPorClave(String clave) {
         //regresa los productos filtrados por clave
-        List<ProductoMongo> productosMongo = coleccionProductos.find(and(gt("stock", 0), eq("idProducto", clave))).into(new ArrayList<>());
-        return productosMongo.stream().map(p -> ProductoMapperMongo.entityToDomain(p)).toList();
+        List<ProductoMongo> productosMongo = coleccionProductos.find(
+            and(
+                gt("stock", 0),
+                eq("idProducto", clave),
+                in("tipo", TipoProducto.PRODUCTO, TipoProducto.MEDICAMENTO)
+            )
+        ).into(new ArrayList<>());
+        return productosMongo.stream().map(ProductoMapperMongo::entityToDomain).toList();
     }
 
     /**
@@ -100,6 +118,25 @@ public class ProductoDAO implements IProductoDAO {
         return null;
     }
 
+    @Override
+    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos) {
+        List<Bson> pipeline = Arrays.asList(
+            Aggregates.match(
+                and(
+                    eq("tipo", TipoProducto.PUNTOS),
+                    gt("stock", 0),
+                    lte("precio", puntos)
+                )
+            ),
+            Aggregates.sort(Sorts.ascending("precio"))
+        );
+        return coleccionProductos.aggregate(pipeline, ProductoMongo.class)
+            .into(new ArrayList<>())
+            .stream()
+            .map(ProductoMapperMongo::entityToDomain)
+            .toList();
+    }
+    
     /**
      * Disminuye el stock de un producto actualizando la cantidad disponible en
      * la base de datos.

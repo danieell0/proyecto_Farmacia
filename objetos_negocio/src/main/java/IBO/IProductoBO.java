@@ -41,4 +41,6 @@ public interface IProductoBO {
      */
     public List<ProductoDTO> obtenerProductoPorClave(String clave);
 
+    
+    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos);
 }

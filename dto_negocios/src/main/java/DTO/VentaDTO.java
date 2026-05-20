@@ -1,12 +1,12 @@
 package DTO;
 
-import java.time.LocalDate;
+import Enums.TipoVenta;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * DTO que representa una venta.
  * @author munos
  */
 public class VentaDTO {
@@ -15,6 +15,8 @@ public class VentaDTO {
     private Double total;
     private String idEmpleado;
     private String idCliente;
+    private TipoVenta tipo;
+    private Double puntosGenerados ;
     private List<DetalleVentaDTO> detalles;
 
     public VentaDTO() {
@@ -67,6 +69,22 @@ public class VentaDTO {
 
     public void setDetalles(List<DetalleVentaDTO> detalles) {
         this.detalles = detalles;
+    }
+
+    public TipoVenta getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVenta tipo) {
+        this.tipo = tipo;
+    }
+
+    public Double getPuntosGenerados() {
+        return puntosGenerados;
+    }
+
+    public void setPuntosGenerados(Double puntosGenerados) {
+        this.puntosGenerados = puntosGenerados;
     }
     
 }

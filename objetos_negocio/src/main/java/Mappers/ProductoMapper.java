@@ -4,8 +4,10 @@
  */
 package Mappers;
 
+import DTO.CanjeableDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
+import Entidades.Canjeable;
 import Entidades.Medicamento;
 import Entidades.Producto;
 
@@ -14,19 +16,12 @@ import Entidades.Producto;
  * Clase encargada de realizar la conversión entre entidades del dominio
  * {@link Producto} y objetos DTO {@link ProductoDTO}.
  *
- * También permite convertir objetos de tipo {@link Medicamento} y
- * {@link MedicamentoDTO}.
- *
  * @author Jorge
  */
 public class ProductoMapper {
 
     /**
      * Convierte una entidad {@link Producto} a un objeto {@link ProductoDTO}.
-     *
-     * Si el producto es una instancia de {@link Medicamento}, se convierte a
-     * {@link MedicamentoDTO}.
-     *
      * @param producto Entidad de producto a convertir.
      * @return Objeto DTO correspondiente o {@code null} si el producto es nulo.
      */
@@ -50,6 +45,18 @@ public class ProductoMapper {
             dto.setEspecialidades(m.getEspecialidades());
             return dto;
         }
+        if (producto instanceof Canjeable c) {
+            CanjeableDTO dto = new CanjeableDTO();
+            dto.setIdProducto(c.getIdProducto());
+            dto.setNombre(c.getNombre());
+            dto.setMarca(c.getMarca());
+            dto.setTipo(c.getTipo());
+            dto.setPrecio(c.getPrecio());
+            dto.setImagen(c.getImagen());
+            dto.setStock(c.getStock());
+            dto.setPuntos(c.getPuntos());
+            return dto;
+        }
         ProductoDTO dto = new ProductoDTO();
         dto.setIdProducto(producto.getIdProducto());
         dto.setMarca(producto.getMarca());
@@ -63,10 +70,6 @@ public class ProductoMapper {
 
     /**
      * Convierte un objeto {@link ProductoDTO} a una entidad {@link Producto}.
-     *
-     * Si el DTO es una instancia de {@link MedicamentoDTO}, se convierte a
-     * {@link Medicamento}.
-     *
      * @param dto DTO del producto a convertir.
      * @return Entidad correspondiente o {@code null} si el DTO es nulo.
      */
@@ -88,6 +91,18 @@ public class ProductoMapper {
             entity.setPresentacion(m.getPresentacion());
             entity.setEsControlada(m.getEsControlado());
             entity.setEspecialidades(m.getEspecialidades());
+            return entity;
+        }
+        if (dto instanceof CanjeableDTO c) {
+            Canjeable entity = new Canjeable();
+            entity.setIdProducto(c.getIdProducto());
+            entity.setMarca(c.getMarca());
+            entity.setTipo(c.getTipo());
+            entity.setNombre(c.getNombre());
+            entity.setPrecio(c.getPrecio());
+            entity.setImagen(c.getImagen());
+            entity.setStock(c.getStock());
+            entity.setPuntos(c.getPuntos());
             return entity;
         }
         Producto entity = new Producto();

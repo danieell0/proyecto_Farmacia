@@ -62,5 +62,10 @@ public class Fachada implements ICatalogo {
     public List<ProductoDTO> buscarProductoPorCodigo(String codigo) {
         return control.obtenerProductoPorCodigo(codigo);
     }
+    
+    @Override
+    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
+        return control.obtenerProductosConcordantes(idCliente, puntos);
+    }
 
 }

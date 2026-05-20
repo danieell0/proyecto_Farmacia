@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DTO;
 
 import java.time.LocalDate;
@@ -14,7 +10,7 @@ public class ClienteDTO {
     private String idCliente;
     private String nombre;
     private String telefono;
-    private double puntos;
+    private Double puntos;
     private LocalDate fechaNacimiento;
 
     public ClienteDTO() {
@@ -48,7 +44,7 @@ public class ClienteDTO {
         return puntos;
     }
 
-    public void setPuntos(double puntos) {
+    public void setPuntos(Double puntos) {
         this.puntos = puntos;
     }
 

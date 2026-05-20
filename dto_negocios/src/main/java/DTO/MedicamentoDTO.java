@@ -3,27 +3,17 @@ package DTO;
 import Enums.Especialidades;
 import Enums.Medida;
 import Enums.TipoProducto;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
  * DTO que representa un medicamento.
- *
- * Hereda de {@link ProductoDTO} e incluye información específica de
- * medicamentos.
- *
  * @author Dario
  */
 public class MedicamentoDTO extends ProductoDTO {
-    //Unidad de medida del medicamento
     private Medida medida;
-    //Cantidad de dosis del medicamento
     private Double dosis;
-    //Presentación del medicamento
     private String presentacion;
-    //Indica si el medicamento es controlado
     private Boolean esControlado;
-    //Lista de especialidades médicas relacionadas
     private List<Especialidades> especialidades;
 
     /**
@@ -34,8 +24,7 @@ public class MedicamentoDTO extends ProductoDTO {
     }
 
     /**
-     * Constructor con parámetros.
-     *
+     * Constructor con parametros.
      * @param medida Unidad de medida del medicamento.
      * @param dosis Dosis del medicamento.
      * @param presentacion Presentación del medicamento.
@@ -60,7 +49,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Obtiene la medida del medicamento.
-     *
      * @return Medida del medicamento.
      */
     public Medida getMedida() {
@@ -69,7 +57,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Establece la medida del medicamento.
-     *
      * @param medida Nueva medida del medicamento.
      */
     public void setMedida(Medida medida) {
@@ -78,7 +65,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Obtiene la dosis del medicamento.
-     *
      * @return Dosis del medicamento.
      */
     public Double getDosis() {
@@ -87,7 +73,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Establece la dosis del medicamento.
-     *
      * @param dosis Nueva dosis del medicamento.
      */
     public void setDosis(Double dosis) {
@@ -96,7 +81,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Obtiene la presentación del medicamento.
-     *
      * @return Presentación del medicamento.
      */
     public String getPresentacion() {
@@ -105,7 +89,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Establece la presentación del medicamento.
-     *
      * @param presentacion Nueva presentación del medicamento.
      */
     public void setPresentacion(String presentacion) {
@@ -114,7 +97,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Indica si el medicamento es controlado.
-     *
      * @return {@code true} si es controlado, {@code false} en caso contrario.
      */
     public Boolean getEsControlado() {
@@ -123,7 +105,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Establece si el medicamento es controlado.
-     *
      * @param esControlado Nuevo estado de control del medicamento.
      */
     public void setEsControlado(Boolean esControlado) {
@@ -132,7 +113,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Obtiene las especialidades relacionadas con el medicamento.
-     *
      * @return Lista de especialidades.
      */
     public List<Especialidades> getEspecialidades() {
@@ -141,7 +121,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Establece las especialidades relacionadas con el medicamento.
-     *
      * @param especialidades Nueva lista de especialidades.
      */
     public void setEspecialidades(List<Especialidades> especialidades) {
@@ -150,7 +129,6 @@ public class MedicamentoDTO extends ProductoDTO {
 
     /**
      * Devuelve una representación en cadena del objeto.
-     *
      * @return Cadena con los datos del medicamento.
      */
     @Override

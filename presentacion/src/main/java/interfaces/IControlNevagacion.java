@@ -13,10 +13,15 @@ import javax.swing.JFrame;
  */
 public interface IControlNevagacion {
 
+    
     public void setControlNeavegacion();
 
+    
     public void abrirMenuFrame();
-
+    
+    
+    public void abrirMenuPuntosFrame();
+    
     
     public void abrirVentaFrame();
 

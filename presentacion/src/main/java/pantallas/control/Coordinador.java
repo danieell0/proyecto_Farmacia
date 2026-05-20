@@ -5,10 +5,13 @@ import Catalogo.Fachada;
 import Catalogo.ICatalogo;
 import DTO.ProductoDTO;
 import DTO.CarritoDTO;
+import DTO.ClienteDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
 import DTO.CuentaAccesoDTO;
 import DTO.SesionActualDTO;
+import Ingreso.FachadaIngreso;
+import Ingreso.IFachadaIngreso;
 import fachada.FVentas;
 import fachada.IVenta;
 import interfaces.ICoordinador;
@@ -19,6 +22,9 @@ import pantallas.menuFrame;
 import pantallas.validarRecetaDlg;
 import Sesion.FachadaSesion;
 import Sesion.IFachadaSesion;
+import javax.swing.JFrame;
+import pantallas.menuPuntosFrame;
+import pantallas.VentaPuntosFrame;
 
 /**
  *
@@ -33,10 +39,15 @@ public class Coordinador implements ICoordinador {
     private static Coordinador cordinador;
     private IVenta fVentas;
     private VentaFrame ventaFrame;
+    private VentaPuntosFrame ventaPuntosFrame;
     private ICatalogo catalogo;
+    private IFachadaIngreso ingreso;
     private String folioRecetaActual;
+    private EmpleadoDTO empleado;
+    private ClienteDTO clienteActual;
     private validarRecetaDlg recetaDlg;
     private menuFrame menuJFrame;
+    private menuPuntosFrame menuPuntos;
     
     /**
      * Constructor del coordinador. Inicializa el acceso al subsistema de ventas
@@ -46,18 +57,16 @@ public class Coordinador implements ICoordinador {
         this.catalogo = new Fachada();
         this.fVentas = new FVentas();
         this.fachadaSesion = new FachadaSesion();
+        this.ingreso = new FachadaIngreso();
     }
 
-    // Agrega este método:
     @Override
     public SesionActualDTO obtenerSesionActual() {
-        // El coordinador solo le pasa el recado a la fachada
         return fachadaSesion.obtenerSesionActual(); 
     }
     
     /**
      * Asigna la referencia de la pantalla de ventas.
-     *
      * @param ventaFrame La instancia de la vista.
      */
     @Override
@@ -66,8 +75,16 @@ public class Coordinador implements ICoordinador {
     }
 
     /**
+     * Asigna la referencia de la pantalla de venta de puntos.
+     * @param ventaPuntos La instancia de la vista.
+     */
+    @Override
+    public void setVentaPuntosFrame(VentaPuntosFrame ventaPuntos) {
+        this.ventaPuntosFrame = ventaPuntos;
+    }
+    
+    /**
      * Asigna la referencia de la pantalla de menu.
-     *
      * @param menuJFrame La instancia de la vista.
      */
     @Override
@@ -77,17 +94,24 @@ public class Coordinador implements ICoordinador {
 
     /**
      * Asigna la referencia del dialog de validar receta.
-     *
      * @param recetaDlg La instancia de la vista.
      */
     @Override
     public void setRecetaDlg(validarRecetaDlg recetaDlg) {
         this.recetaDlg = recetaDlg;
     }
+    
+    /**
+     * Asigna la referencia de la pantalla de menu de puntos.
+     * @param menuPuntos La instancia de la vista.
+     */
+    @Override
+    public void setMenuPuntosFrame(menuPuntosFrame menuPuntos) {
+        this.menuPuntos = menuPuntos;
+    }
 
     /**
      * Singelton del coordinador.
-     *
      * @return Instancia del coordinador.
      */
     public static Coordinador getCoordinador() {
@@ -98,18 +122,58 @@ public class Coordinador implements ICoordinador {
     }
 
     /**
+     * Obtiene el cliente que se encuentra activo en el flujo de venta.
+     * @return El cliente.
+     */
+    @Override
+    public ClienteDTO getClienteActual() {
+        return clienteActual;
+    }
+
+    /**
+     * Asigna al cliente al flujo de venta.
+     * @param clienteActual El cliente.
+     */
+    public void setClienteActual(ClienteDTO clienteActual) {
+        this.clienteActual = clienteActual;
+    }
+    
+    /**
+     * Retorna el JFrame que se esta mostrando actualmente en pantalla.
+     * @return La pantalla.
+     */
+    public JFrame getVentanaActiva() {
+        if (this.ventaFrame != null && this.ventaFrame.isShowing()) {
+            return this.ventaFrame;
+        }
+        if (this.menuPuntos != null && this.menuPuntos.isShowing()) {
+            return this.menuPuntos;
+        }
+        if (this.menuJFrame != null && this.menuJFrame.isShowing()) {
+            return this.menuJFrame;
+        }
+        return null;
+    }
+
+    /**
      * Obtiene todos los productos activos existentes.
-     *
      * @return Resultado de la busqueda.
      */
     @Override
     public List<ProductoDTO> ObtenerProductos() {
         return catalogo.obtenerProductos();
     }
+    
+    /**
+     * Obtiene todos los productos concordantes con los puntos del cliente.
+     * @return Lista de productos concordantes.
+     */
+    public List<ProductoDTO> ObtenerProductosProductosConcordantes() {
+        return catalogo.obtenerProductosConcordantes(clienteActual.getIdCliente(), clienteActual.getPuntos());
+    }
 
     /**
      * Obtiene todos los productos en base un filtro por su nombre.
-     *
      * @param nombre Filtro nombre con el que se realizara la busqueda.
      * @return El resultado de la busqueda.
      */
@@ -168,14 +232,13 @@ public class Coordinador implements ICoordinador {
     /**
      * Toma el producto seleccionado en la pantalla, arma el renglón (Detalle) y
      * lo manda a la fachada para agregarlo al carrito.
-     *
      * @param producto El producto seleccionado de la tabla catálogo.
      * @param cantidad Cantidad ingresada por el usuario.
      */
     @Override
     public void agregarProductoAlCarrito(ProductoDTO producto, Integer cantidad) {
     if (producto == null || cantidad == null || cantidad <= 0) {
-            JOptionPane.showMessageDialog(ventaFrame, "Cantidad inválida.");
+            JOptionPane.showMessageDialog(getVentanaActiva(), "Cantidad inválida.");
             return;
         }
         try {
@@ -198,7 +261,7 @@ public class Coordinador implements ICoordinador {
                 fVentas.setFolioRecetaActual(null);
 
                 JOptionPane.showMessageDialog(
-                        ventaFrame != null ? ventaFrame : menuJFrame,
+                        getVentanaActiva() != null ? getVentanaActiva() : getVentanaActiva(),
                         mensaje,
                         "Error",
                         JOptionPane.ERROR_MESSAGE
@@ -209,7 +272,6 @@ public class Coordinador implements ICoordinador {
 
     /**
      * Manda la orden de borrar un producto del carrito y actualiza la pantalla.
-     *
      * @param idProducto ID del producto que se eliminara del carrito.
      * @param cantidad La cantidad a eliminar del producto.
      */
@@ -219,13 +281,12 @@ public class Coordinador implements ICoordinador {
             fVentas.eliminarDelCarrito(idProducto);
             actualizarCarrito();
         } catch (NegocioException e) {
-            JOptionPane.showMessageDialog(ventaFrame, e.getMessage(), "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(getVentanaActiva(), e.getMessage(), "Error al eliminar", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     /**
      * Pide el carrito actual a la fachada para mostrarlo.
-     *
      * @return el carrito actual.
      */
     @Override
@@ -236,36 +297,21 @@ public class Coordinador implements ICoordinador {
     /**
      * Procesa la compra: valida el pago, guarda en BD y devuelve el cambio. Si
      * algo falla, lanza una Exception para que la pantalla la muestre.
-     *
+     * @param tipoPago 
      * @param cantidadRecibida
      * @param idEmpleado
      * @param idCliente
      * @return double
      */
     @Override
-    public Double ejecutarFinalizarCompra(
-            Double cantidadRecibida,
-            String idEmpleado,
-            String idCliente
-    ) throws Exception {
-
-        if (cantidadRecibida == null
-                || idEmpleado == null
-                || idCliente == null) {
-
+    public Double ejecutarFinalizarCompra(String tipoPago, Double cantidadRecibida, String idEmpleado, String idCliente) throws Exception {
+        if (cantidadRecibida == null || idEmpleado == null || idCliente == null) {
             throw new Exception("Datos incompletos para finalizar la venta.");
         }
-
-        Double cambio = fVentas.finalizarVenta(
-                cantidadRecibida,
-                idEmpleado,
-                idCliente
-        );
-
+        Double cambio = fVentas.finalizarVenta(tipoPago, cantidadRecibida, idEmpleado, idCliente);
         if (cambio == null) {
             throw new Exception("Error interno al procesar la venta.");
         }
-
         return cambio;
     }
 
@@ -311,31 +357,34 @@ public class Coordinador implements ICoordinador {
         ventaFrame.setVisible(true);
     }
 
+    public void mostrarPantallaVentaPuntos() {
+        if (ventaPuntosFrame == null) {
+            ventaPuntosFrame = new VentaPuntosFrame();
+            ventaPuntosFrame.setCoordinador(this);
+        }
+        ventaPuntosFrame.actualizarTablaCarrito(fVentas.obtenerCarritoActual());
+        ventaPuntosFrame.setVisible(true);
+     }
+    
     /**
      * Cancela la venta en curso, limpia el carrito y regresa al catalogo.
      */
     @Override
     public void cancelarVenta(){
         fVentas.cancelarVentaActual();
-
         this.folioRecetaActual = null;
-
+        this.limpiarClienteActual();
         if (menuJFrame != null) {
             menuJFrame.limpiarVenta();
         }
-
         if (ventaFrame != null) {
             ventaFrame.limpiarVenta();
         }
-
-        pantallas.control.controlNavegacion
-                .getcontrolNavegacion()
-                .abrirMenuFrame();
+        pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
     }
 
     /**
      * Verifica la existencia de una receta.
-     *
      * @param folio Folio de la receta a verificar.
      * @return El resultado de la busqueda.
      */
@@ -351,17 +400,31 @@ public class Coordinador implements ICoordinador {
 
     @Override
     public void actualizarCarrito() {
-
-        CarritoDTO carritoActualizado
-                = fVentas.obtenerCarritoActual();
-
+        CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();
         if (ventaFrame != null) {
             ventaFrame.actualizarTablaCarrito(carritoActualizado);
         }
-
         if (menuJFrame != null) {
             menuJFrame.actualizarTablaCarrito(carritoActualizado);
         }
+        if (menuPuntos != null && menuPuntos.isShowing()) {
+            menuPuntos.actualizarTablaCarrito(carritoActualizado);
+        }
+    }
+    
+    @Override
+    public Boolean setClientePorId(String idCliente) {
+        ClienteDTO cliente = ingreso.ingresarCliente(idCliente);
+        if (cliente == null) return false;
+        this.clienteActual = cliente;
+        return true;
+    }
+    
+    @Override
+    public Boolean limpiarClienteActual() {
+        this.clienteActual = null;
+        ingreso.limpiarClienteActual();
+        return true;
     }
 
 }

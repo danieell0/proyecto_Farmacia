@@ -1,21 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package fachada;
 
 import Bo.NegocioException;
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
-import DTO.DetalleRecetaDTO;
 import DTO.MedicamentoDTO;
 import DTO.ProductoDTO;
-import DTO.RecetaDTO;
 import DTO.VentaDTO;
 import Enums.Especialidades;
 import Sesion.FachadaSesion;
 import Sesion.IFachadaSesion;
-import java.util.List;
 import subsistemaRecetas.FachadaSubsistemaReceta;
 import subsistemaRecetas.IFachadaSubsistemaRecetas;
 
@@ -29,6 +23,7 @@ public class FVentas implements IVenta {
     private final ControlFinalizarVenta controlFinalizar;
     private final IFachadaSubsistemaRecetas fachadaReceta;
     private final IFachadaSesion fachadaSesion;
+    private IVentaStrategy ventaStrategy;
     private String folioRecetaActual;
 
     public FVentas() {
@@ -42,6 +37,10 @@ public class FVentas implements IVenta {
     public void setFolioRecetaActual(String folio) {
         this.folioRecetaActual = folio;
     }
+    
+    public void setVentaStrategy(IVentaStrategy strategy) {
+        this.ventaStrategy = strategy;
+    }
 
      /**
      * Agrega un producto al carrito y descuenta el stock de forma temporal 
@@ -52,19 +51,16 @@ public class FVentas implements IVenta {
     @Override
     public void agregarAlCarrito(DetalleCarritoDTO detalle) throws NegocioException{
         ProductoDTO producto = detalle.getProducto();
-
+        
     if (producto.getStock() < detalle.getCantidad()) {
         throw new NegocioException("No hay suficiente stock para: " + producto.getNombre());
     }
-
     if (producto instanceof MedicamentoDTO med && med.getEsControlado()) {
 
         String folioEncontrado = null;
         if (med.getEspecialidades() != null) {
             for (Especialidades esp : med.getEspecialidades()) {
-                folioEncontrado = fachadaReceta.buscarEnRecetasActivas(
-                    med.getIdProducto(), detalle.getCantidad(), esp
-                );
+                folioEncontrado = fachadaReceta.buscarEnRecetasActivas(med.getIdProducto(), detalle.getCantidad(), esp);
                 if (folioEncontrado != null) break;
             }
         }
@@ -79,11 +75,7 @@ public class FVentas implements IVenta {
             if (med.getEspecialidades() != null) {
                 for (Especialidades esp : med.getEspecialidades()) {
                     try {
-                        if (fachadaReceta.validarYReservar(
-                                this.folioRecetaActual,
-                                med.getIdProducto(),
-                                detalle.getCantidad(),
-                                esp)) {
+                        if (fachadaReceta.validarYReservar(this.folioRecetaActual, med.getIdProducto(), detalle.getCantidad(), esp)) {
                             esValido = true;
                             break;
                         }
@@ -147,23 +139,25 @@ public class FVentas implements IVenta {
 
     /**
      * Obtiene carrito actual.
-     *
      * @return carrito.
      */
     @Override
     public CarritoDTO obtenerCarritoActual() {
-        return this.controlCarrito
-                .obtenerCarrito();
+        return this.controlCarrito.obtenerCarrito();
     }
     
     /**
      * Metodo legado para compatibilidad, delega a finalizarVenta.
+     * @param carrito Carrito con el que se realizara la venta.
+     * @param idCliente ID del cliente asociado a esta.
+     * @param tipoPago El tipo de pago de la venta.
+     * @return La venta lista para finalizarse.
      */
     @Override
-    public VentaDTO registrarVenta(CarritoDTO carrito) {
+    public VentaDTO registrarVenta(CarritoDTO carrito, String idCliente, String tipoPago) {
         try {
-            String idEmpleado = fachadaSesion.obtenerSesionActual().getIdEmpleado(); //MODIFICADO PARA GUARDAR ID
-            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, "1L");
+            String idEmpleado = fachadaSesion.obtenerSesionActual().getIdEmpleado();
+            VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente, tipoPago);
             if (this.controlFinalizar.registrarVenta(ventaEmpacada)) {
                 this.controlCarrito.limpiarCarrito();
                 return ventaEmpacada;
@@ -176,40 +170,48 @@ public class FVentas implements IVenta {
 
     /**
      * Finaliza venta. El stock definitivo se descuenta en BO.
-     *
-     * @param cantidadRecibida Pago recibido.
+     * @param tipoPago tipo de pago de la venta.
+     * @param monto El monto que se pagara.
      * @param idEmpleado Empleado.
      * @param idCliente Cliente.
      * @return cambio.
      */
     @Override
-    public Double finalizarVenta(
-            Double cantidadRecibida,
-            String idEmpleado,
-            String idCliente
-    ) {
+    public Double finalizarVenta(String tipoPago, Double monto, String idEmpleado, String idCliente) {
         try {
+            if ("PUNTOS".equalsIgnoreCase(tipoPago)) {
+                this.ventaStrategy = new VentaPuntosStrategy();
+            } else if ("EFECTIVO".equalsIgnoreCase(tipoPago)) {
+                this.ventaStrategy = new VentaNormalStrategy();
+            } else {
+                throw new IllegalArgumentException("Tipo de pago no soportado: " + tipoPago);
+            }
+
             CarritoDTO carrito = this.controlCarrito.obtenerCarrito();
-            Double total = carrito.getTotalAPagar();
-            if (cantidadRecibida < total) {
-                throw new RuntimeException("Dinero insuficiente.");
-            }
-            VentaDTO ventaPreparada= this.controlFinalizar.prepararVenta(carrito,idEmpleado,idCliente);
+            VentaDTO ventaPreparada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente, tipoPago);
             boolean exito = this.controlFinalizar.registrarVenta(ventaPreparada);
+            
             if (!exito) {
-                throw new RuntimeException("No se pudo registrar la venta.");
+                throw new RuntimeException("No se pudo registrar la venta en la base de datos.");
             }
-            this.fachadaReceta.confirmarDescuentoReceta();
+            
+            Double resultadoOperacion = this.ventaStrategy.finalizarVenta(monto, idCliente, carrito);
+            
+            if (this.ventaStrategy instanceof VentaNormalStrategy) {
+                this.fachadaReceta.confirmarDescuentoReceta();
+            }
+            
             this.controlCarrito.limpiarCarrito();
             this.folioRecetaActual = null;
-            return cantidadRecibida - total;
+            this.ventaStrategy = null;
+            return resultadoOperacion;
         } catch (Exception e) {
-            throw new RuntimeException("Error al finalizar venta: "+ e.getMessage());
+            throw new RuntimeException("Error critico al procesar la transacción: " + e.getMessage());
         }
     }
 
     /**
-     * Verifica existencia de receta.
+     * Verifica existencia de una receta.
      * @param folio Folio receta.
      * @return true si existe.
      */

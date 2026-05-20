@@ -1,5 +1,6 @@
 package ConexionMongo;
 
+import Entidades.Cliente;
 import Entidades.CuentaAcceso;
 import Entidades.Empleado;
 import Entidades.Producto;
@@ -95,6 +96,10 @@ public class ManejadorConexiones {
 
     public static MongoCollection<CuentaAccesoMongo> obtenerColeccionCuentas() {
         return obtenerBaseDatos().getCollection(COLECCION_CUENTAS, CuentaAccesoMongo.class);
+    }
+    
+    public static MongoCollection<Cliente> obtenerColeccionCliente() {
+        return obtenerBaseDatos().getCollection(COLECCION_CLIENTES, Cliente.class);
     }
     
     public static MongoCollection<MovimientoMongo> obtenerColeccionMovimientos(){

@@ -36,4 +36,5 @@ public interface ICatalogo {
      */
     public List<ProductoDTO> buscarProductoPorCodigo(String codigo);
 
+    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos);
 }

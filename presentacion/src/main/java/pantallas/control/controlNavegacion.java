@@ -8,6 +8,8 @@ import pantallas.VentaFrame;
 import pantallas.menuFrame;
 import pantallas.validarRecetaDlg;
 import pantallas.InicioSesionFrm;
+import pantallas.menuPuntosFrame;
+import pantallas.VentaPuntosFrame;
 
 /**
  * Clase que se encarga de la nevagacion entre pantallas.
@@ -27,24 +29,51 @@ public class controlNavegacion implements IControlNevagacion{
     public void abrirMenuFrame(){
         cambiarPantalla(new menuFrame());
     }
+    
     @Override
-    public void abrirVentaFrame() {
-    VentaFrame nuevaVenta = new VentaFrame();
-    
-    // ESTA LÍNEA ES LA QUE EVITA QUE SE CIERRE EL PROGRAMA
-    nuevaVenta.setControlNavegacion(this); 
-    
-    nuevaVenta.setCoordinador(Coordinador.getCoordinador());
-    Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
-    
-    // Cargar datos actuales
-    DTO.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
-    if (carritoGuardado != null) {
-        nuevaVenta.actualizarTablaCarrito(carritoGuardado);
+    public void abrirMenuPuntosFrame(){
+        menuPuntosFrame puntosFrame = new menuPuntosFrame();
+        puntosFrame.setCoordinador(Coordinador.getCoordinador());
+        cambiarPantalla(puntosFrame);
     }
     
-    cambiarPantalla(nuevaVenta);
-}
+    @Override
+        public void abrirVentaFrame() {
+        VentaFrame nuevaVenta = new VentaFrame();
+
+        // ESTA LÍNEA ES LA QUE EVITA QUE SE CIERRE EL PROGRAMA
+        nuevaVenta.setControlNavegacion(this); 
+
+        nuevaVenta.setCoordinador(Coordinador.getCoordinador());
+        Coordinador.getCoordinador().setVentaFrame(nuevaVenta);
+
+        // Cargar datos actuales
+        DTO.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
+        if (carritoGuardado != null) {
+            nuevaVenta.actualizarTablaCarrito(carritoGuardado);
+        }
+
+        cambiarPantalla(nuevaVenta);
+    }
+    
+        public void abrirVentaPuntosFrame() {
+        VentaPuntosFrame nuevaVenta = new VentaPuntosFrame();
+
+        // ESTA LÍNEA ES LA QUE EVITA QUE SE CIERRE EL PROGRAMA
+        nuevaVenta.setControlNavegacion(this); 
+
+        nuevaVenta.setCoordinador(Coordinador.getCoordinador());
+        Coordinador.getCoordinador().setVentaPuntosFrame(nuevaVenta);
+
+        // Cargar datos actuales
+        DTO.CarritoDTO carritoGuardado = Coordinador.getCoordinador().obtenerCarritoActual();
+        if (carritoGuardado != null) {
+            nuevaVenta.actualizarTablaCarrito(carritoGuardado);
+        }
+
+        cambiarPantalla(nuevaVenta);
+    }
+        
     @Override
     public void abrirRecetaDialog(){
         validarRecetaDlg dlg = new validarRecetaDlg(frameActual, true, coordinador);

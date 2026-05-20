@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Mappers;
 
 import DTO.VentaDTO;
@@ -27,6 +23,8 @@ public class VentaMapper {
         venta.setTotal(dto.getTotal());
         venta.setIdEmpleado(dto.getIdEmpleado());
         venta.setIdCliente(dto.getIdCliente());
+        venta.setTipo(dto.getTipo());
+        venta.setPuntosGenerados(dto.getPuntosGenerados());
 
         if (dto.getDetalles() != null) {
             List<DetalleVenta> detalles = dto.getDetalles().stream().map(d -> detalleMapper.toEntity(d)).toList();

@@ -4,8 +4,7 @@
  */
 package EntidadesMongo;
 
-import Entidades.DetalleVenta;
-import java.time.LocalDate;
+import Enums.TipoVenta;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
@@ -15,12 +14,14 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
  * @author munos
  */
 @BsonDiscriminator
-public class VentaMongo {
- private String idVenta;
+public class VentaMongo {  
+    private String idVenta;
     private LocalDateTime fecha;
     private Double total;
     private String idEmpleado;
     private String idCliente;
+    private TipoVenta tipo;
+    private Double puntosGenerados;
     private List<DetalleVentaMongo> detalles;
 
     public VentaMongo() {
@@ -66,6 +67,22 @@ public class VentaMongo {
         this.idCliente = idCliente;
     }
 
+    public Double getPuntosGenerados() {
+        return puntosGenerados;
+    }
+
+    public void setPuntosGenerados(Double puntosGenerados) {
+        this.puntosGenerados = puntosGenerados;
+    }
+
+    public TipoVenta getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVenta tipo) {
+        this.tipo = tipo;
+    }
+    
     public List<DetalleVentaMongo> getDetalles() {
         return detalles;
     }

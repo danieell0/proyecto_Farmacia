@@ -133,9 +133,9 @@ public class VentaFrame extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
 
             if (confirmacion == JOptionPane.YES_OPTION) {
-                coordinador.cancelarVenta(); // Esto debería limpiar el carrito y devolver stock
+                coordinador.cancelarVenta();
                 if (control != null) {
-                    control.abrirMenuFrame(); // Regresamos al catálogo
+                    control.abrirMenuFrame();
                 }
             }
         });
@@ -254,14 +254,12 @@ public class VentaFrame extends JFrame {
      * y redirige al usuario de vuelta al catálogo de productos.
      */
    private void finalizarCompra() {
-    // 1. Validación de presentación: Tabla vacía
     if (modelo.getRowCount() == 0) {
         JOptionPane.showMessageDialog(this, "La lista de productos está vacía.", "Aviso", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
     try {
-        // 2. Validación de presentación: Formato de texto
         String textoRecibido = txtPago.getText().trim();
         if (textoRecibido.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Debe ingresar la cantidad con la que paga el cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -271,28 +269,25 @@ public class VentaFrame extends JFrame {
         Double cantidadRecibida = Double.parseDouble(textoRecibido);
 
         if (this.coordinador != null) {
-            // Pedimos el resultado al coordinador
             String idCajeroActivo = String.valueOf(this.coordinador.obtenerSesionActual().getIdEmpleado());
-            String idCliente = "1L";
+            String idCliente = "0";
+            if (this.coordinador.getClienteActual() != null) {
+                idCliente = this.coordinador.getClienteActual().getIdCliente();
+            }
             
            
-            Double resultado = this.coordinador.ejecutarFinalizarCompra(cantidadRecibida, idCajeroActivo, idCliente);
-            // 3. Evaluar la respuesta del subsistema
+            Double resultado = this.coordinador.ejecutarFinalizarCompra("EFECTIVO", cantidadRecibida, idCajeroActivo, idCliente);
             if (resultado == null) {
                 JOptionPane.showMessageDialog(this, "Error interno al procesar la venta.", "Error", JOptionPane.ERROR_MESSAGE);
             } else if (resultado == -1.0) {
                 JOptionPane.showMessageDialog(this, "El carrito de compras está vacío.", "Aviso", JOptionPane.WARNING_MESSAGE);
             } else if (resultado == -2.0) {
-                // AQUÍ SE CORRIGE TU ERROR DE LA CAPTURA:
                 JOptionPane.showMessageDialog(this, "Dinero insuficiente para completar la venta.", "Pago Insuficiente", JOptionPane.WARNING_MESSAGE);
             } else {
-                // 4. VENTA EXITOSA: Solo si el resultado no es un código de error
                 JOptionPane.showMessageDialog(this, 
                         "Venta registrada con éxito.\nEntregar cambio: $" + String.format("%.2f", resultado), 
                         "Venta Exitosa", 
                         JOptionPane.INFORMATION_MESSAGE);
-
-                // 5. Redirigir al menú (Catálogo)
                 if (this.control != null) {
                     this.control.abrirMenuFrame();
                 } else {

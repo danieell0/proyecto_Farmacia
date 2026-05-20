@@ -27,6 +27,8 @@ public class VentaMapperMongo {
         venta.setTotal(mongo.getTotal());
         venta.setIdEmpleado(mongo.getIdEmpleado());
         venta.setIdCliente(mongo.getIdCliente());
+        venta.setTipo(mongo.getTipo());
+        venta.setPuntosGenerados(mongo.getPuntosGenerados());
         
         if (mongo.getDetalles() != null) {
             venta.setDetalles(
@@ -52,6 +54,8 @@ public class VentaMapperMongo {
         mongo.setTotal(venta.getTotal());
         mongo.setIdEmpleado(venta.getIdEmpleado());
         mongo.setIdCliente(venta.getIdCliente());
+        mongo.setTipo(venta.getTipo()); 
+        mongo.setPuntosGenerados(venta.getPuntosGenerados());
         
         if (venta.getDetalles() != null) {
             mongo.setDetalles(

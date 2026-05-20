@@ -1,7 +1,9 @@
 package MapperMongo;
 
+import Entidades.Canjeable;
 import Entidades.Medicamento;
 import Entidades.Producto;
+import EntidadesMongo.CanjeableMongo;
 import EntidadesMongo.MedicamentoMongo;
 import EntidadesMongo.ProductoMongo;
 import java.util.ArrayList;
@@ -37,7 +39,20 @@ public class ProductoMapperMongo {
                 med.setEspecialidades(new ArrayList<>(medMongo.getEspecialidades()));
             }
             return med;
-        } 
+        }
+        if (mongo instanceof CanjeableMongo canjeableMongo) {
+            Canjeable canjeable = new Canjeable();
+            canjeable.setIdProducto(canjeableMongo.getIdProducto());
+            canjeable.setNombre(canjeableMongo.getNombre());
+            canjeable.setPrecio(canjeableMongo.getPrecio());
+            canjeable.setImagen(canjeableMongo.getImagen());
+            canjeable.setStock(canjeableMongo.getStock());
+            canjeable.setTipo(canjeableMongo.getTipo());
+            canjeable.setMarca(canjeableMongo.getMarca());
+            //Canjeable
+            canjeable.setPuntos(canjeableMongo.getPuntos());
+            return canjeable;
+        }
         Producto prod = new Producto();
         prod.setIdProducto(mongo.getIdProducto());
         prod.setNombre(mongo.getNombre());
@@ -74,6 +89,19 @@ public class ProductoMapperMongo {
                 medMongo.setEspecialidades(new ArrayList<>(med.getEspecialidades()));
             }
             return medMongo;
+        }
+        if (producto instanceof Canjeable canjeable) {
+            CanjeableMongo canjeableMongo = new CanjeableMongo();
+            canjeableMongo.setIdProducto(canjeable.getIdProducto());
+            canjeableMongo.setNombre(canjeable.getNombre());
+            canjeableMongo.setPrecio(canjeable.getPrecio());
+            canjeableMongo.setImagen(canjeable.getImagen());
+            canjeableMongo.setStock(canjeable.getStock());
+            canjeableMongo.setMarca(canjeable.getMarca());
+            canjeableMongo.setTipo(canjeable.getTipo());
+            //Canjeable
+            canjeableMongo.setPuntos(canjeable.getPuntos());
+            return canjeableMongo;
         }
         ProductoMongo mongo = new ProductoMongo();
         mongo.setIdProducto(producto.getIdProducto());

@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Entidades;
 
-import java.time.LocalDate;
+import Enums.TipoVenta;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +14,8 @@ public class Venta {
     private Double total;
     private String idEmpleado;
     private String idCliente;
+    private TipoVenta tipo;
+    private Double puntosGenerados;
     private List<DetalleVenta> detalles;
 
     public Venta() {
@@ -69,6 +67,22 @@ public class Venta {
 
     public void setDetalles(List<DetalleVenta> detalles) {
         this.detalles = detalles;
+    }
+    
+    public TipoVenta getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoVenta tipo) {
+        this.tipo = tipo;
+    }
+
+    public Double getPuntosGenerados() {
+        return puntosGenerados;
+    }
+
+    public void setPuntosGenerados(Double puntosGenerados) {
+        this.puntosGenerados = puntosGenerados;
     }
     
 }

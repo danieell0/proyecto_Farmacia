@@ -270,6 +270,26 @@ public class menuFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "El carrito está vacío");
                 return;
             }
+            int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Desea asociar un cliente a esta venta?",
+                "Cliente",
+                JOptionPane.YES_NO_OPTION
+            );
+            if (opcion == JOptionPane.YES_OPTION) {
+                String idCliente = JOptionPane.showInputDialog(
+                    this,
+                    "Ingrese el ID o Cédula del Cliente:",
+                    "Buscar Cliente",
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                if (idCliente != null && !idCliente.trim().isEmpty()) {
+                    if (!Coordinador.getCoordinador().setClientePorId(idCliente.trim())) {
+                        JOptionPane.showMessageDialog(this, "Cliente no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
             controlNavegacion.getcontrolNavegacion().abrirVentaFrame();
         });
         panel.add(Box.createVerticalStrut(20));

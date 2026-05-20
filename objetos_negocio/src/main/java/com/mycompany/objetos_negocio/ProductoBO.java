@@ -75,5 +75,11 @@ public class ProductoBO implements IProductoBO {
         List<Producto> productoC = productoDAO.obtenerProductoPorClave(clave);
         return productoC.stream().map(p -> mapper.toDTO(p)).toList();
     }
+    
+    @Override
+    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
+        List<Producto> productoCan = productoDAO.obtenerProductosConcordantes(idCliente, puntos);
+        return productoCan.stream().map(p -> mapper.toDTO(p)).toList();
+    }
 
 }

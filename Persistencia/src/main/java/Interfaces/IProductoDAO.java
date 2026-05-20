@@ -57,6 +57,9 @@ public interface IProductoDAO {
      * @return {@code true} si el stock fue actualizado correctamente,
      * {@code false} en caso contrario.
      */
+    
+    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos);
+            
     public Boolean DisminuirStock(String idProducto, int nuevoStock);
     
     public Boolean aumentarStock(String idProducto, Integer nuevoStock);
