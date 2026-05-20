@@ -115,5 +115,17 @@ public class InventarioDAO implements IInventarioDAO {
             throw new PersistenciaException("Error al obtener el lote", e);
         }
     }
+    
+    @Override
+    public String generarIdMovimiento()throws PersistenciaException {
+        try {
+            long numMovimientos = ManejadorConexiones.obtenerColeccionMovimientos().countDocuments();
+            long siguienteNumero = numMovimientos + 1;
+            return "MOV-" + String.format("%03d", siguienteNumero);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE,"Error al generar el id del movimiento");
+            throw new PersistenciaException("Error al generar el id del movimiento");
+        }
+    }
 
 }
