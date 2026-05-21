@@ -119,7 +119,7 @@ public class inserts {
             Connection conexion = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/",
                     "root",
-                    "rAgfiw-z"
+                    "Jorge"
             );
 
             // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea
@@ -203,16 +203,40 @@ public class inserts {
         }
 
         //estas son las solicitudes de entrada 
-        MongoCollection<SolicitudMongo> coleccionSolicitudes= ManejadorConexiones.obtenerColeccionSolicitudes();
-
+        MongoCollection<SolicitudMongo> coleccionSolicitudes = ManejadorConexiones.obtenerColeccionSolicitudes();
         coleccionSolicitudes.drop();
 
-        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL001",LocalDateTime.now(),"123",EstadoSolicitud.PENDIENTE,Arrays.asList
-        (new DetalleSolicitudMongo(new MedicamentoMongo
-        (Medida.mg,500.0,"Tabletas",false,List.of(Especialidades.MEDICOGENERAL),"M001","Paracetamol","Genérico",500.0,"/imagenes/paracetamol.png",10,TipoProducto.MEDICAMENTO),20),
-        new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg,400.0,"Cápsulas",false,List.of(Especialidades.MEDICOGENERAL,Especialidades.PEDIATRIA),"M002","Ibuprofeno","Pfizer",600.0,"/imagenes/ibuprofeno.png",20,TipoProducto.MEDICAMENTO),15)))
-        );
-
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL001", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 500.0, "Tabletas", false, List.of(Especialidades.MEDICOGENERAL), "M001", "Paracetamol", "Genérico", 500.0, "/imagenes/paracetamol.png", 10, TipoProducto.MEDICAMENTO), 20),
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 400.0, "Cápsulas", false, List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA), "M002", "Ibuprofeno", "Pfizer", 600.0, "/imagenes/ibuprofeno.png", 20, TipoProducto.MEDICAMENTO), 15))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL002", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new ProductoMongo("P001", "Agua Natural Ciel", "Coca Cola", 20.0, "/imagenes/aguaNaturalCiel.png", 25, TipoProducto.PRODUCTO), 10),
+            new DetalleSolicitudMongo(new ProductoMongo("P002", "Galletas Marías", "Gamesa", 30.0, "/imagenes/galletasMarias.png", 20, TipoProducto.PRODUCTO), 12))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL003", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 2.0, "Tabletas", true, List.of(Especialidades.NEUROLOGIA), "MC001", "Clonazepam", "Roche", 2.0, "/imagenes/clonazepam.png", 6, TipoProducto.MEDICAMENTO), 5),
+            new DetalleSolicitudMongo(new ProductoMongo("P003", "Jugo Del Valle Naranja", "Del Valle", 25.0, "/imagenes/jugoDelValle.png", 10, TipoProducto.PRODUCTO), 8))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL004", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 500.0, "Cápsulas", false, List.of(Especialidades.PEDIATRIA), "M003", "Amoxicilina", "Sandoz", 500.0, "/imagenes/amoxicilina.png", 5, TipoProducto.MEDICAMENTO), 10),
+            new DetalleSolicitudMongo(new ProductoMongo("P004", "Papel Higiénico", "Pétalo", 60.0, "/imagenes/papelHigienico.png", 5, TipoProducto.PRODUCTO), 15))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL005", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new ProductoMongo("P005", "Shampoo Nutritivo", "Pantene", 75.0, "/imagenes/shampooPantene.png", 50, TipoProducto.PRODUCTO), 8),
+            new DetalleSolicitudMongo(new ProductoMongo("P006", "Sabritas Original", "Sabritas", 22.0, "/imagenes/sabritasOriginal.png", 35, TipoProducto.PRODUCTO), 10))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL006", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 100.0, "Tabletas", false, List.of(Especialidades.CARDIOLOGIA), "M004", "Aspirina", "Bayer", 500.0, "/imagenes/aspirina.png", 20, TipoProducto.MEDICAMENTO), 14),
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 10.0, "Tabletas", false, List.of(Especialidades.MEDICOGENERAL, Especialidades.PEDIATRIA), "M005", "Loratadina", "Genérico", 10.0, "/imagenes/loratadina.png", 10, TipoProducto.MEDICAMENTO), 16))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL007", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new ProductoMongo("P007", "Coca Cola 600ml", "Coca Cola", 18.0, "/imagenes/cocaCola600.png", 40, TipoProducto.PRODUCTO), 20),
+            new DetalleSolicitudMongo(new ProductoMongo("P008", "Pan Blanco", "Bimbo", 48.0, "/imagenes/panBimbo.png", 15, TipoProducto.PRODUCTO), 18))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL008", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 20.0, "Cápsulas", false, List.of(Especialidades.GASTROENTEROLOGIA), "M006", "Omeprazol", "Sandoz", 20.0, "/imagenes/omeprazol.png", 14, TipoProducto.MEDICAMENTO), 7),
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 850.0, "Tabletas", false, List.of(Especialidades.MEDICOGENERAL), "M007", "Metformina", "Merck", 850.0, "/imagenes/metformina.png", 12, TipoProducto.MEDICAMENTO), 5))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL009", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new ProductoMongo("P009", "Leche Entera", "Lala", 32.0, "/imagenes/lecheLala.png", 18, TipoProducto.PRODUCTO), 10),
+            new DetalleSolicitudMongo(new ProductoMongo("P010", "Atún en Agua", "Dolores", 27.0, "/imagenes/atunDolores.png", 22, TipoProducto.PRODUCTO), 12))));
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL010", LocalDateTime.now(), "123", EstadoSolicitud.PENDIENTE, Arrays.asList(
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg, 50.0, "Tabletas", false, List.of(Especialidades.CARDIOLOGIA), "M008", "Losartán", "Pfizer", 50.0, "/imagenes/losartan.png", 16, TipoProducto.MEDICAMENTO), 11),
+            new DetalleSolicitudMongo(new MedicamentoMongo(Medida.ml, 5.0, "Jarabe", false, List.of(Especialidades.PEDIATRIA), "M010", "Ambroxol", "Boehringer", 30.0, "/imagenes/ambroxol.png", 9, TipoProducto.MEDICAMENTO), 9))));
     }
+    
 
 }

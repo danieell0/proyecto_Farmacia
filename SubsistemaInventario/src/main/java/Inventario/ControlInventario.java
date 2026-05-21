@@ -49,71 +49,73 @@ public class ControlInventario {
     }
 
     public Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioException {
-        try {
+        try {            
             if (movimiento == null) {
                 throw new NegocioException("El movimiento no puede ser null");
             }
             if (movimiento.getFechaHora() == null) {
                 throw new NegocioException("La fecha del movimiento es obligatoria");
             }
-            if (movimiento.getIdEmpleado() == null || movimiento.getIdEmpleado().trim().isEmpty()) {
+            if (movimiento.getIdEmpleado() == null|| movimiento.getIdEmpleado().trim().isEmpty()) {
                 throw new NegocioException("El id del empleado es obligatorio");
             }
-            if (movimiento.getCodigoSolicitud() == null || movimiento.getCodigoSolicitud().trim().isEmpty()) {
+            if (movimiento.getCodigoSolicitud() == null|| movimiento.getCodigoSolicitud().trim().isEmpty()) {
                 throw new NegocioException("El codigo de solicitud es obligatorio");
             }
             if (movimiento.getLote() == null) {
                 throw new NegocioException("El lote es obligatorio");
             }
-            if (movimiento.getLote().getCodigoLote() == null || movimiento.getLote().getCodigoLote().trim().isEmpty()) {
+            if (movimiento.getLote().getCodigoLote() == null|| movimiento.getLote().getCodigoLote().trim().isEmpty()) {
                 throw new NegocioException("El codigo del lote no puede estar vacio");
             }
-            if (movimiento.getLote().getProveedor() == null || movimiento.getLote().getProveedor().trim().isEmpty()) {
+            if (movimiento.getLote().getProveedor() == null|| movimiento.getLote().getProveedor().trim().isEmpty()) {
                 throw new NegocioException("El proveedor es obligatorio");
             }
-            if (movimiento.getLote().getDetalles() == null || movimiento.getLote().getDetalles().isEmpty()) {
+            if (movimiento.getLote().getDetalles() == null|| movimiento.getLote().getDetalles().isEmpty()) {
                 throw new NegocioException("El lote debe contener detalles");
             }
-            LoteDTO loteExistente = inventarioBO.obtenerLote(movimiento.getLote().getCodigoLote());
+            LoteDTO loteExistente= inventarioBO.obtenerLote(movimiento.getLote().getCodigoLote());
             if (loteExistente != null) {
                 throw new NegocioException("Ya existe un lote con ese codigo");
             }
-            for (DetalleLoteDTO detalle : movimiento.getLote().getDetalles()) {
+            for (DetalleLoteDTO detalle: movimiento.getLote().getDetalles()) {
                 if (detalle.getProducto() == null) {
                     throw new NegocioException("Todos los detalles deben tener producto");
                 }
-                if (detalle.getCantidadSolicitada() == null || detalle.getCantidadSolicitada() <0) {
+                if (detalle.getCantidadSolicitada() == null|| detalle.getCantidadSolicitada() < 0) {
                     throw new NegocioException("La cantidad solicitada debe ser mayor a cero");
                 }
-                if (detalle.getCantidadRecibida() == null || detalle.getCantidadRecibida() < 0) {
+                if (detalle.getCantidadRecibida() == null|| detalle.getCantidadRecibida() < 0) {
                     throw new NegocioException("La cantidad recibida no puede ser negativa");
                 }
-                ProductoDTO producto = productoBO.obtenerProducto(detalle.getProducto().getIdProducto());
+                ProductoDTO producto= productoBO.obtenerProducto(detalle.getProducto().getIdProducto());
                 if (producto == null) {
                     throw new NegocioException("El producto no existe");
                 }
-                Integer stockAnterior = producto.getStock();
-                Integer nuevoStock = stockAnterior + detalle.getCantidadRecibida();
+                Integer stockAnterior= producto.getStock();
+                Integer nuevoStock= stockAnterior+ detalle.getCantidadRecibida();
+                producto.setStock(nuevoStock);
                 detalle.setCantidadAnterior(stockAnterior);
                 detalle.setCantidadNueva(nuevoStock);
-                Boolean actualizado = productoBO.aumentar(producto.getIdProducto(), nuevoStock);
+                detalle.setProducto(producto);
+                Boolean actualizado= productoBO.aumentar(producto.getIdProducto(),nuevoStock);
                 if (!actualizado) {
                     throw new NegocioException("No se pudo actualizar el stock");
                 }
             }
             movimiento.setIdMovimiento(inventarioBO.generarIdMovimiento());
             inventarioBO.guardarLote(movimiento.getLote());
-            Boolean registrado = inventarioBO.registrarMovimientoEntrada(movimiento);
+            Boolean registrado= inventarioBO.registrarMovimientoEntrada(movimiento);
             if (registrado) {
-                Boolean estadoActualizado = inventarioBO.actualizarEstadoSolicitud(movimiento.getCodigoSolicitud());
+                Boolean estadoActualizado= inventarioBO.actualizarEstadoSolicitud(movimiento.getCodigoSolicitud());
                 if (!estadoActualizado) {
                     throw new NegocioException("No se pudo actualizar el estado de la solicitud");
                 }
             }
             return registrado;
         } catch (NegocioException ex) {
-            logger.log(Level.SEVERE, "Error al registrar movimiento de entrada", ex);
-            throw new NegocioException("Error al registrar movimiento de entrada", ex);
+            logger.log(Level.SEVERE,"Error al registrar movimiento de entrada",ex);
+            throw new NegocioException("Error al registrar movimiento de entrada",ex);
         }
     }
 
