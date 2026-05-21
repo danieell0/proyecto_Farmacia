@@ -82,7 +82,7 @@ public class ControlInventario {
                 if (detalle.getProducto() == null) {
                     throw new NegocioException("Todos los detalles deben tener producto");
                 }
-                if (detalle.getCantidadSolicitada() == null || detalle.getCantidadSolicitada() <= 0) {
+                if (detalle.getCantidadSolicitada() == null || detalle.getCantidadSolicitada() <0) {
                     throw new NegocioException("La cantidad solicitada debe ser mayor a cero");
                 }
                 if (detalle.getCantidadRecibida() == null || detalle.getCantidadRecibida() < 0) {
