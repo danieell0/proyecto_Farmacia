@@ -12,6 +12,7 @@ import Enums.RolPuesto;
 import Interfaces.IEmpleadoDAO;
 import MapperMongo.EmpleadoMapperMongo;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import java.time.LocalDate;
@@ -73,9 +74,8 @@ public class EmpleadoDAO implements IEmpleadoDAO{
     @Override
     public Empleado obtenerEmpleadoPorId(String idEmpleado){
         // lo busca en la bd y lo devuelve como mongo empleado
-        EmpleadoMongo resultadoMongo = coleccionEmpleados.find(eq("idEmpleado", idEmpleado)).first();
-        
+        EmpleadoMongo empleadoMongo = coleccionEmpleados.find(Filters.eq("_id", idEmpleado)).first();        
         // el mapper lo pasa a entidad java para que todo fluya bien
-        return EmpleadoMapperMongo.aEntidadJava(resultadoMongo);
+        return EmpleadoMapperMongo.aEntidadJava(empleadoMongo);
     }        
 }

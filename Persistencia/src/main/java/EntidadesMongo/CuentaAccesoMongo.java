@@ -4,6 +4,7 @@
  */
 package EntidadesMongo;
 
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 /**
@@ -11,7 +12,7 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
  * @author Benjamin
  */
 public class CuentaAccesoMongo {
-    @BsonProperty("IDEmpleado")
+    @BsonId
     private String IDEmpleado;
     
     @BsonProperty("contrasena")
