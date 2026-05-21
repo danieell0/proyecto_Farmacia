@@ -46,7 +46,7 @@ public class ControlSesion{
                 
                 // se crea el dto que es bueno para mantener la sesion sin exponer la contraseña
                 SesionActualDTO sesionSegura = new SesionActualDTO(
-                        empleado.getIdEmpleado(),
+                        empleado.getID(),
                         nombreCompleto,
                         empleado.getRolPuesto()
                 );

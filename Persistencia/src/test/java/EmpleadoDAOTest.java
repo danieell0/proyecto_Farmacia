@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
  * @author Benjamin
  */
 public class EmpleadoDAOTest {
-    /*
+    
     private EmpleadoDAO empleadoDAO;
 
     // Este método se ejecuta ANTES de cada prueba para tener un DAO fresco y una BD limpia
@@ -82,5 +82,5 @@ public class EmpleadoDAOTest {
             empleadoDAO.obtenerEmpleadoPorId(idValido);
         }, "No debería lanzar ninguna excepción al buscar un empleado válido en la BD.");
     }
-    */
+    
 }

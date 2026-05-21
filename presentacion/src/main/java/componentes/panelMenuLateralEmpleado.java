@@ -129,7 +129,7 @@ public class panelMenuLateralEmpleado extends JPanel {
                     if (ventana != null) {
                         ventana.dispose();
                     }
-                    ControlNavegacion.getControlNavegacion().abrirMenuPuntosFrame();
+                    ControlNavegacion.getcontrolNavegacion().abrirMenuPuntosFrame();
                     break;
                 }
             });

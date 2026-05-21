@@ -290,7 +290,7 @@ public class menuFrame extends JFrame {
                     }
                 }
             }
-            ControlNavegacion.getControlNavegacion().abrirVentaFrame();
+            ControlNavegacion.getcontrolNavegacion().abrirVentaFrame();
         });
         panel.add(Box.createVerticalStrut(20));
         panel.add(pagar);
