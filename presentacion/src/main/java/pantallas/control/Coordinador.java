@@ -223,7 +223,7 @@ public class Coordinador implements ICoordinador {
                 
                 //hace que se espere un tiempo para que se termine de cerrar el login antes de abrir el otro (el bug raro que hacia que se fuera hacia atras del netbeans la otra pantalla)
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                    pantallas.control.ControlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+                    pantallas.control.ControlNavegacion.getControlNavegacion().abrirMenuFrame();
                 });
                 
                 return true;
@@ -394,7 +394,7 @@ public class Coordinador implements ICoordinador {
         if (ventaFrame != null) {
             ventaFrame.limpiarVenta();
         }
-        pantallas.control.ControlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+        pantallas.control.ControlNavegacion.getControlNavegacion().abrirMenuFrame();
     }
 
     /**
@@ -411,7 +411,7 @@ public class Coordinador implements ICoordinador {
     public List<ProductoDTO> ObtenerProductoPorCodigo(String codigo) {
         return catalogo.buscarProductoPorCodigo(codigo);
     }
-
+    
     @Override
     public void actualizarCarrito() {
         CarritoDTO carritoActualizado = fVentas.obtenerCarritoActual();

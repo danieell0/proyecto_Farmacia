@@ -15,6 +15,8 @@ public class pruebillas {
     /**
      * @param args the command line arguments
      */
+    
+    /*
     public static void main(String[] args) {
         // Ejecutamos la interfaz gráfica en el hilo de eventos de Swing (buena práctica)
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -27,5 +29,5 @@ public class pruebillas {
             }
         });
     }
-    
+    */
 }
