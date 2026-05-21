@@ -397,16 +397,22 @@ public class Coordinador implements ICoordinador {
      */
     @Override
     public void cancelarVenta(){
+        boolean ventaPuntos = (this.ventaPuntosFrame != null && this.ventaPuntosFrame.isShowing());
         fVentas.cancelarVentaActual();
         this.folioRecetaActual = null;
-        this.limpiarClienteActual();
         if (menuJFrame != null) {
             menuJFrame.limpiarVenta();
         }
         if (ventaFrame != null) {
             ventaFrame.limpiarVenta();
         }
-        pantallas.control.controlNavegacion.getControlNavegacion().abrirMenuFrame();
+        if (ventaPuntos) {
+            pantallas.control.controlNavegacion.getControlNavegacion().abrirMenuPuntosFrame();
+        } else {
+            this.limpiarClienteActual();
+            pantallas.control.controlNavegacion.getControlNavegacion().abrirMenuFrame();
+        }
+        
     }
 
     /**

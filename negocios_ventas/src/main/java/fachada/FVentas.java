@@ -154,7 +154,7 @@ public class FVentas implements IVenta {
      * @return La venta lista para finalizarse.
      */
     @Override
-    public VentaDTO registrarVenta(CarritoDTO carrito, String idCliente, String tipoPago) {
+    public VentaDTO prepararVenta(CarritoDTO carrito, String idCliente, String tipoPago) {
         try {
             String idEmpleado = fachadaSesion.obtenerSesionActual().getIdEmpleado();
             VentaDTO ventaEmpacada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente, tipoPago);
