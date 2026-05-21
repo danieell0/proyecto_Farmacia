@@ -42,7 +42,14 @@ public interface IProductoBO {
      */
     public List<ProductoDTO> obtenerProductoPorClave(String clave);
 
-    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos);
+    /**
+     * Obtiene los productos que el cliente puede canjear.
+     * @param idCliente ID del cliente objeto del filtro.
+     * @param puntos Puntos disponibles del cliente.
+     * @throws NegocioException La causa del error.
+     * @return Lista de productos concordantes.
+     */
+    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) throws NegocioException;
 
     public Boolean aumentar(String idProducto, Integer nuevoStock) throws NegocioException;
 

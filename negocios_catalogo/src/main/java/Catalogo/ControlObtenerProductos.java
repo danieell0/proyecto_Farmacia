@@ -4,6 +4,7 @@
  */
 package Catalogo;
 
+import Bo.NegocioException;
 import fachada.ControlCariito;
 import DTO.DetalleVentaDTO;
 import DTO.ProductoDTO;
@@ -63,7 +64,7 @@ public class ControlObtenerProductos {
         return catalogoBO.obtenerProductoPorClave(codigo);
     }
     
-    protected List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
+    protected List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) throws NegocioException{
         return catalogoBO.obtenerProductosConcordantes(idCliente, puntos);
     }
 }

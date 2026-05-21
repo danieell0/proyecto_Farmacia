@@ -8,10 +8,13 @@ import Bo.NegocioException;
 import Clases.ProductoDAO;
 import DTO.ProductoDTO;
 import Entidades.Producto;
+import Excepciones.PersistenciaException;
 import IBO.IProductoBO;
 import Interfaces.IProductoDAO;
 import Mappers.ProductoMapper;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase que implementa la lógica de negocio relacionada con los productos.
@@ -27,7 +30,8 @@ public class ProductoBO implements IProductoBO {
 
     //Objeto DAO para acceder a los datos de productos
     private IProductoDAO productoDAO;
-
+    private static final Logger logger = Logger.getLogger(ProductoBO.class.getSimpleName());
+    
     /**
      * Constructor de la clase ProductoBO.
      *
@@ -74,10 +78,22 @@ public class ProductoBO implements IProductoBO {
         return productoC.stream().map(p -> ProductoMapper.toDTO(p)).toList();
     }
 
+    /**
+     * Obtiene los productos que el cliente puede canjear.
+     * @param idCliente ID del cliente objeto del filtro.
+     * @param puntos Puntos disponibles del cliente.
+     * @throws NegocioException La causa del error.
+     * @return Lista de productos concordantes.
+     */
     @Override
-    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
-        List<Producto> productoCan = productoDAO.obtenerProductosConcordantes(idCliente, puntos);
-        return productoCan.stream().map(p -> ProductoMapper.toDTO(p)).toList();
+    public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) throws NegocioException {
+        try {
+            List<Producto> productoCan = productoDAO.obtenerProductosConcordantes(idCliente, puntos);
+            return productoCan.stream().map(p -> ProductoMapper.toDTO(p)).toList();
+        } catch (PersistenciaException e) {
+            logger.log(Level.SEVERE, "Error en negocio al obtener productos concordantes", e);
+            throw new NegocioException("Error al procesar los productos elegibles para el cliente.", e);
+        }
     }
 
     @Override

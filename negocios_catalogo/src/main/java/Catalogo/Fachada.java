@@ -1,5 +1,6 @@
 package Catalogo;
 
+import Bo.NegocioException;
 import fachada.ControlCariito;
 import DTO.DetalleVentaDTO;
 import DTO.MedicamentoDTO;
@@ -65,7 +66,11 @@ public class Fachada implements ICatalogo {
     
     @Override
     public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
-        return control.obtenerProductosConcordantes(idCliente, puntos);
+        try {
+            return control.obtenerProductosConcordantes(idCliente, puntos);
+        } catch(NegocioException e) {
+            return new ArrayList<>();
+        }
     }
 
 }

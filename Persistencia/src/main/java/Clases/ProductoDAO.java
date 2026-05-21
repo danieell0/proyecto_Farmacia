@@ -147,10 +147,10 @@ public class ProductoDAO implements IProductoDAO {
                 .stream()
                 .map(ProductoMapperMongo::entityToDomain)
                 .toList();
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "Error al ejecutar la agregacion de productos", e);
-                throw new PersistenciaException("Error al obtener los productos concordantes desde la base de datos.", e);
-            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error al ejecutar la agregacion de productos", e);
+            throw new PersistenciaException("Error al obtener los productos concordantes desde la base de datos.", e);
+        }
     }
     
     /**
