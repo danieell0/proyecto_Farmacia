@@ -22,20 +22,52 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Clase que actúa como controlador del módulo de inventario.
+ *
+ * Se encarga de validar la información recibida y coordinar las operaciones
+ * entre la capa de negocio y la presentación.
  *
  * @author Jorge
  */
 public class ControlInventario {
 
+    /**
+     * Objeto de negocio encargado de gestionar las operaciones relacionadas con
+     * inventario.
+     */
     private InventarioBO inventarioBO;
+    /**
+     * Objeto de negocio encargado de gestionar las operaciones relacionadas con
+     * productos.
+     */
     private ProductoBO productoBO;
+    /**
+     * Logger utilizado para registrar eventos y errores de la clase
+     * ControlInventario.
+     */
     private static final Logger logger = Logger.getLogger(ControlInventario.class.getSimpleName());
 
+    /**
+     * Constructor de la clase ControlInventario.
+     *
+     * Inicializa las instancias necesarias de las clases de negocio.
+     */
     public ControlInventario() {
         inventarioBO = new InventarioBO();
         productoBO = new ProductoBO();
     }
 
+    /**
+     * Busca una solicitud pendiente utilizando su código identificador.
+     *
+     * Valida que la clave de la solicitud no esté vacía antes de realizar la
+     * búsqueda.
+     *
+     * @param claveSolicitud Código de la solicitud a buscar.
+     * @return Solicitud encontrada en formato DTO o {@code null} si no existe o
+     * no está pendiente.
+     * @throws NegocioException Error al buscar la solicitud.
+     */
     public SolicitudDTO buscarSolicitud(String claveSolicitud) throws NegocioException {
         try {
             if (claveSolicitud == null || claveSolicitud.trim().isEmpty()) {
@@ -48,6 +80,18 @@ public class ControlInventario {
         }
     }
 
+    /**
+     * Registra un movimiento de entrada dentro del sistema.
+     *
+     * Realiza validaciones sobre el movimiento, el lote y los productos
+     * asociados. También actualiza el stock de los productos y cambia el estado
+     * de la solicitud relacionada.
+     *
+     * @param movimiento Movimiento de entrada en formato DTO.
+     * @return {@code true} si el movimiento fue registrado correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al registrar el movimiento de entrada.
+     */
     public Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioException {
         try {
             if (movimiento == null) {
@@ -122,6 +166,17 @@ public class ControlInventario {
         }
     }
 
+    /**
+     * Registra un movimiento de salida dentro del sistema.
+     *
+     * Realiza validaciones sobre el movimiento y el stock disponible del
+     * producto antes de actualizar las existencias.
+     *
+     * @param movimiento Movimiento de salida en formato DTO.
+     * @return {@code true} si el movimiento fue registrado correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al registrar el movimiento de salida.
+     */
     public Boolean registrarMovimientoSalida(
             MovimientoSalidaDTO movimiento) throws NegocioException {
         try {
@@ -164,6 +219,16 @@ public class ControlInventario {
         }
     }
 
+    /**
+     * Obtiene un lote utilizando su código identificador.
+     *
+     * Valida que el código del lote no esté vacío antes de realizar la
+     * búsqueda.
+     *
+     * @param codigoLote Código del lote a buscar.
+     * @return Lote encontrado en formato DTO o {@code null} si no existe.
+     * @throws NegocioException Error al obtener el lote.
+     */
     public LoteDTO obtenerLote(String codigoLote) throws NegocioException {
         try {
             if (codigoLote == null || codigoLote.trim().isEmpty()) {
@@ -176,6 +241,17 @@ public class ControlInventario {
         }
     }
 
+    /**
+     * Guarda un lote dentro del sistema.
+     *
+     * Valida que el lote y su código identificador sean válidos antes de
+     * registrarlo.
+     *
+     * @param lote Lote en formato DTO que se desea registrar.
+     * @return {@code true} si el lote fue guardado correctamente, {@code false}
+     * en caso contrario.
+     * @throws NegocioException Error al guardar el lote.
+     */
     public Boolean guardarLote(LoteDTO lote) throws NegocioException {
         try {
             if (lote == null) {
@@ -191,6 +267,17 @@ public class ControlInventario {
         }
     }
 
+    /**
+     * Actualiza el estado de una solicitud.
+     *
+     * Valida que el código de la solicitud no esté vacío antes de realizar la
+     * actualización.
+     *
+     * @param codigoSolicitud Código de la solicitud a actualizar.
+     * @return {@code true} si la solicitud fue actualizada correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al actualizar el estado de la solicitud.
+     */
     public Boolean actualizarEstadoSolicitud(String codigoSolicitud) throws NegocioException {
         try {
             if (codigoSolicitud == null || codigoSolicitud.trim().isEmpty()) {
@@ -203,6 +290,13 @@ public class ControlInventario {
         }
     }
 
+    /**
+     * Genera un identificador único para un movimiento.
+     *
+     * @return Identificador generado para el movimiento.
+     * @throws NegocioException Error al generar el identificador del
+     * movimiento.
+     */
     public String generarIdMovimiento() throws NegocioException {
         try {
             return inventarioBO.generarIdMovimiento();
@@ -213,4 +307,3 @@ public class ControlInventario {
     }
 
 }
-//qp no tienes nada porque marcas error

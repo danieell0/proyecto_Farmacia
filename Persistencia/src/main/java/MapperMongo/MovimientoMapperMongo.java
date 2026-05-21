@@ -11,7 +11,28 @@ import EntidadesMongo.MovimientoEntradaMongo;
 import EntidadesMongo.MovimientoMongo;
 import EntidadesMongo.MovimientoSalidaMongo;
 
+/**
+ * Clase encargada de realizar la conversión entre objetos de dominio
+ * {@link Movimiento} y entidades Mongo {@link MovimientoMongo}.
+ *
+ * Contiene métodos estáticos para transformar movimientos entre la capa de
+ * dominio y la capa de persistencia.
+ *
+ * @author Jorge
+ */
 public class MovimientoMapperMongo {
+
+    /**
+     * Convierte una entidad Mongo {@link MovimientoMongo} a un objeto de
+     * dominio {@link Movimiento}.
+     *
+     * Si la entidad corresponde a un movimiento de entrada o salida, se realiza
+     * la conversión específica según el tipo.
+     *
+     * @param mongo Entidad Mongo que se desea convertir.
+     * @return Objeto de dominio correspondiente o {@code null} si la entidad es
+     * nula.
+     */
     public static Movimiento entityToDomain(MovimientoMongo mongo) {
         if (mongo == null) {
             return null;
@@ -46,13 +67,24 @@ public class MovimientoMapperMongo {
         movimiento.setCodigoSolicitud(mongo.getCodigoSolicitud());
         return movimiento;
     }
-    
+
+    /**
+     * Convierte un objeto de dominio {@link Movimiento} a una entidad Mongo
+     * {@link MovimientoMongo}.
+     *
+     * Si el objeto corresponde a un movimiento de entrada o salida, se realiza
+     * la conversión específica según el tipo.
+     *
+     * @param movimento Objeto de dominio que se desea convertir.
+     * @return Entidad Mongo correspondiente o {@code null} si el objeto es
+     * nulo.
+     */
     public static MovimientoMongo domainToEntity(Movimiento movimento) {
         if (movimento == null) {
             return null;
         }
         if (movimento instanceof MovimientoEntrada entrada) {
-            MovimientoEntradaMongo entradaMongo= new MovimientoEntradaMongo();
+            MovimientoEntradaMongo entradaMongo = new MovimientoEntradaMongo();
             entradaMongo.setIdMovimiento(entrada.getIdMovimiento());
             entradaMongo.setIdEmpleado(entrada.getIdEmpleado());
             entradaMongo.setFechaHora(entrada.getFechaHora());
@@ -61,7 +93,7 @@ public class MovimientoMapperMongo {
             return entradaMongo;
         }
         if (movimento instanceof MovimientoSalida salida) {
-            MovimientoSalidaMongo salidaMongo= new MovimientoSalidaMongo();
+            MovimientoSalidaMongo salidaMongo = new MovimientoSalidaMongo();
             salidaMongo.setIdMovimiento(salida.getIdMovimiento());
             salidaMongo.setFechaHora(salida.getFechaHora());
             salidaMongo.setIdEmpleado(salida.getIdEmpleado());

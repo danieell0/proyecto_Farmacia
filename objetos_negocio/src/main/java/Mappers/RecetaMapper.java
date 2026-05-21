@@ -8,15 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Clase mapper que convierte una Receta a RecetaDTO.
+ * Clase encargada de realizar la conversión entre objetos de dominio
+ * {@link Receta} y objetos DTO {@link RecetaDTO}.
+ *
+ * Contiene métodos estáticos para transformar recetas entre la capa de dominio
+ * y la capa de transferencia de datos.
+ *
  * @author Dario
  */
 public class RecetaMapper {
-    
+
     /**
-     * Convierte una receta a DTO.
-     * @param receta a convertir a DTO.
-     * @return DTO.
+     * Convierte un objeto de dominio {@link Receta} a un objeto DTO
+     * {@link RecetaDTO}.
+     *
+     * También realiza la conversión de los detalles asociados a la receta.
+     *
+     * @param receta Objeto de dominio que se desea convertir.
+     * @return Objeto DTO correspondiente o {@code null} si el objeto es nulo.
      */
     public static RecetaDTO adaptarADTO(Receta receta) {
         if (receta == null) {

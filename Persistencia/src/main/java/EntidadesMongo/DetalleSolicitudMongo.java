@@ -5,40 +5,80 @@
 package EntidadesMongo;
 
 /**
+ * Clase que representa el detalle de una solicitud almacenada en MongoDB.
+ *
+ * Un detalle de solicitud Mongo almacena la información relacionada con el
+ * producto solicitado y la cantidad requerida.
  *
  * @author Jorge
  */
 public class DetalleSolicitudMongo {
+
     private ProductoMongo producto;
     private Integer cantidadSolicitada;
 
+    /**
+     * Constructor por defecto de la clase DetalleSolicitudMongo.
+     */
     public DetalleSolicitudMongo() {
     }
 
+    /**
+     * Constructor que inicializa todos los atributos del detalle de solicitud
+     * Mongo.
+     *
+     * @param producto Producto asociado al detalle.
+     * @param cantidadSolicitada Cantidad solicitada del producto.
+     */
     public DetalleSolicitudMongo(ProductoMongo producto, Integer cantidadSolicitada) {
         this.producto = producto;
         this.cantidadSolicitada = cantidadSolicitada;
     }
 
+    /**
+     * Obtiene el producto asociado al detalle de solicitud.
+     *
+     * @return Producto del detalle.
+     */
     public ProductoMongo getProducto() {
         return producto;
     }
 
+    /**
+     * Establece el producto asociado al detalle de solicitud.
+     *
+     * @param producto Producto del detalle.
+     */
     public void setProducto(ProductoMongo producto) {
         this.producto = producto;
     }
 
+    /**
+     * Obtiene la cantidad solicitada del producto.
+     *
+     * @return Cantidad solicitada.
+     */
     public Integer getCantidadSolicitada() {
         return cantidadSolicitada;
     }
 
+    /**
+     * Establece la cantidad solicitada del producto.
+     *
+     * @param cantidadSolicitada Cantidad solicitada.
+     */
     public void setCantidadSolicitada(Integer cantidadSolicitada) {
         this.cantidadSolicitada = cantidadSolicitada;
     }
 
+    /**
+     * Devuelve una representación en cadena del objeto DetalleSolicitudMongo.
+     *
+     * @return Cadena con la información del detalle de solicitud.
+     */
     @Override
     public String toString() {
         return "DetalleSolicitudMongo{" + "producto=" + producto + ", cantidadSolicitada=" + cantidadSolicitada + '}';
     }
-    
+
 }

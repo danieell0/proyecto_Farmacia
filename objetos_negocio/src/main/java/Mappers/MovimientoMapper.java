@@ -12,16 +12,32 @@ import Entidades.MovimientoEntrada;
 import Entidades.MovimientoSalida;
 
 /**
+ * Clase encargada de realizar la conversión entre objetos de dominio
+ * {@link Movimiento} y objetos DTO {@link MovimientoDTO}.
+ *
+ * Contiene métodos estáticos para transformar movimientos entre la capa de
+ * dominio y la capa de transferencia de datos.
  *
  * @author Jorge
  */
 public class MovimientoMapper {
+
+    /**
+     * Convierte un objeto de dominio {@link Movimiento} a un objeto DTO
+     * {@link MovimientoDTO}.
+     *
+     * Si el objeto corresponde a un movimiento de entrada o salida, se realiza
+     * la conversión específica según el tipo.
+     *
+     * @param movimiento Objeto de dominio que se desea convertir.
+     * @return Objeto DTO correspondiente o {@code null} si el objeto es nulo.
+     */
     public static MovimientoDTO toDTO(Movimiento movimiento) {
         if (movimiento == null) {
             return null;
         }
         if (movimiento instanceof MovimientoEntrada entrada) {
-            MovimientoEntradaDTO dto =new MovimientoEntradaDTO();
+            MovimientoEntradaDTO dto = new MovimientoEntradaDTO();
             dto.setIdMovimiento(entrada.getIdMovimiento());
             dto.setFechaHora(entrada.getFechaHora());
             dto.setIdEmpleado(entrada.getIdEmpleado());
@@ -30,7 +46,7 @@ public class MovimientoMapper {
             return dto;
         }
         if (movimiento instanceof MovimientoSalida salida) {
-            MovimientoSalidaDTO dto =new MovimientoSalidaDTO();
+            MovimientoSalidaDTO dto = new MovimientoSalidaDTO();
             dto.setIdMovimiento(salida.getIdMovimiento());
             dto.setFechaHora(salida.getFechaHora());
             dto.setIdEmpleado(salida.getIdEmpleado());
@@ -51,12 +67,23 @@ public class MovimientoMapper {
         return dto;
     }
 
+    /**
+     * Convierte un objeto DTO {@link MovimientoDTO} a un objeto de dominio
+     * {@link Movimiento}.
+     *
+     * Si el objeto corresponde a un movimiento de entrada o salida, se realiza
+     * la conversión específica según el tipo.
+     *
+     * @param dto Objeto DTO que se desea convertir.
+     * @return Objeto de dominio correspondiente o {@code null} si el objeto es
+     * nulo.
+     */
     public static Movimiento toEntity(MovimientoDTO dto) {
         if (dto == null) {
             return null;
         }
         if (dto instanceof MovimientoEntradaDTO entradaDTO) {
-            MovimientoEntrada entrada =new MovimientoEntrada();
+            MovimientoEntrada entrada = new MovimientoEntrada();
             entrada.setIdMovimiento(entradaDTO.getIdMovimiento());
             entrada.setFechaHora(entradaDTO.getFechaHora());
             entrada.setIdEmpleado(entradaDTO.getIdEmpleado());
@@ -65,7 +92,7 @@ public class MovimientoMapper {
             return entrada;
         }
         if (dto instanceof MovimientoSalidaDTO salidaDTO) {
-            MovimientoSalida salida =new MovimientoSalida();
+            MovimientoSalida salida = new MovimientoSalida();
             salida.setIdMovimiento(salidaDTO.getIdMovimiento());
             salida.setFechaHora(salidaDTO.getFechaHora());
             salida.setIdEmpleado(salidaDTO.getIdEmpleado());

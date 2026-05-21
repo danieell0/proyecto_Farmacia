@@ -12,8 +12,8 @@ import java.util.List;
  * Interfaz que define las operaciones de negocio relacionadas con los
  * productos.
  *
- * Contiene los métodos necesarios para obtener información de productos en
- * formato DTO.
+ * Contiene los métodos necesarios para obtener y actualizar información de
+ * productos en formato DTO.
  *
  * @author Jorge
  */
@@ -29,13 +29,16 @@ public interface IProductoBO {
     /**
      * Obtiene los productos que coincidan con el nombre proporcionado.
      *
+     * La búsqueda no distingue entre mayúsculas y minúsculas.
+     *
      * @param nombre Nombre del producto a buscar.
      * @return Lista de productos encontrados en formato DTO.
      */
     public List<ProductoDTO> obtenerProductosPorNombre(String nombre);
 
     /**
-     * Obtiene los productos filtrados por su clave.
+     * Obtiene los productos filtrados por su clave siempre y cuando tengan
+     * stock disponible.
      *
      * @param clave Clave del producto.
      * @return Lista de productos encontrados en formato DTO.
@@ -43,18 +46,45 @@ public interface IProductoBO {
     public List<ProductoDTO> obtenerProductoPorClave(String clave);
 
     /**
-     * Obtiene los productos que el cliente puede canjear.
-     * @param idCliente ID del cliente objeto del filtro.
-     * @param puntos Puntos disponibles del cliente.
-     * @throws NegocioException La causa del error.
+     * Obtiene los productos que el cliente puede canjear de acuerdo con la
+     * cantidad de puntos disponibles.
+     *
+     * @param idCliente Identificador del cliente.
+     * @param puntos Cantidad de puntos disponibles del cliente.
      * @return Lista de productos concordantes.
+     * @throws NegocioException La causa del error.
      */
     public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) throws NegocioException;
 
+    /**
+     * Aumenta el stock de un producto.
+     *
+     * @param idProducto Identificador del producto.
+     * @param nuevoStock Nueva cantidad de stock del producto.
+     * @return {@code true} si el stock fue actualizado correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al actualizar el stock del producto.
+     */
     public Boolean aumentar(String idProducto, Integer nuevoStock) throws NegocioException;
 
+    /**
+     * Disminuye el stock de un producto.
+     *
+     * @param idProducto Identificador del producto.
+     * @param nuevoStock Nueva cantidad de stock del producto.
+     * @return {@code true} si el stock fue actualizado correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al actualizar el stock del producto.
+     */
     public Boolean disminuir(String idProducto, Integer nuevoStock) throws NegocioException;
 
+    /**
+     * Obtiene un producto mediante su identificador.
+     *
+     * @param idProducto Identificador del producto.
+     * @return Producto encontrado en formato DTO o {@code null} si no existe.
+     * @throws NegocioException Error al obtener el producto.
+     */
     public ProductoDTO obtenerProducto(String idProducto) throws NegocioException;
 
 }

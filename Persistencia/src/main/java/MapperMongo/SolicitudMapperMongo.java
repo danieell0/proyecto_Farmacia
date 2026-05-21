@@ -8,10 +8,24 @@ import Entidades.Solicitud;
 import EntidadesMongo.SolicitudMongo;
 
 /**
+ * Clase encargada de realizar la conversión entre objetos de dominio
+ * {@link Solicitud} y entidades Mongo {@link SolicitudMongo}.
+ *
+ * Contiene métodos estáticos para transformar solicitudes entre la capa de
+ * dominio y la capa de persistencia.
  *
  * @author Jorge
  */
 public class SolicitudMapperMongo {
+
+    /**
+     * Convierte una entidad Mongo {@link SolicitudMongo} a un objeto de dominio
+     * {@link Solicitud}.
+     *
+     * @param mongo Entidad Mongo que se desea convertir.
+     * @return Objeto de dominio correspondiente o {@code null} si la entidad es
+     * nula.
+     */
     public static Solicitud entityToDomain(SolicitudMongo mongo) {
         if (mongo == null) {
             return null;
@@ -25,6 +39,14 @@ public class SolicitudMapperMongo {
         return solicitud;
     }
 
+    /**
+     * Convierte un objeto de dominio {@link Solicitud} a una entidad Mongo
+     * {@link SolicitudMongo}.
+     *
+     * @param solicitud Objeto de dominio que se desea convertir.
+     * @return Entidad Mongo correspondiente o {@code null} si el objeto es
+     * nulo.
+     */
     public static SolicitudMongo domainToEntity(Solicitud solicitud) {
         if (solicitud == null) {
             return null;

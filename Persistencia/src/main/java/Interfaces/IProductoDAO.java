@@ -29,16 +29,19 @@ public interface IProductoDAO {
     /**
      * Obtiene los productos que coincidan con el nombre proporcionado.
      *
+     * La búsqueda no distingue entre mayúsculas y minúsculas.
+     *
      * @param nombre Nombre del producto a buscar.
      * @return Lista de productos encontrados.
      */
     public List<Producto> obtenerProductosPorNombre(String nombre);
 
     /**
-     * Obtiene los productos filtrados por su clave.
+     * Obtiene los productos filtrados por su clave siempre y cuando tengan
+     * stock disponible.
      *
      * @param clave Clave del producto.
-     * @return Lista de productos encontrados.
+     * @return Lista de productos encontrados con stock mayor a cero.
      */
     public List<Producto> obtenerProductoPorClave(String clave);
 
@@ -51,24 +54,36 @@ public interface IProductoDAO {
     public Producto obtenerProductoPorId(String id);
 
     /**
-     * Actualiza el stock de un producto.
+     * Obtiene los productos que el cliente puede canjear de acuerdo con la
+     * cantidad de puntos disponibles.
+     *
+     * @param idCliente Identificador del cliente.
+     * @param puntos Cantidad de puntos disponibles del cliente.
+     * @return Lista de productos concordantes.
+     * @throws PersistenciaException Error al realizar la consulta en la base de
+     * datos.
+     */
+    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos) throws PersistenciaException;
+
+    /**
+     * Disminuye el stock de un producto actualizando la cantidad disponible en
+     * la base de datos.
      *
      * @param idProducto Identificador del producto.
-     * @param nuevoStock Nueva cantidad de stock.
+     * @param nuevoStock Nueva cantidad de stock del producto.
      * @return {@code true} si el stock fue actualizado correctamente,
      * {@code false} en caso contrario.
      */
-    
-    /**
-     * Obtiene los productos que el cliente puede canjear.
-     * @param idCliente ID del cliente objeto del filtro.
-     * @param puntos Puntos disponibles del cliente.
-     * @throws PersistenciaException Error en la consulta.
-     * @return Lista de productos concordantes.
-     */
-    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos) throws PersistenciaException;
-            
     public Boolean DisminuirStock(String idProducto, int nuevoStock);
-    
+
+    /**
+     * Aumenta el stock de un producto actualizando la cantidad disponible en la
+     * base de datos.
+     *
+     * @param idProducto Identificador del producto.
+     * @param nuevoStock Nueva cantidad de stock del producto.
+     * @return {@code true} si el stock fue actualizado correctamente,
+     * {@code false} en caso contrario.
+     */
     public Boolean aumentarStock(String idProducto, Integer nuevoStock);
 }

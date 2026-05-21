@@ -31,7 +31,7 @@ public class ProductoBO implements IProductoBO {
     //Objeto DAO para acceder a los datos de productos
     private IProductoDAO productoDAO;
     private static final Logger logger = Logger.getLogger(ProductoBO.class.getSimpleName());
-    
+
     /**
      * Constructor de la clase ProductoBO.
      *
@@ -57,6 +57,8 @@ public class ProductoBO implements IProductoBO {
     /**
      * Obtiene los productos que coincidan con el nombre proporcionado.
      *
+     * La búsqueda no distingue entre mayúsculas y minúsculas.
+     *
      * @param nombre Nombre del producto a buscar.
      * @return Lista de productos encontrados en formato DTO.
      */
@@ -67,7 +69,8 @@ public class ProductoBO implements IProductoBO {
     }
 
     /**
-     * Obtiene los productos filtrados por su clave.
+     * Obtiene los productos filtrados por su clave siempre y cuando tengan
+     * stock disponible.
      *
      * @param clave Clave del producto.
      * @return Lista de productos encontrados en formato DTO.
@@ -79,11 +82,13 @@ public class ProductoBO implements IProductoBO {
     }
 
     /**
-     * Obtiene los productos que el cliente puede canjear.
-     * @param idCliente ID del cliente objeto del filtro.
-     * @param puntos Puntos disponibles del cliente.
-     * @throws NegocioException La causa del error.
+     * Obtiene los productos que el cliente puede canjear de acuerdo con la
+     * cantidad de puntos disponibles.
+     *
+     * @param idCliente Identificador del cliente.
+     * @param puntos Cantidad de puntos disponibles del cliente.
      * @return Lista de productos concordantes.
+     * @throws NegocioException La causa del error.
      */
     @Override
     public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) throws NegocioException {
@@ -96,19 +101,44 @@ public class ProductoBO implements IProductoBO {
         }
     }
 
+    /**
+     * Aumenta el stock de un producto.
+     *
+     * @param idProducto Identificador del producto.
+     * @param nuevoStock Nueva cantidad de stock del producto.
+     * @return {@code true} si el stock fue actualizado correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al actualizar el stock del producto.
+     */
     @Override
     public Boolean aumentar(String idProducto, Integer nuevoStock) throws NegocioException {
         return productoDAO.aumentarStock(idProducto, nuevoStock);
     }
 
+    /**
+     * Disminuye el stock de un producto.
+     *
+     * @param idProducto Identificador del producto.
+     * @param nuevoStock Nueva cantidad de stock del producto.
+     * @return {@code true} si el stock fue actualizado correctamente,
+     * {@code false} en caso contrario.
+     * @throws NegocioException Error al actualizar el stock del producto.
+     */
     @Override
     public Boolean disminuir(String idProducto, Integer nuevoStock) throws NegocioException {
         return productoDAO.DisminuirStock(idProducto, nuevoStock);
     }
 
+    /**
+     * Obtiene un producto mediante su identificador.
+     *
+     * @param idProducto Identificador del producto.
+     * @return Producto encontrado en formato DTO o {@code null} si no existe.
+     * @throws NegocioException Error al obtener el producto.
+     */
     @Override
     public ProductoDTO obtenerProducto(String idProducto) throws NegocioException {
-        List<Producto> productos= productoDAO.obtenerProductoPorClave(idProducto);
+        List<Producto> productos = productoDAO.obtenerProductoPorClave(idProducto);
         if (productos.isEmpty()) {
             return null;
         }
