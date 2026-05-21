@@ -330,14 +330,28 @@ public class Coordinador implements ICoordinador {
             throw new Exception("Datos incompletas para finalizar la venta (Falta Empleado o Pago).");
         }
         
-        String idClienteValido = (idCliente == null || idCliente.trim().isEmpty()) ? "0" : idCliente.trim();
+        String idClienteValido;
+        if (idCliente == null || idCliente.trim().isEmpty()) {
+            idClienteValido = "0";
+        } else {
+            idClienteValido = idCliente.trim();
+        }
         
         Double cambio = fVentas.finalizarVenta(tipoPago, cantidadRecibida, idEmpleado, idClienteValido);
         if (cambio == null) {
             throw new Exception("Error interno al procesar la venta.");
         }
         
-        this.limpiarClienteActual();
+        boolean esVentaPuntos = (this.ventaPuntosFrame != null && this.ventaPuntosFrame.isShowing());
+    
+        if (esVentaPuntos || "PUNTOS".equalsIgnoreCase(tipoPago)) {
+            if (ventaPuntosFrame != null) {
+                ventaPuntosFrame.limpiarVenta();
+            }
+        } else {
+            this.limpiarClienteActual();
+        }
+    
         return cambio;
     }
 
