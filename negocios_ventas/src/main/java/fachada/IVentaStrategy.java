@@ -3,7 +3,7 @@ package fachada;
 import DTO.CarritoDTO;
 
 /**
- * 
+ * Interfaz que define los metodos del strategy de venta.
  * @author Dario
  */
 public interface IVentaStrategy {
@@ -19,6 +19,10 @@ public interface IVentaStrategy {
      */
     Double finalizarVenta(Double monto, String idCliente, CarritoDTO carrito) throws Exception;
     
+    /**
+     * Metodo donde se asigna si la venta requiere confirmar receta o no.
+     * @return True o false.
+     */
     Boolean requiereConfirmarReceta();
     
 }

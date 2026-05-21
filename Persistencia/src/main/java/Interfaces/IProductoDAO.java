@@ -5,6 +5,7 @@
 package Interfaces;
 
 import Entidades.Producto;
+import Excepciones.PersistenciaException;
 import java.util.List;
 
 /**
@@ -58,7 +59,14 @@ public interface IProductoDAO {
      * {@code false} en caso contrario.
      */
     
-    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos);
+    /**
+     * Obtiene los productos que el cliente puede canjear.
+     * @param idCliente ID del cliente objeto del filtro.
+     * @param puntos Puntos disponibles del cliente.
+     * @throws PersistenciaException Error en la consulta.
+     * @return Lista de productos concordantes.
+     */
+    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos) throws PersistenciaException;
             
     public Boolean DisminuirStock(String idProducto, int nuevoStock);
     

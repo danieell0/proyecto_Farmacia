@@ -5,7 +5,7 @@ import DTO.RecetaDTO;
 import Enums.EstadoReceta;
 
 /**
- *
+ * Interfaz que define los metodos BO de las recetas.
  * @author Dario
  */
 public interface IRecetaBO {

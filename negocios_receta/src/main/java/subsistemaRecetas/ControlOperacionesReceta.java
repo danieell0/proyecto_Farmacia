@@ -5,6 +5,8 @@ import DTO.DetalleRecetaDTO;
 import DTO.RecetaDTO;
 import com.mycompany.objetos_negocio.RecetaBO;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase Control que se encarga de los metodos de operaciones 
@@ -13,7 +15,8 @@ import java.util.Objects;
  */
 public class ControlOperacionesReceta {
     
-    protected RecetaBO recetaBO;
+    private final RecetaBO recetaBO;
+    private static final Logger logger = Logger.getLogger(ControlOperacionesReceta.class.getSimpleName());
     
     /**
      * Contructor de la clase ControlBuscarReceta.
@@ -27,23 +30,31 @@ public class ControlOperacionesReceta {
      * @param receta La receta a la que se aplicara el cambio temporalmente.
      * @param idMedicamento El medicamento al que se aplicara el cambio temporalmente.
      * @param cantidad La cantidad del cambio.
-     * @return Si la operacion fue exitosa.
      * @throws NegocioException La causa del error en la capa de negocio.
+     * @return Si la operacion fue exitosa.
      */
     protected Boolean restarMedicamentos(RecetaDTO receta, String idMedicamento, Integer cantidad) throws NegocioException {
         if (receta == null || receta.getDetalles() == null) {
-            return false;
+            throw new NegocioException("La receta no puede ser nula o no tener productos.");
         }
-        for (DetalleRecetaDTO detalle : receta.getDetalles()) {
-            if (Objects.equals(detalle.getIdMedicamento(), idMedicamento)) {
-                recetaBO.restarMedicamento(receta.getFolio(), idMedicamento, cantidad);
-                int surtidoActual = detalle.getCantidadSurtida();
-                int nuevoSurtido = surtidoActual + cantidad; 
-                detalle.setCantidadSurtida(nuevoSurtido);
-                return true; 
+        if (idMedicamento == null || cantidad == null || cantidad <= 0) {
+            throw new NegocioException("El ID del medicamento o la cantidad ingresada son invalidos.");
+        }
+        try {
+            for (DetalleRecetaDTO detalle : receta.getDetalles()) {
+                if (Objects.equals(detalle.getIdMedicamento(), idMedicamento)) {
+                    recetaBO.restarMedicamento(receta.getFolio(), idMedicamento, cantidad);
+                    int surtidoActual = detalle.getCantidadSurtida();
+                    int nuevoSurtido = surtidoActual + cantidad; 
+                    detalle.setCantidadSurtida(nuevoSurtido);
+                    return true; 
+                }
             }
+            return false;
+        } catch (NegocioException e) {
+            logger.log(Level.SEVERE, "Error al restar medicamentos de la receta.", e);
+            throw new NegocioException("Error inesperado al procesar la salida del medicamento.");
         }
-        return false;
     }
     
     /**
@@ -52,26 +63,34 @@ public class ControlOperacionesReceta {
      * @param receta Receta a la que se le restara la cantidad surtida.
      * @param idMedicamento ID medicamento al que se le restara la cantidad surtida.
      * @param cantidad Cantidad del medicamento al que se le restara la cantidad surtida.
-     * @return Si la operacion fue exitosa.
      * @throws NegocioException La causa del error en la capa de negocio.
+     * @return Si la operacion fue exitosa.
      */
     protected Boolean sumarMedicamentos(RecetaDTO receta, String idMedicamento, Integer cantidad) throws NegocioException {
         if (receta == null || receta.getDetalles() == null) {
-            return false;
+            throw new NegocioException("La receta no puede ser nula o no tener productos.");
         }
-        for (DetalleRecetaDTO detalle : receta.getDetalles()) {
-            if (Objects.equals(detalle.getIdMedicamento(), idMedicamento)) {
-                recetaBO.sumarMedicamento(receta.getFolio(), idMedicamento, cantidad);
-                int surtidoActual = detalle.getCantidadSurtida();
-                int nuevoSurtido = surtidoActual - cantidad;
-                if (nuevoSurtido < 0) {
-                    nuevoSurtido = 0;
+        if (idMedicamento == null || cantidad == null || cantidad <= 0) {
+            throw new NegocioException("El ID del medicamento o la cantidad ingresada son invalidos.");
+        }
+        try {
+            for (DetalleRecetaDTO detalle : receta.getDetalles()) {
+                if (Objects.equals(detalle.getIdMedicamento(), idMedicamento)) {
+                    recetaBO.sumarMedicamento(receta.getFolio(), idMedicamento, cantidad);
+                    int surtidoActual = detalle.getCantidadSurtida();
+                    int nuevoSurtido = surtidoActual - cantidad;
+                    if (nuevoSurtido < 0) {
+                        nuevoSurtido = 0;
+                    }
+                    detalle.setCantidadSurtida(nuevoSurtido);
+                    return true;
                 }
-                detalle.setCantidadSurtida(nuevoSurtido);
-                return true;
             }
+            return false;
+        } catch (NegocioException e) {
+            logger.log(Level.SEVERE, "Error al sumar medicamentos de la receta.", e);
+            throw new NegocioException("Error inesperado al cancelar la reserva del medicamento.");
         }
-        return false;
     }
     
 }

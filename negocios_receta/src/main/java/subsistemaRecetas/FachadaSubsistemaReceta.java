@@ -18,7 +18,7 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
     private final ControlValidarReceta controlValidar = new ControlValidarReceta();
     private final ControlOperacionesReceta controlOperaciones = new ControlOperacionesReceta();
     private final ControlEstadoReceta controlEstado = new ControlEstadoReceta();
-
+    
     private final List<RecetaDTO> recetasActivas = new ArrayList<>();
 
     /**
@@ -39,7 +39,13 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
         RecetaDTO receta = recetasActivas.stream()
             .filter(r -> r.getFolio().equals(folio))
             .findFirst()
-            .orElseGet(() -> controlBuscar.obtenerRecetaPorFolio(folio));
+            .orElseGet(() -> {
+                try {
+                    return controlBuscar.obtenerRecetaPorFolio(folio);
+                } catch (NegocioException e) {
+                    return null;
+                }
+            });
         if (receta == null) {
             return false;
         }
@@ -51,12 +57,7 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
             }
             return false;
         }
-        controlValidar.validarMedicamentosReceta(
-                receta,
-                idProducto,
-                cantidad,
-                especialidadProducto
-        );
+        controlValidar.validarMedicamentosReceta(receta, idProducto, cantidad, especialidadProducto);
         controlOperaciones.restarMedicamentos(receta, idProducto, cantidad);
         boolean yaExiste = recetasActivas.stream()
                 .anyMatch(r -> r.getFolio().equals(folio));
@@ -142,8 +143,12 @@ public class FachadaSubsistemaReceta implements IFachadaSubsistemaRecetas{
      */
     @Override
     public Boolean existeReceta(String folio) {
-        RecetaDTO receta = controlBuscar.obtenerRecetaPorFolio(folio);
-        return receta != null;
+        try {
+            RecetaDTO receta = controlBuscar.obtenerRecetaPorFolio(folio);
+            return receta != null;
+        } catch (NegocioException e) {
+            return null;
+        }
     }
     
     /**

@@ -2,8 +2,6 @@ package fachada;
 
 import DTO.CarritoDTO;
 import DTO.ClienteDTO;
-import IBO.IVentaBO;
-import com.mycompany.objetos_negocio.VentaBO;
 
 /**
  * Strategy para la situacion de venta de puntos.
@@ -11,7 +9,6 @@ import com.mycompany.objetos_negocio.VentaBO;
  */
 public class VentaPuntosStrategy implements IVentaStrategy {
     
-    private final IVentaBO ventaBO = VentaBO.getInstance();
     private final ControlClientePuntos controlClientePuntos = new ControlClientePuntos();
 
     /**
@@ -33,6 +30,10 @@ public class VentaPuntosStrategy implements IVentaStrategy {
         return clienteActualizado.getPuntos();
     }
 
+    /**
+     * Metodo donde se asigna si la venta requiere confirmar receta o no.
+     * @return False.
+     */
     @Override
     public Boolean requiereConfirmarReceta() {
         return false;

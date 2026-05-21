@@ -5,9 +5,12 @@ import Clases.RecetaDAO;
 import DTO.RecetaDTO;
 import Entidades.Receta;
 import Enums.EstadoReceta;
+import Excepciones.PersistenciaException;
 import IBO.IRecetaBO;
 import Interfaces.IRecetaDAO;
 import Mappers.RecetaMapper;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase BO con validaciones minimmas para las operaciones de las recetas.
@@ -15,7 +18,8 @@ import Mappers.RecetaMapper;
  */
 public class RecetaBO implements IRecetaBO{
     
-    private IRecetaDAO recetaDAO;
+    private final IRecetaDAO recetaDAO;
+    private static final Logger logger = Logger.getLogger(RecetaBO.class.getSimpleName());
 
     /**
      * Contructor de la clase.
@@ -41,8 +45,9 @@ public class RecetaBO implements IRecetaBO{
                 throw new NegocioException("No se encontro ninguna receta con ese folio.");
             }
             return RecetaMapper.adaptarADTO(receta);
-        } catch (NegocioException ex) {
-            throw ex;
+        } catch (PersistenciaException e) {
+            logger.log(Level.SEVERE, "Error al buscar la receta", e);
+            throw new NegocioException("Error al buscar la receta", e);
         }
     }
 
@@ -67,8 +72,9 @@ public class RecetaBO implements IRecetaBO{
             receta.setEstado(nuevoEstado);
             recetaDAO.actualizarEstadoReceta(receta);
             return true;
-        } catch (NegocioException ex) {
-            throw ex;
+        } catch (PersistenciaException e) {
+            logger.log(Level.SEVERE, "Error al buscar actualizar el estado de la receta", e);
+            throw new NegocioException("Error al buscar actualizar el estado de la receta", e);
         }
     }
     
@@ -92,8 +98,9 @@ public class RecetaBO implements IRecetaBO{
             }
             recetaDAO.restarMedicamentos(receta, idMedicamento, cantidad);
             return true;
-        } catch (NegocioException ex) {
-            throw ex;
+        } catch (PersistenciaException e) {
+            logger.log(Level.SEVERE, "Error al restar medicamentos de la receta", e);
+            throw new NegocioException("Error al restar medicamentos de la receta", e);
         }
     }
 
@@ -117,8 +124,9 @@ public class RecetaBO implements IRecetaBO{
             }
             recetaDAO.sumarMedicamentos(receta, idMedicamento, cantidad);
             return true;
-        } catch (NegocioException ex) {
-            throw ex;
+        } catch (PersistenciaException e) {
+            logger.log(Level.SEVERE, "Error al sumar medicamentos a la receta", e);
+            throw new NegocioException("Error al sumar medicamentos a la receta", e);
         }
     }
     

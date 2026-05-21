@@ -32,6 +32,10 @@ public class VentaNormalStrategy implements IVentaStrategy {
         return monto - total;
     }
 
+    /**
+     * Metodo donde se asigna si la venta requiere confirmar receta o no.
+     * @return True.
+     */
     @Override
     public Boolean requiereConfirmarReceta() {
         return true;

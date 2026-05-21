@@ -6,6 +6,7 @@ import Entidades.Receta;
 import EntidadesMongo.DetalleRecetaMongo;
 import EntidadesMongo.RecetaMongo;
 import Enums.EstadoReceta;
+import Excepciones.PersistenciaException;
 import MapperMongo.RecetaMapperMongo;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.and;
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- *
+ * Clase test de la DAO de receta.
  * @author Dario
  */
 public class RecetaDAOTest {
@@ -56,7 +57,7 @@ public class RecetaDAOTest {
     }
 
     @Test
-    public void testObtenerRecetaPorFolio() {
+    public void testObtenerRecetaPorFolio() throws PersistenciaException {
         Receta resultado = recetaDAO.obtenerRecetaPorFolio("101P");
         assertNotNull(resultado);
         assertEquals("101P", resultado.getFolio());
@@ -64,7 +65,7 @@ public class RecetaDAOTest {
     }
 
     @Test
-    public void testActualizarEstadoReceta() {
+    public void testActualizarEstadoReceta() throws PersistenciaException {
         Receta recetaDominio = RecetaMapperMongo.entityToDomain(recetaPrueba);
         recetaDAO.actualizarEstadoReceta(recetaDominio);
         RecetaMongo resultado = coleccion.find(eq("folio", "101P")).first();
@@ -73,7 +74,7 @@ public class RecetaDAOTest {
     }
 
     @Test
-    public void testRestarMedicamentos() {
+    public void testRestarMedicamentos() throws PersistenciaException {
         Receta recetaDominio = RecetaMapperMongo.entityToDomain(recetaPrueba);
         recetaDAO.restarMedicamentos(recetaDominio, "P001", 2);
         RecetaMongo resultado = coleccion.find(eq("folio", "101P")).first();
@@ -83,7 +84,7 @@ public class RecetaDAOTest {
     }
 
     @Test
-    public void testSumarMedicamentos() {
+    public void testSumarMedicamentos() throws PersistenciaException {
         coleccion.updateOne(
             and(eq("folio", "101P"), eq("detalles.idMedicamento", "P001")),
             com.mongodb.client.model.Updates.set("detalles.$.cantidadSurtida", 3)

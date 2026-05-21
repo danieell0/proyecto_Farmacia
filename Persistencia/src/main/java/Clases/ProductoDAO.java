@@ -4,6 +4,7 @@ import ConexionMongo.ManejadorConexiones;
 import Entidades.Producto;
 import EntidadesMongo.ProductoMongo;
 import Enums.TipoProducto;
+import Excepciones.PersistenciaException;
 import Interfaces.IProductoDAO;
 import MapperMongo.ProductoMapperMongo;
 import com.mongodb.client.MongoCollection;
@@ -19,6 +20,8 @@ import static com.mongodb.client.model.Updates.set;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.conversions.Bson;
 
 /**
@@ -33,6 +36,7 @@ public class ProductoDAO implements IProductoDAO {
 
     //coleccion de productos de mongo
     private MongoCollection<ProductoMongo> coleccionProductos;
+    private static final Logger logger = Logger.getLogger(ProductoDAO.class.getSimpleName());
 
     /**
      * Constructor de la clase ProductoDAO.
@@ -118,23 +122,35 @@ public class ProductoDAO implements IProductoDAO {
         return null;
     }
 
+    /**
+     * Obtiene los productos que el cliente puede canjear.
+     * @param idCliente ID del cliente objeto del filtro.
+     * @param puntos Puntos disponibles del cliente.
+     * @throws PersistenciaException Error en la consulta.
+     * @return Lista de productos concordantes.
+     */
     @Override
-    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos) {
-        List<Bson> pipeline = Arrays.asList(
-            Aggregates.match(
-                and(
-                    eq("tipo", TipoProducto.PUNTOS),
-                    gt("stock", 0),
-                    lte("precio", puntos)
-                )
-            ),
-            Aggregates.sort(Sorts.ascending("precio"))
-        );
-        return coleccionProductos.aggregate(pipeline, ProductoMongo.class)
-            .into(new ArrayList<>())
-            .stream()
-            .map(ProductoMapperMongo::entityToDomain)
-            .toList();
+    public List<Producto> obtenerProductosConcordantes(String idCliente, Double puntos) throws PersistenciaException{
+        try {
+            List<Bson> pipeline = Arrays.asList(
+                Aggregates.match(
+                    and(
+                        eq("tipo", TipoProducto.PUNTOS),
+                        gt("stock", 0),
+                        lte("precio", puntos)
+                    )
+                ),
+                Aggregates.sort(Sorts.ascending("precio"))
+            );
+            return coleccionProductos.aggregate(pipeline, ProductoMongo.class)
+                .into(new ArrayList<>())
+                .stream()
+                .map(ProductoMapperMongo::entityToDomain)
+                .toList();
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error al ejecutar la agregacion de productos", e);
+                throw new PersistenciaException("Error al obtener los productos concordantes desde la base de datos.", e);
+            }
     }
     
     /**
