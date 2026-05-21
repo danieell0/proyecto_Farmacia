@@ -15,7 +15,7 @@ public interface IVenta {
     public CarritoDTO obtenerCarritoActual();
     Double finalizarVenta(String tipoPago, Double cantidadRecibida, String idEmpleado, String idCliente);   
     void setFolioRecetaActual(String folio);        
-    public VentaDTO registrarVenta(CarritoDTO carrito, String idEmpleado, String idCliente);
+    public VentaDTO prepararVenta(CarritoDTO carrito, String idEmpleado, String idCliente);
     public Boolean verificarExistenciaReceta(String folio);
     public void cancelarVentaActual();
 }
