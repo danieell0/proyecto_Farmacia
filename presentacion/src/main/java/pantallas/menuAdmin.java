@@ -54,11 +54,10 @@ public class menuAdmin extends JFrame {
         setMinimumSize(new java.awt.Dimension(1024, 700));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
         //para hacerla redimensionable en pantallas de cualquier tamaño
         setLayout(new BorderLayout());
         //menu lateral en la izquierda
-        panelMenuLateralAdmin menu = new panelMenuLateralAdmin();
+        panelMenuLateralAdmin menu = new panelMenuLateralAdmin(controlNav);
         add(menu, BorderLayout.WEST);
         //panel de encabezado
         PanelEncabezado encabezado = new PanelEncabezado();
@@ -146,7 +145,7 @@ public class menuAdmin extends JFrame {
         subMenuContratar.setOpaque(false);
         
         // el boton de volver a las 5 opciones originales
-        JButton btnVolver = new JButton("◀ Volver");
+        JButton btnVolver = new JButton("Volver");
         btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnVolver.setBackground(new Color(120, 120, 120));
         btnVolver.setForeground(Color.WHITE);

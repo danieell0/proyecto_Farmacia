@@ -13,6 +13,7 @@ import DTO.MovimientoEntradaDTO;
 import DTO.ProductoDTO;
 import DTO.SolicitudDTO;
 import com.mysql.cj.CoreSession;
+import interfaces.IControlNavegacion;
 import interfaces.ICoordinador;
 import java.awt.Color;
 import java.awt.Font;
@@ -47,8 +48,12 @@ public class registrarEntradaFame extends JFrame {
     private JTable tabla;
     private DefaultTableModel modeloTabla;
     private JButton btnRegistrar;
+    private JButton btnCancelar;
+    private JButton btnSalir;
+    private IControlNavegacion controlNav;
 
-    public registrarEntradaFame() {
+    public registrarEntradaFame(IControlNavegacion controlNav) {
+        this.controlNav=controlNav;
         this.coordinador = new Coordinador();
         setTitle("Registrar entrada");
         setSize(1350, 820);
@@ -190,14 +195,14 @@ public class registrarEntradaFame extends JFrame {
         scrollObs.setBounds(20, 40, 470, 40);
         panelObs.add(scrollObs);
 
-        JButton btnSalir = new JButton("Salir");
+        btnSalir = new JButton("Salir");
         btnSalir.setBounds(670, 705, 160, 50);
         btnSalir.setBackground(new Color(45, 45, 45));
         btnSalir.setForeground(Color.WHITE);
         btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 18));
         add(btnSalir);
 
-        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar = new JButton("Cancelar");
         btnCancelar.setBounds(870, 705, 190, 50);
         btnCancelar.setBackground(new Color(255, 50, 50));
         btnCancelar.setForeground(Color.WHITE);
@@ -214,6 +219,10 @@ public class registrarEntradaFame extends JFrame {
         txtCodigoPedido.addActionListener(e -> {
             try {
                 SolicitudDTO solicitud = coordinador.buscarSolicitud(txtCodigoPedido.getText());
+                if (solicitud == null) {
+                    JOptionPane.showMessageDialog(this, "La solicitud ya fue utilizada o no existe");
+                    return;
+                }
                 cargarDetallesSolicitud(solicitud);
             } catch (NegocioException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -303,10 +312,28 @@ public class registrarEntradaFame extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo registrar el movimiento");
                 }
+                txtCodigoLote.setText("");
+                txtCodigoPedido.setText("");
+                txtObs.setText("");
+                txtProveedor.setText("");
+                modeloTabla.setRowCount(0);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
         });
+
+        btnCancelar.addActionListener(e -> {
+            txtCodigoLote.setText("");
+            txtCodigoPedido.setText("");
+            txtObs.setText("");
+            txtProveedor.setText("");
+            modeloTabla.setRowCount(0);
+        });
+        
+        btnSalir.addActionListener(e->{
+            controlNav.abrirMenuMovimientos();
+        });
+
         setVisible(true);
     }
 

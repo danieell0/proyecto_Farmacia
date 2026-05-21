@@ -12,28 +12,17 @@ import javax.swing.JFrame;
  * @author Jorge
  */
 public interface IControlNavegacion {
-
-    
     public void setControlNeavegacion();
-
-    
     public void abrirMenuFrame();
-    
-    
     public void abrirMenuPuntosFrame();
-    
-    
     public void abrirVentaFrame();
-
-    
     public void abrirRecetaDialog();
-
-    
     public void cambiarPantalla(JFrame nuevoFrame);
-
-    
     public void abrirDialog(JDialog nuevoDialog);
     public void abrirLogin();
     public void abrirMenuAdmin();
     public void abrirRegistroSolicitante();
+    public void abrirMenuMovimientos();
+    public void abrirEnreadaMovimiento();
+    public void abrirSalidaMovimiento();
 }

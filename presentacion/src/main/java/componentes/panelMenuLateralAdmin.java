@@ -4,6 +4,7 @@
  */
 package componentes;
 
+import interfaces.IControlNavegacion;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -26,8 +27,10 @@ import pantallas.menuEntradasSalidas;
  * @author Jorge
  */
 public class panelMenuLateralAdmin extends JPanel {
+    private IControlNavegacion controlNav;
 
-    public panelMenuLateralAdmin() {
+    public panelMenuLateralAdmin(IControlNavegacion controlNav) {
+       this.controlNav = controlNav;
         setPreferredSize(new Dimension(110, 0));
         setBackground(new Color(0, 121, 107));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -93,19 +96,19 @@ public class panelMenuLateralAdmin extends JPanel {
                 ventana.dispose();
                 switch (tooltips[index]) {
                     case "Entrada_Salida":
-                        new menuEntradasSalidas();
+                        controlNav.abrirMenuMovimientos();
                         break;
                     case "Ventas":
-                        new menuEntradasSalidas();
+                        controlNav.abrirMenuMovimientos();
                         break;
                     case "Inventario":
-                        new menuEntradasSalidas();
+                        controlNav.abrirMenuMovimientos();
                         break;
                     case "Productos":
-                        new menuEntradasSalidas();
+                        controlNav.abrirMenuMovimientos();
                         break;
                     case "Reportes":
-                        new menuEntradasSalidas();
+                        controlNav.abrirMenuMovimientos();
                         break;
                 }
             });

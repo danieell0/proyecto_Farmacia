@@ -11,8 +11,11 @@ import pantallas.InicioSesionFrm;
 import pantallas.VentaFrame;
 import pantallas.VentaPuntosFrame;
 import pantallas.menuAdmin;
+import pantallas.menuEntradasSalidas;
 import pantallas.menuFrame;
 import pantallas.menuPuntosFrame;
+import pantallas.registrarEntradaFame;
+import pantallas.registrarSalidaFrame;
 import pantallas.validarRecetaDlg;
 import pantallas_gestion_empleados.RegistroSolicitante;
 
@@ -30,7 +33,7 @@ public class controlNavegacion implements IControlNavegacion{
     private Coordinador coordinador = Coordinador.getCoordinador(); 
     
     // Constructor privado para obligar a usar el getControlNavegacion()
-    private controlNavegacion() {}
+    public controlNavegacion() {}
 
     public static controlNavegacion getControlNavegacion() {
         if (instancia == null) {
@@ -133,5 +136,23 @@ public class controlNavegacion implements IControlNavegacion{
     @Override
     public void setControlNeavegacion() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void abrirMenuMovimientos() {
+        menuEntradasSalidas mes=new menuEntradasSalidas(this);
+        cambiarPantalla(mes);
+    }
+
+    @Override
+    public void abrirEnreadaMovimiento() {
+        registrarEntradaFame ref=new registrarEntradaFame(this);
+        cambiarPantalla(ref);
+    }
+
+    @Override
+    public void abrirSalidaMovimiento() {
+        registrarSalidaFrame rsf=new registrarSalidaFrame(this);
+        cambiarPantalla(rsf);
     }
 }

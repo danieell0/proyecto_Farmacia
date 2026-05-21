@@ -51,7 +51,7 @@ public class RegistroSolicitante extends JFrame{
         // 1. Distribución Principal de la Ventana
         setLayout(new BorderLayout());
 
-        panelMenuLateralAdmin menu = new panelMenuLateralAdmin();
+        panelMenuLateralAdmin menu = new panelMenuLateralAdmin(controlNav);
         add(menu, BorderLayout.WEST);
 
         PanelEncabezado encabezado = new PanelEncabezado();

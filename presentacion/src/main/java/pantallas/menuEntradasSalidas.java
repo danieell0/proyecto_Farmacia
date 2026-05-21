@@ -6,6 +6,7 @@ package pantallas;
 
 import componentes.PanelEncabezado;
 import componentes.panelMenuLateralAdmin;
+import interfaces.IControlNavegacion;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -25,8 +26,10 @@ import javax.swing.border.LineBorder;
  * @author Jorge
  */
 public class menuEntradasSalidas extends JFrame {
-
-    public menuEntradasSalidas() {
+    private IControlNavegacion controlNav;
+    
+    public menuEntradasSalidas(IControlNavegacion controlNav) {
+        this.controlNav=controlNav;
         setTitle("Gestionar Inventario");
         setSize(1525, 900);
         setLocationRelativeTo(null);
@@ -34,7 +37,7 @@ public class menuEntradasSalidas extends JFrame {
         setLayout(null);
 
         getContentPane().setBackground(new Color(245, 245, 245));
-        panelMenuLateralAdmin menu = new panelMenuLateralAdmin();
+        panelMenuLateralAdmin menu = new panelMenuLateralAdmin(controlNav);
         menu.setBounds(0, 0, 110, 900);
         add(menu);
         PanelEncabezado encabezado = new PanelEncabezado();
@@ -139,9 +142,9 @@ public class menuEntradasSalidas extends JFrame {
             ventana.dispose();
 
             if (titulo.equals("Registrar entrada")) {
-                new registrarEntradaFame();
+                controlNav.abrirEnreadaMovimiento();
             }else{
-                new registrarSalidaFrame();
+                controlNav.abrirSalidaMovimiento();
             }
 
         });

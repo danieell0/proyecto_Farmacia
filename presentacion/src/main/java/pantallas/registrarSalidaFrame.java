@@ -5,7 +5,9 @@
 package pantallas;
 
 import DTO.MedicamentoDTO;
+import DTO.MovimientoSalidaDTO;
 import DTO.ProductoDTO;
+import interfaces.IControlNavegacion;
 import java.awt.Color;
 import java.awt.Font;
 import java.time.LocalDate;
@@ -31,6 +33,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +63,7 @@ import pantallas.control.Coordinador;
  * @author Jorge
  */
 public class registrarSalidaFrame extends JFrame {
-    
+
     private JTextField txtBuscar;
     private JTextField txtMotivo;
     private JTextArea txtObservaciones;
@@ -78,8 +81,13 @@ public class registrarSalidaFrame extends JFrame {
     private Coordinador coordinador;
     private List<ProductoDTO> productosEncontrados;
     private ProductoDTO productoSeleccionado;
+    private JButton btnRegistrar;
+    private JButton btnCancelar;
+    private IControlNavegacion controlNav;
+    private JButton btnSalir;
 
-    public registrarSalidaFrame() {
+    public registrarSalidaFrame(IControlNavegacion controlNav) {
+        this.controlNav=controlNav;
         coordinador = new Coordinador();
         productosEncontrados = new ArrayList<>();
         setTitle("Registrar salida");
@@ -212,9 +220,9 @@ public class registrarSalidaFrame extends JFrame {
         JPanel panelBotones = new JPanel();
         panelBotones.setOpaque(false);
         panelBotones.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 0));
-        JButton btnSalir = crearBoton("Salir", Color.BLACK);
-        JButton btnCancelar = crearBoton("Cancelar", new Color(255, 0, 0));
-        JButton btnRegistrar = crearBoton("Registrar salida", new Color(0, 70, 200));
+        btnSalir = crearBoton("Salir", Color.BLACK);
+        btnCancelar = crearBoton("Cancelar", new Color(255, 0, 0));
+        btnRegistrar = crearBoton("Registrar salida", new Color(0, 70, 200));
         panelBotones.add(btnSalir);
         panelBotones.add(btnCancelar);
         panelBotones.add(btnRegistrar);
@@ -222,6 +230,11 @@ public class registrarSalidaFrame extends JFrame {
         panelPrincipal.add(footer, BorderLayout.SOUTH);
         configurarBusqueda();
         configurarSeleccionProducto();
+        configurarBotonRegistrar();
+        configuracionBotonCancelar();
+        btnSalir.addActionListener(e->{
+            controlNav.abrirMenuMovimientos();
+        });
         setVisible(true);
     }
 
@@ -337,6 +350,76 @@ public class registrarSalidaFrame extends JFrame {
                 SpinnerNumberModel modelo = new SpinnerNumberModel(1, 1, (int) productoSeleccionado.getStock(), 1);
                 spinnerCantidad.setModel(modelo);
             }
+        });
+    }
+
+    private void configurarBotonRegistrar() {
+        btnRegistrar.addActionListener(e -> {
+            try {
+                if (productoSeleccionado == null) {
+                    JOptionPane.showMessageDialog(this, "Debe seleccionar un producto");
+                    return;
+                }
+                Integer cantidad = (Integer) spinnerCantidad.getValue();
+                if (cantidad <= 0) {
+                    JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a cero");
+                    return;
+                }
+                if (cantidad > productoSeleccionado.getStock()) {
+                    JOptionPane.showMessageDialog(this, "No hay suficiente stock");
+                    return;
+                }
+                if (txtMotivo.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Debe ingresar un motivo");
+                    return;
+                }
+                MovimientoSalidaDTO movimiento = new MovimientoSalidaDTO();
+                movimiento.setFechaHora(LocalDateTime.now());
+                movimiento.setIdEmpleado("123");
+                movimiento.setProducto(productoSeleccionado);
+                movimiento.setCantidad(cantidad);
+                movimiento.setMotivo(txtMotivo.getText().trim());
+                movimiento.setObservacion(txtObservaciones.getText().trim());
+                Integer stockAnterior = productoSeleccionado.getStock();
+                Integer nuevoStock = stockAnterior - cantidad;
+                movimiento.setCantidadAnterior(stockAnterior);
+                movimiento.setCantidadNueva(nuevoStock);
+                Boolean registrado = coordinador.registrarMovimientoSalida(movimiento);
+                if (registrado) {
+                    JOptionPane.showMessageDialog(this, "Salida registrada correctamente");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo registrar la salida");
+                }
+                txtBuscar.setText("");
+                txtCodigo.setText("");
+                txtDosis.setText("");
+                txtMarca.setText("");
+                txtMedida.setText("");
+                txtMotivo.setText("");
+                txtNombre.setText("");
+                txtObservaciones.setText("");
+                txtStock.setText("");
+                txtUnidad.setText("");
+                spinnerCantidad.setValue(0);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        });
+    }
+
+    private void configuracionBotonCancelar() {
+        btnCancelar.addActionListener(e -> {
+            txtBuscar.setText("");
+            txtCodigo.setText("");
+            txtDosis.setText("");
+            txtMarca.setText("");
+            txtMedida.setText("");
+            txtMotivo.setText("");
+            txtNombre.setText("");
+            txtObservaciones.setText("");
+            txtStock.setText("");
+            txtUnidad.setText("");
+            spinnerCantidad.setValue(0);
         });
     }
 }
