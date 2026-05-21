@@ -248,7 +248,7 @@ private DefaultListModel<String> modeloCarrito;
                 JOptionPane.showMessageDialog(this, "El carrito de puntos está vacío");
                 return;
             }
-            ControlNavegacion.getcontrolNavegacion().abrirVentaPuntosFrame();
+            ControlNavegacion.getControlNavegacion().abrirVentaPuntosFrame();
         });
         
         panel.add(Box.createVerticalStrut(20));

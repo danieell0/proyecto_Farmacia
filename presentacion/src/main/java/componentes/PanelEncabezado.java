@@ -72,7 +72,7 @@ public class PanelEncabezado extends JPanel {
                 }
                 
                 // se abre el login 
-                ControlNavegacion.getcontrolNavegacion().abrirLogin();
+                ControlNavegacion.getControlNavegacion().abrirLogin();
             }
         });
         JPanel right = new JPanel();

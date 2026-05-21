@@ -18,7 +18,7 @@ public class NewMain {
             public void run() {
 
                 //se abre el login primero para que no se pueda interactuar con el sistema sin tener sesion iniciada
-                ControlNavegacion.getcontrolNavegacion().abrirLogin();
+                ControlNavegacion.getControlNavegacion().abrirLogin();
                 
                 //123
                 //admin
