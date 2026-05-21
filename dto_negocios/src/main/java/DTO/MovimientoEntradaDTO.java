@@ -16,8 +16,8 @@ public class MovimientoEntradaDTO extends MovimientoDTO{
     public MovimientoEntradaDTO() {
     }
 
-    public MovimientoEntradaDTO(LoteDTO lote, String idMovimiento, LocalDateTime fechaHora, String idEmpleado) {
-        super(idMovimiento, fechaHora, idEmpleado);
+    public MovimientoEntradaDTO(LoteDTO lote, String idMovimiento, LocalDateTime fechaHora, String idEmpleado, String codigoSolicitud) {
+        super(idMovimiento, fechaHora, idEmpleado, codigoSolicitud);
         this.lote = lote;
     }
     

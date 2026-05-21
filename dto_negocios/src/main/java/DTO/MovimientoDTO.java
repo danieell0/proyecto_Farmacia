@@ -14,14 +14,24 @@ public class MovimientoDTO {
     private String idMovimiento;
     private LocalDateTime fechaHora;
     private String idEmpleado;
+    private String codigoSolicitud;
 
     public MovimientoDTO() {
     }
 
-    public MovimientoDTO(String idMovimiento, LocalDateTime fechaHora, String idEmpleado) {
+    public MovimientoDTO(String idMovimiento, LocalDateTime fechaHora, String idEmpleado, String codigoSolicitud) {
         this.idMovimiento = idMovimiento;
         this.fechaHora = fechaHora;
         this.idEmpleado = idEmpleado;
+        this.codigoSolicitud = codigoSolicitud;
+    }
+
+    public String getCodigoSolicitud() {
+        return codigoSolicitud;
+    }
+
+    public void setCodigoSolicitud(String codigoSolicitud) {
+        this.codigoSolicitud = codigoSolicitud;
     }
 
     public String getIdMovimiento() {

@@ -18,8 +18,8 @@ public class MovimientoEntradaMongo extends MovimientoMongo{
     public MovimientoEntradaMongo() {
     }
 
-    public MovimientoEntradaMongo(LoteMongo lote, String idMovimiento, LocalDateTime fechaHora, String idEmpleado) {
-        super(idMovimiento, fechaHora, idEmpleado);
+    public MovimientoEntradaMongo(LoteMongo lote, String idMovimiento, LocalDateTime fechaHora, String idEmpleado, String codigoSolicitud) {
+        super(idMovimiento, fechaHora, idEmpleado, codigoSolicitud);
         this.lote = lote;
     }
 

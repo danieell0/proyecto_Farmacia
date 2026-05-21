@@ -59,6 +59,9 @@ public class ControlInventario {
             if (movimiento.getIdEmpleado() == null || movimiento.getIdEmpleado().trim().isEmpty()) {
                 throw new NegocioException("El id del empleado es obligatorio");
             }
+            if (movimiento.getCodigoSolicitud() == null || movimiento.getCodigoSolicitud().trim().isEmpty()) {
+                throw new NegocioException("El codigo de solicitud es obligatorio");
+            }
             if (movimiento.getLote() == null) {
                 throw new NegocioException("El lote es obligatorio");
             }
@@ -82,7 +85,6 @@ public class ControlInventario {
                 if (detalle.getCantidadSolicitada() == null || detalle.getCantidadSolicitada() <= 0) {
                     throw new NegocioException("La cantidad solicitada debe ser mayor a cero");
                 }
-
                 if (detalle.getCantidadRecibida() == null || detalle.getCantidadRecibida() < 0) {
                     throw new NegocioException("La cantidad recibida no puede ser negativa");
                 }
@@ -101,7 +103,14 @@ public class ControlInventario {
             }
             movimiento.setIdMovimiento(inventarioBO.generarIdMovimiento());
             inventarioBO.guardarLote(movimiento.getLote());
-            return inventarioBO.registrarMovimientoEntrada(movimiento);
+            Boolean registrado = inventarioBO.registrarMovimientoEntrada(movimiento);
+            if (registrado) {
+                Boolean estadoActualizado = inventarioBO.actualizarEstadoSolicitud(movimiento.getCodigoSolicitud());
+                if (!estadoActualizado) {
+                    throw new NegocioException("No se pudo actualizar el estado de la solicitud");
+                }
+            }
+            return registrado;
         } catch (NegocioException ex) {
             logger.log(Level.SEVERE, "Error al registrar movimiento de entrada", ex);
             throw new NegocioException("Error al registrar movimiento de entrada", ex);
@@ -150,7 +159,6 @@ public class ControlInventario {
         }
     }
 
-    
     public LoteDTO obtenerLote(String codigoLote) throws NegocioException {
         try {
             if (codigoLote == null || codigoLote.trim().isEmpty()) {
@@ -162,7 +170,7 @@ public class ControlInventario {
             throw new NegocioException("Error al obtener el lote", ex);
         }
     }
-    
+
     public Boolean guardarLote(LoteDTO lote) throws NegocioException {
         try {
             if (lote == null) {
@@ -189,7 +197,7 @@ public class ControlInventario {
             throw new NegocioException("Error al actualizar el estado de la solicitud", ex);
         }
     }
-    
+
     public String generarIdMovimiento() throws NegocioException {
         try {
             return inventarioBO.generarIdMovimiento();

@@ -21,8 +21,8 @@ public class MovimientoSalida extends Movimiento {
     public MovimientoSalida() {
     }
 
-    public MovimientoSalida(Producto producto, Integer cantidad, String motivo, String observacion, Integer cantidadAnterior, Integer cantidadNueva, String idMovimiento, LocalDateTime fecha, String idEmpleado) {
-        super(idMovimiento, fecha, idEmpleado);
+    public MovimientoSalida(Producto producto, Integer cantidad, String motivo, String observacion, Integer cantidadAnterior, Integer cantidadNueva, String idMovimiento, LocalDateTime fechaHora, String idEmpleado, String codigoSolicitud) {
+        super(idMovimiento, fechaHora, idEmpleado, codigoSolicitud);
         this.producto = producto;
         this.cantidad = cantidad;
         this.motivo = motivo;

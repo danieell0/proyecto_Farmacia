@@ -14,8 +14,8 @@ import java.util.List;
 public class MovimientoEntrada extends Movimiento{
     private Lote lote;
 
-    public MovimientoEntrada(Lote lote, String idMovimiento, LocalDateTime fecha, String idEmpleado) {
-        super(idMovimiento, fecha, idEmpleado);
+    public MovimientoEntrada(Lote lote, String idMovimiento, LocalDateTime fechaHora, String idEmpleado, String codigoSolicitud) {
+        super(idMovimiento, fechaHora, idEmpleado, codigoSolicitud);
         this.lote = lote;
     }
 

@@ -16,27 +16,25 @@ import Entidades.MovimientoSalida;
  * @author Jorge
  */
 public class MovimientoMapper {
-
     public static MovimientoDTO toDTO(Movimiento movimiento) {
-
         if (movimiento == null) {
             return null;
         }
-
         if (movimiento instanceof MovimientoEntrada entrada) {
             MovimientoEntradaDTO dto =new MovimientoEntradaDTO();
             dto.setIdMovimiento(entrada.getIdMovimiento());
             dto.setFechaHora(entrada.getFechaHora());
             dto.setIdEmpleado(entrada.getIdEmpleado());
+            dto.setCodigoSolicitud(entrada.getCodigoSolicitud());
             dto.setLote(LoteMapper.toDTO(entrada.getLote()));
             return dto;
         }
-
         if (movimiento instanceof MovimientoSalida salida) {
             MovimientoSalidaDTO dto =new MovimientoSalidaDTO();
             dto.setIdMovimiento(salida.getIdMovimiento());
             dto.setFechaHora(salida.getFechaHora());
             dto.setIdEmpleado(salida.getIdEmpleado());
+            dto.setCodigoSolicitud(salida.getCodigoSolicitud());
             dto.setProducto(ProductoMapper.toDTO(salida.getProducto()));
             dto.setCantidad(salida.getCantidad());
             dto.setMotivo(salida.getMotivo());
@@ -49,6 +47,7 @@ public class MovimientoMapper {
         dto.setIdMovimiento(movimiento.getIdMovimiento());
         dto.setFechaHora(movimiento.getFechaHora());
         dto.setIdEmpleado(movimiento.getIdEmpleado());
+        dto.setCodigoSolicitud(movimiento.getCodigoSolicitud());
         return dto;
     }
 
@@ -61,6 +60,7 @@ public class MovimientoMapper {
             entrada.setIdMovimiento(entradaDTO.getIdMovimiento());
             entrada.setFechaHora(entradaDTO.getFechaHora());
             entrada.setIdEmpleado(entradaDTO.getIdEmpleado());
+            entrada.setCodigoSolicitud(entradaDTO.getCodigoSolicitud());
             entrada.setLote(LoteMapper.toEntity(entradaDTO.getLote()));
             return entrada;
         }
@@ -69,6 +69,7 @@ public class MovimientoMapper {
             salida.setIdMovimiento(salidaDTO.getIdMovimiento());
             salida.setFechaHora(salidaDTO.getFechaHora());
             salida.setIdEmpleado(salidaDTO.getIdEmpleado());
+            salida.setCodigoSolicitud(salidaDTO.getCodigoSolicitud());
             salida.setProducto(ProductoMapper.toEntity(salidaDTO.getProducto()));
             salida.setCantidad(salidaDTO.getCantidad());
             salida.setMotivo(salidaDTO.getMotivo());
@@ -81,6 +82,7 @@ public class MovimientoMapper {
         movimiento.setIdMovimiento(dto.getIdMovimiento());
         movimiento.setFechaHora(dto.getFechaHora());
         movimiento.setIdEmpleado(dto.getIdEmpleado());
+        movimiento.setCodigoSolicitud(dto.getCodigoSolicitud());
         return movimiento;
     }
 }

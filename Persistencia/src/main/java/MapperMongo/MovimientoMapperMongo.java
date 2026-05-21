@@ -11,12 +11,7 @@ import EntidadesMongo.MovimientoEntradaMongo;
 import EntidadesMongo.MovimientoMongo;
 import EntidadesMongo.MovimientoSalidaMongo;
 
-/**
- *
- * @author Jorge
- */
 public class MovimientoMapperMongo {
-
     public static Movimiento entityToDomain(MovimientoMongo mongo) {
         if (mongo == null) {
             return null;
@@ -26,15 +21,16 @@ public class MovimientoMapperMongo {
             entrada.setIdMovimiento(entradaMongo.getIdMovimiento());
             entrada.setFechaHora(entradaMongo.getFechaHora());
             entrada.setIdEmpleado(entradaMongo.getIdEmpleado());
+            entrada.setCodigoSolicitud(entradaMongo.getCodigoSolicitud());
             entrada.setLote(LoteMapperMongo.entityToDomain(entradaMongo.getLote()));
             return entrada;
         }
-
         if (mongo instanceof MovimientoSalidaMongo salidaMongo) {
             MovimientoSalida salida = new MovimientoSalida();
             salida.setIdMovimiento(salidaMongo.getIdMovimiento());
             salida.setFechaHora(salidaMongo.getFechaHora());
             salida.setIdEmpleado(salidaMongo.getIdEmpleado());
+            salida.setCodigoSolicitud(salidaMongo.getCodigoSolicitud());
             salida.setProducto(ProductoMapperMongo.entityToDomain(salidaMongo.getProducto()));
             salida.setCantidad(salidaMongo.getCantidad());
             salida.setMotivo(salidaMongo.getMotivo());
@@ -43,33 +39,33 @@ public class MovimientoMapperMongo {
             salida.setCantidadNueva(salidaMongo.getCantidadNueva());
             return salida;
         }
-
         Movimiento movimiento = new Movimiento();
         movimiento.setIdMovimiento(mongo.getIdMovimiento());
         movimiento.setFechaHora(mongo.getFechaHora());
         movimiento.setIdEmpleado(mongo.getIdEmpleado());
+        movimiento.setCodigoSolicitud(mongo.getCodigoSolicitud());
         return movimiento;
     }
     
-    public static MovimientoMongo domainToEntity(Movimiento movimento){
-        if(movimento==null){
+    public static MovimientoMongo domainToEntity(Movimiento movimento) {
+        if (movimento == null) {
             return null;
         }
-        
-        if(movimento instanceof MovimientoEntrada entrada){
-            MovimientoEntradaMongo entradaMongo=new MovimientoEntradaMongo();
+        if (movimento instanceof MovimientoEntrada entrada) {
+            MovimientoEntradaMongo entradaMongo= new MovimientoEntradaMongo();
             entradaMongo.setIdMovimiento(entrada.getIdMovimiento());
             entradaMongo.setIdEmpleado(entrada.getIdEmpleado());
             entradaMongo.setFechaHora(entrada.getFechaHora());
+            entradaMongo.setCodigoSolicitud(entrada.getCodigoSolicitud());
             entradaMongo.setLote(LoteMapperMongo.domainToEntity(entrada.getLote()));
             return entradaMongo;
         }
-        
-        if(movimento instanceof MovimientoSalida salida){
-            MovimientoSalidaMongo salidaMongo=new MovimientoSalidaMongo();
+        if (movimento instanceof MovimientoSalida salida) {
+            MovimientoSalidaMongo salidaMongo= new MovimientoSalidaMongo();
             salidaMongo.setIdMovimiento(salida.getIdMovimiento());
             salidaMongo.setFechaHora(salida.getFechaHora());
             salidaMongo.setIdEmpleado(salida.getIdEmpleado());
+            salidaMongo.setCodigoSolicitud(salida.getCodigoSolicitud());
             salidaMongo.setProducto(ProductoMapperMongo.domainToEntity(salida.getProducto()));
             salidaMongo.setCantidad(salida.getCantidad());
             salidaMongo.setMotivo(salida.getMotivo());
@@ -78,12 +74,11 @@ public class MovimientoMapperMongo {
             salidaMongo.setCantidadNueva(salida.getCantidadNueva());
             return salidaMongo;
         }
-        
-        MovimientoMongo mongo=new MovimientoMongo();
+        MovimientoMongo mongo = new MovimientoMongo();
         mongo.setIdMovimiento(movimento.getIdMovimiento());
         mongo.setIdEmpleado(movimento.getIdEmpleado());
         mongo.setFechaHora(movimento.getFechaHora());
+        mongo.setCodigoSolicitud(movimento.getCodigoSolicitud());
         return mongo;
     }
-    
 }

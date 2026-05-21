@@ -23,8 +23,8 @@ public class MovimientoSalidaMongo extends MovimientoMongo{
     public MovimientoSalidaMongo() {
     }
 
-    public MovimientoSalidaMongo(ProductoMongo producto, Integer cantidad, String motivo, String observacion, Integer cantidadAnterior, Integer cantidadNueva, String idMovimiento, LocalDateTime fechaHora, String idEmpleado) {
-        super(idMovimiento, fechaHora, idEmpleado);
+    public MovimientoSalidaMongo(ProductoMongo producto, Integer cantidad, String motivo, String observacion, Integer cantidadAnterior, Integer cantidadNueva, String idMovimiento, LocalDateTime fechaHora, String idEmpleado, String codigoSolicitud) {
+        super(idMovimiento, fechaHora, idEmpleado, codigoSolicitud);
         this.producto = producto;
         this.cantidad = cantidad;
         this.motivo = motivo;
