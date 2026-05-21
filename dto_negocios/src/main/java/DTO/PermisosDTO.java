@@ -8,9 +8,12 @@ package DTO;
  * Clase data transfer object para representar una lista de permisos que tiene un empleado dentro del sistema
  * @author Benjamin
  */
+
+
 public class PermisosDTO {
-    
+    /*
+    asd
     private String IDEmpleado;
     private String modulosHabilitados;
-    
+    */
 }

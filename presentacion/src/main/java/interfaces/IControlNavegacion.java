@@ -11,7 +11,7 @@ import javax.swing.JFrame;
  *
  * @author Jorge
  */
-public interface IControlNevagacion {
+public interface IControlNavegacion {
 
     
     public void setControlNeavegacion();
@@ -33,4 +33,7 @@ public interface IControlNevagacion {
 
     
     public void abrirDialog(JDialog nuevoDialog);
+    public void abrirLogin();
+    public void abrirMenuAdmin();
+    public void abrirRegistroSolicitante();
 }

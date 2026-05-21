@@ -6,22 +6,10 @@
         <artifactId>ProyectoFarmacia</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>negocios_ingresos</artifactId>
+    <artifactId>negocios_GestionEmpleados</artifactId>
     <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>objetos_negocio</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>dto_negocios</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
-        <exec.mainClass>com.mycompany.negocios_ingresos.Negocios_ingresos</exec.mainClass>
+        <exec.mainClass>com.mycompany.negocios_gestionempleados.Negocios_GestionEmpleados</exec.mainClass>
     </properties>
 </project>

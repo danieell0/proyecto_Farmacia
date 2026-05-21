@@ -34,7 +34,7 @@ public class Coordinador implements ICoordinador {
 
     private IFachadaSesion fachadaSesion;
     // Atributo de navegación
-    private controlNavegacion navegacion;
+    private ControlNavegacion navegacion;
 
     private static Coordinador cordinador;
     private IVenta fVentas;
@@ -223,7 +223,7 @@ public class Coordinador implements ICoordinador {
                 
                 //hace que se espere un tiempo para que se termine de cerrar el login antes de abrir el otro (el bug raro que hacia que se fuera hacia atras del netbeans la otra pantalla)
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                    pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+                    pantallas.control.ControlNavegacion.getcontrolNavegacion().abrirMenuFrame();
                 });
                 
                 return true;
@@ -394,7 +394,7 @@ public class Coordinador implements ICoordinador {
         if (ventaFrame != null) {
             ventaFrame.limpiarVenta();
         }
-        pantallas.control.controlNavegacion.getcontrolNavegacion().abrirMenuFrame();
+        pantallas.control.ControlNavegacion.getcontrolNavegacion().abrirMenuFrame();
     }
 
     /**

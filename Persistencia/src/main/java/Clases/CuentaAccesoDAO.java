@@ -7,6 +7,7 @@ package Clases;
 import ConexionMongo.ManejadorConexiones;
 import Entidades.CuentaAcceso;
 import EntidadesMongo.CuentaAccesoMongo;
+import Interfaces.ICuentaAccesoDAO;
 import MapperMongo.CuentaAccesoMapperMongo;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.and;
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @author Benjamin
  */
-public class CuentaAccesoDAO {
+public class CuentaAccesoDAO implements ICuentaAccesoDAO{
     /*
     private List<CuentaAcceso> tablaCuentas;
     

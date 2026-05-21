@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import pantallas.control.Coordinador;
-import pantallas.control.controlNavegacion;
+import pantallas.control.ControlNavegacion;
 
 /**
  *
@@ -129,7 +129,7 @@ public class panelMenuLateralEmpleado extends JPanel {
                     if (ventana != null) {
                         ventana.dispose();
                     }
-                    controlNavegacion.getcontrolNavegacion().abrirMenuPuntosFrame();
+                    ControlNavegacion.getcontrolNavegacion().abrirMenuPuntosFrame();
                     break;
                 }
             });

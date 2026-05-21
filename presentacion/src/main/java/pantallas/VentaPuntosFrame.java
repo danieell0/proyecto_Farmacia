@@ -4,7 +4,6 @@ import DTO.CanjeableDTO;
 import DTO.CarritoDTO;
 import DTO.ClienteDTO;
 import DTO.DetalleCarritoDTO;
-import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import pantallas.control.Coordinador;
+import interfaces.IControlNavegacion;
 
 /**
  *
@@ -39,7 +39,7 @@ public class VentaPuntosFrame extends JFrame {
     
     private double totalPuntosCanje = 0.0;
     private ICoordinador coordinador;
-    private IControlNevagacion control;
+    private IControlNavegacion control;
     private ClienteDTO clienteActual;
 
     private final Color colorFondo = new Color(245, 245, 245);
@@ -129,7 +129,7 @@ public class VentaPuntosFrame extends JFrame {
     public void setCoordinador(ICoordinador coordinador) {
         this.coordinador = coordinador;
     }
-    public void setControlNavegacion(IControlNevagacion control) {
+    public void setControlNavegacion(IControlNavegacion control) {
         this.control = control;
     }
 

@@ -16,6 +16,8 @@
         <module>persistencia</module>
         <module>infrestructura</module>
         <module>negocios_ingresos</module>
+        <module>subsistemaGestionEmpleados</module>
+        <module>negocios_GestionEmpleados</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

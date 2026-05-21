@@ -6,7 +6,6 @@ import DTO.DetalleCarritoDTO;
 import DTO.ProductoDTO;
 import componentes.PanelEncabezado;
 import componentes.panelMenuLateralEmpleado;
-import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -32,7 +31,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import pantallas.control.Coordinador;
-import pantallas.control.controlNavegacion;
+import pantallas.control.ControlNavegacion;
+import interfaces.IControlNavegacion;
 
 /**
  *
@@ -48,13 +48,13 @@ private DefaultListModel<String> modeloCarrito;
     private JPanel grid;
 
     private ICoordinador coordinador;
-    private IControlNevagacion navegacion;
+    private IControlNavegacion navegacion;
 
     public void setCoordinador(ICoordinador coordinador) {
         this.coordinador = coordinador;
     }
 
-    public void setNavegacion(IControlNevagacion navegacion) {
+    public void setNavegacion(IControlNavegacion navegacion) {
         this.navegacion = navegacion;
     }
 
@@ -248,7 +248,7 @@ private DefaultListModel<String> modeloCarrito;
                 JOptionPane.showMessageDialog(this, "El carrito de puntos está vacío");
                 return;
             }
-            controlNavegacion.getcontrolNavegacion().abrirVentaPuntosFrame();
+            ControlNavegacion.getcontrolNavegacion().abrirVentaPuntosFrame();
         });
         
         panel.add(Box.createVerticalStrut(20));

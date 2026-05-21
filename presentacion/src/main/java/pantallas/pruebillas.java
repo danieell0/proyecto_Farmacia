@@ -4,7 +4,7 @@
  */
 package pantallas;
 
-import pantallas.control.controlNavegacion;
+import pantallas.control.ControlNavegacion;
 
 /**
  *
@@ -20,7 +20,7 @@ public class pruebillas {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 // Instanciamos tu control de navegación
-                controlNavegacion navegador = new controlNavegacion();
+                ControlNavegacion navegador = new ControlNavegacion();
                 
                 // Usamos tu método para abrir el frame principal (menuFrame)
                 //navegador.abrirFrame(); 

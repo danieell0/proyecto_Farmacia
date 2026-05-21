@@ -1,7 +1,7 @@
 package pantallas;
 
 import pantallas.control.Coordinador;
-import pantallas.control.controlNavegacion;
+import pantallas.control.ControlNavegacion;
 
 /**
  *
@@ -18,7 +18,7 @@ public class NewMain {
             public void run() {
 
                 //se abre el login primero para que no se pueda interactuar con el sistema sin tener sesion iniciada
-                controlNavegacion.getcontrolNavegacion().abrirLogin();
+                ControlNavegacion.getcontrolNavegacion().abrirLogin();
                 
                 //123
                 //admin

@@ -7,7 +7,6 @@ import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
 import componentes.PanelEncabezado;
-import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,13 +37,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import pantallas.control.controlNavegacion;
+import pantallas.control.ControlNavegacion;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import pantallas.control.Coordinador;
+import interfaces.IControlNavegacion;
 //import pantallas.control.Coordinador;
 
 /**
@@ -61,7 +61,7 @@ public class menuFrame extends JFrame {
     private JPanel grid;
 
     private ICoordinador coordinador;
-    private IControlNevagacion navegacion;
+    private IControlNavegacion navegacion;
 
     public void setCoordinador(ICoordinador coordinador) {
         this.coordinador = coordinador;
@@ -290,7 +290,7 @@ public class menuFrame extends JFrame {
                     }
                 }
             }
-            controlNavegacion.getcontrolNavegacion().abrirVentaFrame();
+            ControlNavegacion.getcontrolNavegacion().abrirVentaFrame();
         });
         panel.add(Box.createVerticalStrut(20));
         panel.add(pagar);

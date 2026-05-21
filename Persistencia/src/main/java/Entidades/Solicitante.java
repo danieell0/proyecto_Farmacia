@@ -1,54 +1,45 @@
-package DTO;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Entidades;
 
-import Enums.EstatusEmpleado;
 import Enums.RolPuesto;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
- * Clase data transfer object para representar un objeto de tipo empleado dentro del sistema
+ *
  * @author Benjamin
  */
-public class EmpleadoDTO {
-    private String ID;
+public class Solicitante {
+    private String idSolicitante;
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String telefono;
     private RolPuesto rolPuesto;
     private LocalDate fechaNacimiento;
-    private EstatusEmpleado estatus;
-    
-    public EmpleadoDTO() {
-    }
+    private String notasEntrevista;
 
-    public EmpleadoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDate fechaNacimiento, EstatusEmpleado estatus) {
+    public Solicitante() {}
+
+    public Solicitante(String idSolicitante, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDate fechaNacimiento, String notasEntrevista) {
+        this.idSolicitante = idSolicitante;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.telefono = telefono;
         this.rolPuesto = rolPuesto;
         this.fechaNacimiento = fechaNacimiento;
-        this.estatus = estatus;
+        this.notasEntrevista = notasEntrevista;
     }
 
-    public EmpleadoDTO(String ID, String nombre, String apellidoPaterno, String apellidoMaterno, String telefono, RolPuesto rolPuesto, LocalDate fechaNacimiento, EstatusEmpleado estatus) {
-        this.ID = ID;
-        this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.telefono = telefono;
-        this.rolPuesto = rolPuesto;
-        this.fechaNacimiento = fechaNacimiento;
-        this.estatus = estatus;
+    public String getIdSolicitante() {
+        return idSolicitante;
     }
 
-    public String getIdEmpleado() {
-        return ID;
-    }
-
-    public void setIdEmpleado(String ID) {
-        this.ID = ID;
+    public void setIdSolicitante(String idSolicitante) {
+        this.idSolicitante = idSolicitante;
     }
 
     public String getNombre() {
@@ -99,12 +90,13 @@ public class EmpleadoDTO {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public EstatusEmpleado getEstatus() {
-        return estatus;
+    public String getNotasEntrevista() {
+        return notasEntrevista;
     }
 
-    public void setEstatus(EstatusEmpleado estatus) {
-        this.estatus = estatus;
+    public void setNotasEntrevista(String notasEntrevista) {
+        this.notasEntrevista = notasEntrevista;
     }
+    
     
 }

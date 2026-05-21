@@ -11,7 +11,9 @@ import Enums.RolPuesto;
 import DTO.CuentaAccesoDTO;
 import DTO.EmpleadoDTO;
 import Entidades.Empleado;
-import Mappers.EmpleadoMapper;
+import Interfaces.ICuentaAccesoDAO;
+import Interfaces.IEmpleadoDAO;
+import Mappers.MapperEmpleadoNegocio;
 import excepciones.NegocioExcepcion;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,21 +26,20 @@ import java.util.List;
 public class EmpleadoBO {
     
     // Instanciamos los accesos a datos
-    private CuentaAccesoDAO cuentaDAO;
-    private EmpleadoDAO empleadoDAO;
+    private ICuentaAccesoDAO cuentaDAO;
+    private IEmpleadoDAO empleadoDAO;
     
-    // Asumo que tienes un mapper creado, si no, lo haremos manual abajo
-    private EmpleadoMapper mapper; 
+    private MapperEmpleadoNegocio mapper; 
     
     public EmpleadoBO() {
         this.cuentaDAO = new CuentaAccesoDAO();
         this.empleadoDAO = new EmpleadoDAO();
-        this.mapper = new EmpleadoMapper(); 
+        this.mapper = new MapperEmpleadoNegocio(); 
     }
     
     public EmpleadoDTO validarLogin(String idEmpleado, String contrasena) throws NegocioExcepcion {
         
-        // Validaciones iniciales
+        // validaciones basicas
         if (idEmpleado == null || idEmpleado.isEmpty() || idEmpleado.startsWith("-")) { 
             throw new NegocioExcepcion("El ID ingresado no es válido.");
         }
@@ -46,27 +47,27 @@ public class EmpleadoBO {
             throw new NegocioExcepcion("El campo de contraseña no puede estar vacío.");
         }
         
-        // Paso 1: Pedirle a la BD que valide la cuenta
+        // se le pide a la bd que valide la cuenta
         boolean credencialesCorrectas = cuentaDAO.validarCredenciales(idEmpleado, contrasena);
         
         if (!credencialesCorrectas) {
             throw new NegocioExcepcion("Credenciales incorrectas.");
         }
         
-        // Paso 2: Si es correcta, pedirle a la BD la ENTIDAD pura del empleado
+        // si es correcta se le pide la entidad pura a la bd
         Empleado entidadEmpleado = empleadoDAO.obtenerEmpleadoPorId(idEmpleado);
         
         if (entidadEmpleado == null) {
             throw new NegocioExcepcion("Error de integridad: La cuenta existe pero el empleado no.");
         }
-        
-        // Validamos estatus usando la entidad
+       
+        // se valida el estatus usando la entidad
         if (entidadEmpleado.getEmpleadoEstatus() != EstatusEmpleado.ACTIVO) {
             throw new NegocioExcepcion("Acceso denegado: El empleado está inactivo en el sistema.");
         }
         
-        // Paso 3: Transformamos la Entidad de la BD a un DTO para la presentacion
-        return mapper.toDTO(entidadEmpleado); 
+        // se transforma a dto para enviarselo a presentacion
+        return mapper.aDTO(entidadEmpleado); 
     }
      
 }

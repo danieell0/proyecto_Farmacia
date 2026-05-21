@@ -4,6 +4,9 @@
  */
 package pantallas;
 
+import interfaces.IControlNavegacion;
+import pantallas.control.ControlNavegacion;
+
 /**
  *
  * @author Jorge
@@ -14,8 +17,11 @@ public class admin {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        menuAdmin ma=new menuAdmin();
-        ma.setVisible(true);
+        // 1. Despertamos al "Jefe de Navegación" usando el Patrón Singleton
+        ControlNavegacion controlador = ControlNavegacion.getControlNavegacion();
+        
+        // 2. Le damos la orden de arrancar el sistema abriendo la primera pantalla
+        controlador.abrirMenuAdmin();
     }
     
 }

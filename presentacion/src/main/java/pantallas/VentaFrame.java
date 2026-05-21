@@ -2,7 +2,6 @@ package pantallas;
 
 import DTO.CarritoDTO;
 import DTO.DetalleCarritoDTO;
-import interfaces.IControlNevagacion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import pantallas.control.Coordinador;
+import interfaces.IControlNavegacion;
 
 /**
  *
@@ -38,7 +38,7 @@ public class VentaFrame extends JFrame {
     private JLabel lblCambio;
     
     private ICoordinador coordinador;
-    private IControlNevagacion control;
+    private IControlNavegacion control;
 
     private final Color colorFondo = new Color(245, 245, 245);
     private final Color colorAzul = new Color(52, 152, 219);
@@ -149,7 +149,7 @@ public class VentaFrame extends JFrame {
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
-    public void setControlNavegacion(IControlNevagacion control) {
+    public void setControlNavegacion(IControlNavegacion control) {
         this.control = control;
     }
 
