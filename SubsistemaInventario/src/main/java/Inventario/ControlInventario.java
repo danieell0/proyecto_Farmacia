@@ -210,3 +210,4 @@ public class ControlInventario {
     }
 
 }
+//qp no tienes nada porque marcas error
