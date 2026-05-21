@@ -153,9 +153,14 @@ public class registrarEntradaFame extends JFrame {
         btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 17));
         panelTabla.add(btnAgregar);
 
-        String[] columnas = {"Código","Medicamento","Marca","Presentación","Cantidad pedida","Cantidad recibida","Observaciones"};
+        String[] columnas = {"Código", "Medicamento", "Marca", "Presentación", "Cantidad pedida", "Cantidad recibida", "Observaciones"};
 
-        modeloTabla = new DefaultTableModel(columnas,0);
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 5 || column == 6;
+            }
+        };
 
         tabla = new JTable(modeloTabla);
         tabla.setRowHeight(38);
@@ -261,37 +266,47 @@ public class registrarEntradaFame extends JFrame {
 
         btnRegistrar.addActionListener(e -> {
             try {
+                if (modeloTabla.getRowCount() == 0) {
+                    JOptionPane.showMessageDialog(this, "Debe agregar al menos un producto");
+                    return;
+                }
+                if (tabla.isEditing()) {
+                    tabla.getCellEditor().stopCellEditing();
+                }
                 MovimientoEntradaDTO movimiento = new MovimientoEntradaDTO();
                 movimiento.setFechaHora(LocalDateTime.now());
                 movimiento.setIdEmpleado("123");
-                //movimiento.setIdEmpleado(coordinador.obtenerSesionActual().getIdEmpleado());
+                //movimiento.setIdEmpleado(coordinador.obtenerSesionActual().getIdEmpleado()
+                movimiento.setCodigoSolicitud(txtCodigoPedido.getText().trim());
                 LoteDTO lote = new LoteDTO();
-                lote.setCodigoLote(txtCodigoLote.getText());
-                lote.setProveedor(txtProveedor.getText());
-                lote.setObservacionGeneral(txtObs.getText());
+                lote.setCodigoLote(txtCodigoLote.getText().trim());
+                lote.setProveedor(txtProveedor.getText().trim());
+                lote.setObservacionGeneral(txtObs.getText().trim());
                 List<DetalleLoteDTO> detalles = new ArrayList<>();
                 for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                     DetalleLoteDTO detalle = new DetalleLoteDTO();
-                    ProductoDTO producto = coordinador.ObtenerProductoPorCodigo(modeloTabla.getValueAt(i, 0).toString()).getFirst();
+                    String codigoProducto = modeloTabla.getValueAt(i, 0).toString();
+                    ProductoDTO producto = coordinador.ObtenerProductoPorCodigo(codigoProducto).getFirst();
                     detalle.setProducto(producto);
-                    detalle.setCantidadSolicitada(Integer.parseInt(modeloTabla.getValueAt(i, 4).toString()));
-                    detalle.setCantidadRecibida(Integer.parseInt(modeloTabla.getValueAt(i, 5).toString()));
+                    Integer cantidadSolicitada = Integer.parseInt(modeloTabla.getValueAt(i, 4).toString());
+                    detalle.setCantidadSolicitada(cantidadSolicitada);
+                    Integer cantidadRecibida = Integer.parseInt(modeloTabla.getValueAt(i, 5).toString());
+                    detalle.setCantidadRecibida(cantidadRecibida);
                     detalle.setObservacion(modeloTabla.getValueAt(i, 6).toString());
                     detalles.add(detalle);
                 }
-                lote.setProveedor(txtProveedor.getText());
-                lote.setObservacionGeneral(txtObs.getText());
                 lote.setDetalles(detalles);
                 movimiento.setLote(lote);
                 Boolean registrado = coordinador.registrarMovimientoEntrada(movimiento);
                 if (registrado) {
                     JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo registrar el movimiento");
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }
         });
-
         setVisible(true);
     }
 
