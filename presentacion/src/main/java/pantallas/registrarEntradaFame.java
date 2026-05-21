@@ -153,11 +153,11 @@ public class registrarEntradaFame extends JFrame {
         btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 17));
         panelTabla.add(btnAgregar);
 
-        String[] columnas = {"Código", "Medicamento", "Marca", "Presentación", "Cantidad pedida", "Cantidad recibida", "Observaciones"};
+        String[] columnas = {"Código","Medicamento","Marca","Presentación","Cantidad pedida","Cantidad recibida","Observaciones"};
 
-        Object[][] datos = {};
+        modeloTabla = new DefaultTableModel(columnas,0);
 
-        tabla = new JTable(datos, columnas);
+        tabla = new JTable(modeloTabla);
         tabla.setRowHeight(38);
         tabla.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -261,7 +261,7 @@ public class registrarEntradaFame extends JFrame {
 
         btnRegistrar.addActionListener(e -> {
             try {
-                MovimientoEntradaDTO movimiento= new MovimientoEntradaDTO();
+                MovimientoEntradaDTO movimiento = new MovimientoEntradaDTO();
                 movimiento.setFechaHora(LocalDateTime.now());
                 movimiento.setIdEmpleado("123");
                 //movimiento.setIdEmpleado(coordinador.obtenerSesionActual().getIdEmpleado());
@@ -269,7 +269,7 @@ public class registrarEntradaFame extends JFrame {
                 lote.setCodigoLote(txtCodigoLote.getText());
                 lote.setProveedor(txtProveedor.getText());
                 lote.setObservacionGeneral(txtObs.getText());
-                List<DetalleLoteDTO> detalles= new ArrayList<>();
+                List<DetalleLoteDTO> detalles = new ArrayList<>();
                 for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                     DetalleLoteDTO detalle = new DetalleLoteDTO();
                     ProductoDTO producto = coordinador.ObtenerProductoPorCodigo(modeloTabla.getValueAt(i, 0).toString()).getFirst();
