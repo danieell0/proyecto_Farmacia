@@ -9,9 +9,14 @@ import DTO.ClienteDTO;
 import DTO.DetalleCarritoDTO;
 import DTO.EmpleadoDTO;
 import DTO.CuentaAccesoDTO;
+import DTO.LoteDTO;
+import DTO.MovimientoEntradaDTO;
+import DTO.MovimientoSalidaDTO;
 import DTO.SesionActualDTO;
+import DTO.SolicitudDTO;
 import Ingreso.FachadaIngreso;
 import Ingreso.IFachadaIngreso;
+import Inventario.FachadaInventario;
 import fachada.FVentas;
 import fachada.IVenta;
 import interfaces.ICoordinador;
@@ -25,6 +30,7 @@ import Sesion.IFachadaSesion;
 import javax.swing.JFrame;
 import pantallas.menuPuntosFrame;
 import pantallas.VentaPuntosFrame;
+import Inventario.IFachadaInventario;
 
 /**
  *
@@ -48,6 +54,7 @@ public class Coordinador implements ICoordinador {
     private validarRecetaDlg recetaDlg;
     private menuFrame menuJFrame;
     private menuPuntosFrame menuPuntos;
+    private IFachadaInventario fachadaInventario;
     
     /**
      * Constructor del coordinador. Inicializa el acceso al subsistema de ventas
@@ -58,6 +65,7 @@ public class Coordinador implements ICoordinador {
         this.fVentas = new FVentas();
         this.fachadaSesion = new FachadaSesion();
         this.ingreso = new FachadaIngreso();
+        this.fachadaInventario=new FachadaInventario();
     }
 
     @Override
@@ -444,6 +452,26 @@ public class Coordinador implements ICoordinador {
         this.clienteActual = null;
         ingreso.limpiarClienteActual();
         return true;
+    }
+
+    @Override
+    public SolicitudDTO buscarSolicitud(String codigoSolicitud) throws NegocioException {
+        return fachadaInventario.buscarSolicitud(codigoSolicitud);
+    }
+
+    @Override
+    public Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioException {
+        return fachadaInventario.registrarMovimientoEntrada(movimiento);
+    }
+
+    @Override
+    public Boolean registrarMovimientoSalida(MovimientoSalidaDTO movimiento) throws NegocioException {
+        return fachadaInventario.registrarMovimientoSalida(movimiento);
+    }
+
+    @Override
+    public LoteDTO obtenerLote(String codigoLote) throws NegocioException {
+        return fachadaInventario.obtenerLote(codigoLote);
     }
 
 }

@@ -4,6 +4,7 @@
  */
 package com.mycompany.objetos_negocio;
 
+import Bo.NegocioException;
 import Clases.ProductoDAO;
 import DTO.ProductoDTO;
 import Entidades.Producto;
@@ -27,9 +28,6 @@ public class ProductoBO implements IProductoBO {
     //Objeto DAO para acceder a los datos de productos
     private IProductoDAO productoDAO;
 
-    //Mapper encargado de convertir entidades y DTOs
-    private ProductoMapper mapper = new ProductoMapper();
-
     /**
      * Constructor de la clase ProductoBO.
      *
@@ -49,7 +47,7 @@ public class ProductoBO implements IProductoBO {
     @Override
     public List<ProductoDTO> obtenerProductos() {
         List<Producto> productos = productoDAO.obtenerProductos();
-        return productos.stream().map(p -> mapper.toDTO(p)).toList();
+        return productos.stream().map(p -> ProductoMapper.toDTO(p)).toList();
     }
 
     /**
@@ -61,7 +59,7 @@ public class ProductoBO implements IProductoBO {
     @Override
     public List<ProductoDTO> obtenerProductosPorNombre(String nombre) {
         List<Producto> productoN = productoDAO.obtenerProductosPorNombre(nombre);
-        return productoN.stream().map(p -> mapper.toDTO(p)).toList();
+        return productoN.stream().map(p -> ProductoMapper.toDTO(p)).toList();
     }
 
     /**
@@ -73,13 +71,32 @@ public class ProductoBO implements IProductoBO {
     @Override
     public List<ProductoDTO> obtenerProductoPorClave(String clave) {
         List<Producto> productoC = productoDAO.obtenerProductoPorClave(clave);
-        return productoC.stream().map(p -> mapper.toDTO(p)).toList();
+        return productoC.stream().map(p -> ProductoMapper.toDTO(p)).toList();
     }
-    
+
     @Override
     public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos) {
         List<Producto> productoCan = productoDAO.obtenerProductosConcordantes(idCliente, puntos);
-        return productoCan.stream().map(p -> mapper.toDTO(p)).toList();
+        return productoCan.stream().map(p -> ProductoMapper.toDTO(p)).toList();
+    }
+
+    @Override
+    public Boolean aumentar(String idProducto, Integer nuevoStock) throws NegocioException {
+        return productoDAO.aumentarStock(idProducto, nuevoStock);
+    }
+
+    @Override
+    public Boolean disminuir(String idProducto, Integer nuevoStock) throws NegocioException {
+        return productoDAO.DisminuirStock(idProducto, nuevoStock);
+    }
+
+    @Override
+    public ProductoDTO obtenerProducto(String idProducto) throws NegocioException {
+        List<Producto> productos= productoDAO.obtenerProductoPorClave(idProducto);
+        if (productos.isEmpty()) {
+            return null;
+        }
+        return ProductoMapper.toDTO(productos.getFirst());
     }
 
 }

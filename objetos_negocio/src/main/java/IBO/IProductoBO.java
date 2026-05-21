@@ -4,6 +4,7 @@
  */
 package IBO;
 
+import Bo.NegocioException;
 import DTO.ProductoDTO;
 import java.util.List;
 
@@ -41,6 +42,12 @@ public interface IProductoBO {
      */
     public List<ProductoDTO> obtenerProductoPorClave(String clave);
 
-    
     public List<ProductoDTO> obtenerProductosConcordantes(String idCliente, Double puntos);
+
+    public Boolean aumentar(String idProducto, Integer nuevoStock) throws NegocioException;
+
+    public Boolean disminuir(String idProducto, Integer nuevoStock) throws NegocioException;
+
+    public ProductoDTO obtenerProducto(String idProducto) throws NegocioException;
+
 }

@@ -1,10 +1,15 @@
 package interfaces;
 
+import Bo.NegocioException;
 import DTO.ProductoDTO;
 import DTO.CarritoDTO;
 import DTO.ClienteDTO;
 import DTO.CuentaAccesoDTO;
+import DTO.LoteDTO;
+import DTO.MovimientoEntradaDTO;
+import DTO.MovimientoSalidaDTO;
 import DTO.SesionActualDTO;
+import DTO.SolicitudDTO;
 import java.util.List;
 import pantallas.VentaFrame;
 import pantallas.menuFrame;
@@ -42,4 +47,8 @@ public interface ICoordinador {
     public Boolean setClientePorId(String idCliente);
     public Boolean limpiarClienteActual();
     void regresarTiendaNormal();
+    public SolicitudDTO buscarSolicitud(String codigoSolicitud) throws NegocioException;
+    public Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioException;
+    public Boolean registrarMovimientoSalida(MovimientoSalidaDTO movimiento) throws NegocioException;
+    public LoteDTO obtenerLote(String codigoLote) throws NegocioException;
 }

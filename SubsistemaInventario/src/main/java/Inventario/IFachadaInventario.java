@@ -14,7 +14,7 @@ import DTO.SolicitudDTO;
  *
  * @author Jorge
  */
-public interface IFachada {
+public interface IFachadaInventario {
 
     public SolicitudDTO buscarSolicitud(String codigoSolicitud) throws NegocioException;
 

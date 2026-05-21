@@ -5,12 +5,18 @@
 package Inventario;
 
 import Bo.NegocioException;
+import DTO.DetalleLoteDTO;
 import DTO.LoteDTO;
 import DTO.MovimientoDTO;
 import DTO.MovimientoEntradaDTO;
 import DTO.MovimientoSalidaDTO;
+import DTO.ProductoDTO;
 import DTO.SolicitudDTO;
+import Entidades.Solicitud;
+import IBO.IInventarioBO;
+import IBO.IProductoBO;
 import com.mycompany.objetos_negocio.InventarioBO;
+import com.mycompany.objetos_negocio.ProductoBO;
 import excepciones.NegocioExcepcion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,48 +27,176 @@ import java.util.logging.Logger;
  */
 public class ControlInventario {
 
-    protected InventarioBO inventarioBO;
+    private InventarioBO inventarioBO;
+    private ProductoBO productoBO;
     private static final Logger logger = Logger.getLogger(ControlInventario.class.getSimpleName());
 
-    protected ControlInventario() {
+    public ControlInventario() {
         inventarioBO = new InventarioBO();
+        productoBO = new ProductoBO();
     }
 
-    protected SolicitudDTO buscarSolicitud(String codigoSolicitud) throws NegocioExcepcion {
+    public SolicitudDTO buscarSolicitud(String claveSolicitud) throws NegocioException {
         try {
-            return inventarioBO.buscarSolicitud(codigoSolicitud);
+            if (claveSolicitud == null || claveSolicitud.trim().isEmpty()) {
+                throw new NegocioException("La clave de la solicitud no puede estar vacia.");
+            }
+            return inventarioBO.buscarSolicitud(claveSolicitud);
         } catch (NegocioException ex) {
-            logger.log(Level.SEVERE,"Error al buscar la solicitud",ex);
-            throw new NegocioExcepcion("Error al buscar la solicitud");
+            logger.log(Level.SEVERE, "Error al buscar la solicitud", ex);
+            throw new NegocioException("Error al buscar la solicitud", ex);
         }
     }
 
-    protected Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioExcepcion {
+    public Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioException {
         try {
+            if (movimiento == null) {
+                throw new NegocioException("El movimiento no puede ser null");
+            }
+            if (movimiento.getFechaHora() == null) {
+                throw new NegocioException("La fecha del movimiento es obligatoria");
+            }
+            if (movimiento.getIdEmpleado() == null || movimiento.getIdEmpleado().trim().isEmpty()) {
+                throw new NegocioException("El id del empleado es obligatorio");
+            }
+            if (movimiento.getLote() == null) {
+                throw new NegocioException("El lote es obligatorio");
+            }
+            if (movimiento.getLote().getCodigoLote() == null || movimiento.getLote().getCodigoLote().trim().isEmpty()) {
+                throw new NegocioException("El codigo del lote no puede estar vacio");
+            }
+            if (movimiento.getLote().getProveedor() == null || movimiento.getLote().getProveedor().trim().isEmpty()) {
+                throw new NegocioException("El proveedor es obligatorio");
+            }
+            if (movimiento.getLote().getDetalles() == null || movimiento.getLote().getDetalles().isEmpty()) {
+                throw new NegocioException("El lote debe contener detalles");
+            }
+            LoteDTO loteExistente = inventarioBO.obtenerLote(movimiento.getLote().getCodigoLote());
+            if (loteExistente != null) {
+                throw new NegocioException("Ya existe un lote con ese codigo");
+            }
+            for (DetalleLoteDTO detalle : movimiento.getLote().getDetalles()) {
+                if (detalle.getProducto() == null) {
+                    throw new NegocioException("Todos los detalles deben tener producto");
+                }
+                if (detalle.getCantidadSolicitada() == null || detalle.getCantidadSolicitada() <= 0) {
+                    throw new NegocioException("La cantidad solicitada debe ser mayor a cero");
+                }
+
+                if (detalle.getCantidadRecibida() == null || detalle.getCantidadRecibida() < 0) {
+                    throw new NegocioException("La cantidad recibida no puede ser negativa");
+                }
+                ProductoDTO producto = productoBO.obtenerProducto(detalle.getProducto().getIdProducto());
+                if (producto == null) {
+                    throw new NegocioException("El producto no existe");
+                }
+                Integer stockAnterior = producto.getStock();
+                Integer nuevoStock = stockAnterior + detalle.getCantidadRecibida();
+                detalle.setCantidadAnterior(stockAnterior);
+                detalle.setCantidadNueva(nuevoStock);
+                Boolean actualizado = productoBO.aumentar(producto.getIdProducto(), nuevoStock);
+                if (!actualizado) {
+                    throw new NegocioException("No se pudo actualizar el stock");
+                }
+            }
+            movimiento.setIdMovimiento(inventarioBO.generarIdMovimiento());
+            inventarioBO.guardarLote(movimiento.getLote());
             return inventarioBO.registrarMovimientoEntrada(movimiento);
         } catch (NegocioException ex) {
-            logger.log(Level.SEVERE,"Error al registrar el movimiento de entrada",ex);
-            throw new NegocioExcepcion("Error al registrar el movimiento de entrada");
+            logger.log(Level.SEVERE, "Error al registrar movimiento de entrada", ex);
+            throw new NegocioException("Error al registrar movimiento de entrada", ex);
         }
     }
 
-    protected Boolean registrarMovimientoSalida(MovimientoSalidaDTO movimientoSalida) throws NegocioExcepcion {
+    public Boolean registrarMovimientoSalida(
+            MovimientoSalidaDTO movimiento) throws NegocioException {
         try {
-            return inventarioBO.registrarMovimientoSalida(movimientoSalida);
+            if (movimiento == null) {
+                throw new NegocioException("El movimiento no puede ser null");
+            }
+            if (movimiento.getFechaHora() == null) {
+                throw new NegocioException("La fecha del movimiento es obligatoria");
+            }
+            if (movimiento.getIdEmpleado() == null || movimiento.getIdEmpleado().trim().isEmpty()) {
+                throw new NegocioException("El id del empleado es obligatorio");
+            }
+            if (movimiento.getProducto() == null) {
+                throw new NegocioException("El producto del movimiento es obligatorio");
+            }
+            if (movimiento.getCantidad() == null || movimiento.getCantidad() <= 0) {
+                throw new NegocioException("La cantidad debe ser mayor a cero");
+            }
+            ProductoDTO producto = productoBO.obtenerProducto(movimiento.getProducto().getIdProducto());
+            if (producto == null) {
+                throw new NegocioException("El producto no existe");
+            }
+            Integer stockAnterior = producto.getStock();
+            if (movimiento.getCantidad() > stockAnterior) {
+                throw new NegocioException("No hay suficiente stock disponible");
+            }
+            Integer nuevoStock = stockAnterior - movimiento.getCantidad();
+            movimiento.setCantidadAnterior(stockAnterior);
+            movimiento.setCantidadNueva(nuevoStock);
+            movimiento.setIdMovimiento(inventarioBO.generarIdMovimiento()
+            );
+            Boolean actualizado = productoBO.disminuir(producto.getIdProducto(), nuevoStock);
+            if (!actualizado) {
+                throw new NegocioException("No se pudo actualizar el stock");
+            }
+            return inventarioBO.registrarMovimientoSalida(movimiento);
         } catch (NegocioException ex) {
-            logger.log(Level.SEVERE,"Error al registrar el movimiento de salida",ex);
-            throw new NegocioExcepcion("Error al registrar el movimiento de salida");
+            logger.log(Level.SEVERE, "Error al registrar movimiento de salida", ex);
+            throw new NegocioException("Error al registrar movimiento de salida", ex);
         }
     }
 
-    protected LoteDTO obtenerLote(String codigoLote) throws NegocioExcepcion {
+    
+    public LoteDTO obtenerLote(String codigoLote) throws NegocioException {
         try {
+            if (codigoLote == null || codigoLote.trim().isEmpty()) {
+                throw new NegocioException("El codigo del lote no puede estar vacio");
+            }
             return inventarioBO.obtenerLote(codigoLote);
         } catch (NegocioException ex) {
-             logger.log(Level.SEVERE,"Error al obtener el lote",ex);
-            throw new NegocioExcepcion("Error al obtener el lote");
+            logger.log(Level.SEVERE, "Error al obtener el lote", ex);
+            throw new NegocioException("Error al obtener el lote", ex);
+        }
+    }
+    
+    public Boolean guardarLote(LoteDTO lote) throws NegocioException {
+        try {
+            if (lote == null) {
+                throw new NegocioException("El lote no puede ser null");
+            }
+            if (lote.getCodigoLote() == null || lote.getCodigoLote().trim().isEmpty()) {
+                throw new NegocioException("El codigo del lote no puede estar vacio");
+            }
+            return inventarioBO.guardarLote(lote);
+        } catch (NegocioException ex) {
+            logger.log(Level.SEVERE, "Error al guardar el lote", ex);
+            throw new NegocioException("Error al guardar el lote", ex);
         }
     }
 
+    public Boolean actualizarEstadoSolicitud(String codigoSolicitud) throws NegocioException {
+        try {
+            if (codigoSolicitud == null || codigoSolicitud.trim().isEmpty()) {
+                throw new NegocioException("El codigo de la solicitud no puede estar vacio");
+            }
+            return inventarioBO.actualizarEstadoSolicitud(codigoSolicitud);
+        } catch (NegocioException ex) {
+            logger.log(Level.SEVERE, "Error al actualizar el estado de la solicitud", ex);
+            throw new NegocioException("Error al actualizar el estado de la solicitud", ex);
+        }
+    }
+    
+    public String generarIdMovimiento() throws NegocioException {
+        try {
+            return inventarioBO.generarIdMovimiento();
+        } catch (NegocioException ex) {
+            logger.log(Level.SEVERE, "Error al generar el id del movimiento", ex);
+            throw new NegocioException("Error al generar el id del movimiento", ex);
+        }
+    }
 
 }
