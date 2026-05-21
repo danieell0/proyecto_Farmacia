@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import pantallas.control.ControlNavegacion;
+import pantallas.control.controlNavegacion;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -290,7 +290,7 @@ public class menuFrame extends JFrame {
                     }
                 }
             }
-            ControlNavegacion.getControlNavegacion().abrirVentaFrame();
+            controlNavegacion.getControlNavegacion().abrirVentaFrame();
         });
         panel.add(Box.createVerticalStrut(20));
         panel.add(pagar);

@@ -5,7 +5,7 @@
 package pantallas;
 
 import interfaces.IControlNavegacion;
-import pantallas.control.ControlNavegacion;
+import pantallas.control.controlNavegacion;
 
 /**
  *
@@ -18,7 +18,7 @@ public class admin {
      */
     public static void main(String[] args) {
         // 1. Despertamos al "Jefe de Navegación" usando el Patrón Singleton
-        ControlNavegacion controlador = ControlNavegacion.getControlNavegacion();
+        controlNavegacion controlador = controlNavegacion.getControlNavegacion();
         
         // 2. Le damos la orden de arrancar el sistema abriendo la primera pantalla
         controlador.abrirMenuAdmin();

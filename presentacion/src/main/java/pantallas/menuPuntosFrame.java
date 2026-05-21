@@ -31,7 +31,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import pantallas.control.Coordinador;
-import pantallas.control.ControlNavegacion;
+import pantallas.control.controlNavegacion;
 import interfaces.IControlNavegacion;
 
 /**
@@ -248,7 +248,7 @@ private DefaultListModel<String> modeloCarrito;
                 JOptionPane.showMessageDialog(this, "El carrito de puntos está vacío");
                 return;
             }
-            ControlNavegacion.getControlNavegacion().abrirVentaPuntosFrame();
+            controlNavegacion.getControlNavegacion().abrirVentaPuntosFrame();
         });
         
         panel.add(Box.createVerticalStrut(20));

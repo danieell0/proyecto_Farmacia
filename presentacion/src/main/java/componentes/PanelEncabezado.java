@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import pantallas.control.Coordinador;
-import pantallas.control.ControlNavegacion;
+import pantallas.control.controlNavegacion;
 
 /**
  *
@@ -72,7 +72,7 @@ public class PanelEncabezado extends JPanel {
                 }
                 
                 // se abre el login 
-                ControlNavegacion.getControlNavegacion().abrirLogin();
+                controlNavegacion.getControlNavegacion().abrirLogin();
             }
         });
         JPanel right = new JPanel();
