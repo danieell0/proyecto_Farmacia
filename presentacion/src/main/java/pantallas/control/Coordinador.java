@@ -31,12 +31,16 @@ import javax.swing.JFrame;
 import pantallas.menuPuntosFrame;
 import pantallas.VentaPuntosFrame;
 import Inventario.IFachadaInventario;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  *
  * @author Dario
  */
 public class Coordinador implements ICoordinador {
+    
+    public static final Logger logger = Logger.getLogger(Coordinador.class.getName());
 
     private IFachadaSesion fachadaSesion;
     // Atributo de navegación
@@ -221,7 +225,7 @@ public class Coordinador implements ICoordinador {
     }
 
     @Override
-    public Boolean validarInicioSesion(CuentaAccesoDTO login) {
+    public Boolean validarInicioSesion(CuentaAccesoDTO login) throws Exception {
         try {
             // la fachada hace todas las validaciones y el almacenamiento
             SesionActualDTO sesion = fachadaSesion.verificarCredenciales(login);
@@ -241,7 +245,7 @@ public class Coordinador implements ICoordinador {
             
         } catch (Exception e) {
             //manejo de errores inesperados
-            System.err.println("Error al validar sesión: " + e.getMessage());
+            logger.warning("Inicio de sesion fallido");
             return false;
         }
     }

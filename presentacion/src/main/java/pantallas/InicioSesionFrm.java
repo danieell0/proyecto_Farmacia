@@ -5,6 +5,7 @@
 package pantallas;
 
 import DTO.CuentaAccesoDTO;
+import excepciones.NegocioExcepcion;
 import interfaces.ICoordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -294,6 +295,9 @@ public class InicioSesionFrm extends JDialog{
             // 6. Atrapamos el error por si el usuario escribió letras en vez de números en el ID
             JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.", "Formato incorrecto", JOptionPane.WARNING_MESSAGE);
             txtId.setText("");
+        } catch (Exception ex){
+            JOptionPane.showMessageDialog(this,"Error en el sistema, intentelo de nuevo","Aviso del sistema", JOptionPane.WARNING_MESSAGE);
+            txtContrasena.setText("");
         }
     }
 }

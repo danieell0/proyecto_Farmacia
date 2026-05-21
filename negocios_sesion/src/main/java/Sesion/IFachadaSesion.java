@@ -15,7 +15,7 @@ import DTO.SesionActualDTO;
 public interface IFachadaSesion {
     
     //verifica en la bd si las credenciales coinciden
-    SesionActualDTO verificarCredenciales(CuentaAccesoDTO login);
+    SesionActualDTO verificarCredenciales(CuentaAccesoDTO login) throws Exception;
     
     public SesionActualDTO obtenerSesionActual();
     

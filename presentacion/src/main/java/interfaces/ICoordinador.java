@@ -39,7 +39,7 @@ public interface ICoordinador {
     void limpiarFolioReceta();
     String getFolioRecetaActual();
     void cancelarVenta();
-    Boolean validarInicioSesion(CuentaAccesoDTO login);    
+    Boolean validarInicioSesion(CuentaAccesoDTO login) throws Exception;
     public List<ProductoDTO> ObtenerProductoPorCodigo(String codigo);
     void actualizarCarrito();
     void setMenuPuntosFrame(menuPuntosFrame menuPuntos);

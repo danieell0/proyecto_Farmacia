@@ -25,7 +25,7 @@ public class FachadaSesion implements IFachadaSesion{
     }
     
     @Override
-    public SesionActualDTO verificarCredenciales(CuentaAccesoDTO login) {
+    public SesionActualDTO verificarCredenciales(CuentaAccesoDTO login) throws Exception {
         // 1. fachada llama a control para validar 
         SesionActualDTO sesionValidada = controlSesion.validarLogin(login);
         

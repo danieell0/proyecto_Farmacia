@@ -47,11 +47,13 @@ public class EmpleadoBO {
             throw new NegocioExcepcion("El campo de contraseña no puede estar vacío.");
         }
         
+        try{
+        
         // se le pide a la bd que valide la cuenta
         boolean credencialesCorrectas = cuentaDAO.validarCredenciales(idEmpleado, contrasena);
         
         if (!credencialesCorrectas) {
-            throw new NegocioExcepcion("Credenciales incorrectas.");
+            return null;
         }
         
         // si es correcta se le pide la entidad pura a la bd
@@ -68,6 +70,12 @@ public class EmpleadoBO {
         
         // se transforma a dto para enviarselo a presentacion
         return mapper.aDTO(entidadEmpleado); 
+        
+        } catch (NegocioExcepcion ex){
+            throw ex;
+        }catch (Exception e){
+            throw new NegocioExcepcion("Ocurrio un error al validar el login");
+        }
     }
      
 }
