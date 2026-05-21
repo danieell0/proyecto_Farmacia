@@ -28,4 +28,6 @@ public interface IInventarioDAO {
     
     public Lote obtenerLote(String codigoLote)throws PersistenciaException;
     
+     public String generarIdMovimiento()throws PersistenciaException ;
+    
 }

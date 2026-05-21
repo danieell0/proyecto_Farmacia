@@ -5,12 +5,15 @@ import EntidadesMongo.CanjeableMongo;
 import EntidadesMongo.ClienteMongo;
 import EntidadesMongo.CuentaAccesoMongo;
 import EntidadesMongo.DetalleRecetaMongo;
+import EntidadesMongo.DetalleSolicitudMongo;
 import EntidadesMongo.EmpleadoMongo;
 import EntidadesMongo.MedicamentoMongo;
 import EntidadesMongo.ProductoMongo;
 import EntidadesMongo.RecetaMongo;
+import EntidadesMongo.SolicitudMongo;
 import Enums.Especialidades;
 import Enums.EstadoReceta;
+import Enums.EstadoSolicitud;
 import Enums.EstatusEmpleado;
 import Enums.Medida;
 import Enums.RolPuesto;
@@ -22,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,7 +69,7 @@ public class inserts {
         coleccionProductos.insertOne(new MedicamentoMongo(Medida.mg, 10.0, "Tabletas", true, List.of(Especialidades.NEUROLOGIA), "MC003", "Ritalin", "Novartis", 320.0, "/imagenes/ritalin.png", 4, TipoProducto.MEDICAMENTO));
         coleccionProductos.insertOne(new MedicamentoMongo(Medida.mg, 5.0, "Tabletas", true, List.of(Especialidades.PSIQUIATRIA), "MC004", "Alprazolam", "Pfizer", 0.5, "/imagenes/alprazolam.png", 7, TipoProducto.MEDICAMENTO));
         coleccionProductos.insertOne(new MedicamentoMongo(Medida.mg, 30.0, "Cápsulas", true, List.of(Especialidades.NEUROLOGIA), "MC005", "Vyvanse", "Takeda", 450.0, "/imagenes/vyvanse.png", 3, TipoProducto.MEDICAMENTO));
-        
+
         coleccionProductos.insertOne(new CanjeableMongo(0.0, "C001", "Telefono Xiaomi", "Xiaomi", 5000.0, "/imagenes/phone.png", 20, TipoProducto.PUNTOS));
         coleccionProductos.insertOne(new CanjeableMongo(0.0, "C002", "Smartwatch", "Generico", 1500.0, "/imagenes/smartwatch.png", 20, TipoProducto.PUNTOS));
         coleccionProductos.insertOne(new CanjeableMongo(0.0, "C003", "Balon", "Adidas", 1000.0, "/imagenes/balon.png", 20, TipoProducto.PUNTOS));
@@ -81,8 +85,9 @@ public class inserts {
         coleccionRecetas.insertOne(new RecetaMongo("101L", "MG01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 12, 31), Arrays.asList(new DetalleRecetaMongo("M001", 10, 0), new DetalleRecetaMongo("M007", 10, 0))));
         coleccionRecetas.insertOne(new RecetaMongo("102L", "CA01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 12, 31), Arrays.asList(new DetalleRecetaMongo("M004", 5, 0), new DetalleRecetaMongo("M008", 5, 0))));
         coleccionRecetas.insertOne(new RecetaMongo("103L", "PS03", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 6, 15), Arrays.asList(new DetalleRecetaMongo("MC002", 2, 0), new DetalleRecetaMongo("MC004", 1, 0))));
-        coleccionRecetas.insertOne(new RecetaMongo("104L", "ON01", 0, EstadoReceta.CADUCADA, LocalDate.of(2023, 12, 31), Arrays.asList(new DetalleRecetaMongo("MC001", 10, 0))));        coleccionRecetas.insertOne(new RecetaMongo("105L","MG02",0,EstadoReceta.ACTIVA,LocalDate.of(2026, 10, 15),Arrays.asList(new DetalleRecetaMongo("M005", 4, 0),new DetalleRecetaMongo("M009", 3, 0))));
-        coleccionRecetas.insertOne(new RecetaMongo("105L", "MG02", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 10, 15), Arrays.asList(new DetalleRecetaMongo("M005", 4, 0), new DetalleRecetaMongo("M009", 3, 0)))); 
+        coleccionRecetas.insertOne(new RecetaMongo("104L", "ON01", 0, EstadoReceta.CADUCADA, LocalDate.of(2023, 12, 31), Arrays.asList(new DetalleRecetaMongo("MC001", 10, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("105L", "MG02", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 10, 15), Arrays.asList(new DetalleRecetaMongo("M005", 4, 0), new DetalleRecetaMongo("M009", 3, 0))));
+        coleccionRecetas.insertOne(new RecetaMongo("105L", "MG02", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 10, 15), Arrays.asList(new DetalleRecetaMongo("M005", 4, 0), new DetalleRecetaMongo("M009", 3, 0))));
         coleccionRecetas.insertOne(new RecetaMongo("106L", "PD01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 8, 10), Arrays.asList(new DetalleRecetaMongo("M003", 2, 0), new DetalleRecetaMongo("M010", 1, 0))));
         coleccionRecetas.insertOne(new RecetaMongo("107L", "PS03", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 9, 30), Arrays.asList(new DetalleRecetaMongo("MC002", 1, 0))));
         coleccionRecetas.insertOne(new RecetaMongo("108L", "CA01", 0, EstadoReceta.ACTIVA, LocalDate.of(2026, 5, 18), Arrays.asList(new DetalleRecetaMongo("M008", 4, 0))));
@@ -100,7 +105,7 @@ public class inserts {
         coleccionCuentas.insertOne(new CuentaAccesoMongo("123", "admin"));
         coleccionCuentas.insertOne(new CuentaAccesoMongo("456", "caja"));
         coleccionCuentas.insertOne(new CuentaAccesoMongo("789", "caja2"));
-        
+
         MongoCollection<ClienteMongo> coleccionClientes = ManejadorConexiones.obtenerColeccionCliente();
         coleccionClientes.drop();
         coleccionClientes.insertOne(new ClienteMongo("0", "VentaSinCliente", "1", 0.0, LocalDate.of(2000, 1, 1)));
@@ -196,6 +201,18 @@ public class inserts {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        //estas son las solicitudes de entrada 
+        MongoCollection<SolicitudMongo> coleccionSolicitudes= ManejadorConexiones.obtenerColeccionSolicitudes();
+
+        coleccionSolicitudes.drop();
+
+        coleccionSolicitudes.insertOne(new SolicitudMongo("SOL001",LocalDateTime.now(),"123",EstadoSolicitud.PENDIENTE,Arrays.asList
+        (new DetalleSolicitudMongo(new MedicamentoMongo
+        (Medida.mg,500.0,"Tabletas",false,List.of(Especialidades.MEDICOGENERAL),"M001","Paracetamol","Genérico",500.0,"/imagenes/paracetamol.png",10,TipoProducto.MEDICAMENTO),20),
+        new DetalleSolicitudMongo(new MedicamentoMongo(Medida.mg,400.0,"Cápsulas",false,List.of(Especialidades.MEDICOGENERAL,Especialidades.PEDIATRIA),"M002","Ibuprofeno","Pfizer",600.0,"/imagenes/ibuprofeno.png",20,TipoProducto.MEDICAMENTO),15)))
+        );
+
     }
 
 }

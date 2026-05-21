@@ -66,6 +66,11 @@
             <version>1.4</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SubsistemaInventario</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     
     

@@ -25,7 +25,7 @@ public class ProductoMapper {
      * @param producto Entidad de producto a convertir.
      * @return Objeto DTO correspondiente o {@code null} si el producto es nulo.
      */
-    public ProductoDTO toDTO(Producto producto) {
+    public static ProductoDTO toDTO(Producto producto) {
         if (producto == null) {
             return null;
         }
@@ -73,7 +73,7 @@ public class ProductoMapper {
      * @param dto DTO del producto a convertir.
      * @return Entidad correspondiente o {@code null} si el DTO es nulo.
      */
-    public Producto toEntity(ProductoDTO dto) {
+    public static Producto toEntity(ProductoDTO dto) {
         if (dto == null) {
             return null;
         }
