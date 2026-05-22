@@ -57,6 +57,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import pantallas.control.Coordinador;
+import validadores.validadoresRegex;
 
 /**
  *
@@ -87,7 +88,7 @@ public class registrarSalidaFrame extends JFrame {
     private JButton btnSalir;
 
     public registrarSalidaFrame(IControlNavegacion controlNav) {
-        this.controlNav=controlNav;
+        this.controlNav = controlNav;
         coordinador = new Coordinador();
         productosEncontrados = new ArrayList<>();
         setTitle("Registrar salida");
@@ -232,7 +233,7 @@ public class registrarSalidaFrame extends JFrame {
         configurarSeleccionProducto();
         configurarBotonRegistrar();
         configuracionBotonCancelar();
-        btnSalir.addActionListener(e->{
+        btnSalir.addActionListener(e -> {
             controlNav.abrirMenuMovimientos();
         });
         setVisible(true);
@@ -369,8 +370,18 @@ public class registrarSalidaFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, "No hay suficiente stock");
                     return;
                 }
-                if (txtMotivo.getText().trim().isEmpty()) {
+                if (txtMotivo.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Debe ingresar un motivo");
+                    return;
+                }
+
+                if (!txtMotivo.getText().matches(validadoresRegex.soloLetras)) {
+                    JOptionPane.showMessageDialog(this, "El motivo debe ser solo letras");
+                    return;
+                }
+
+                if (!txtObservaciones.getText().isEmpty()&&!txtObservaciones.getText().matches(validadoresRegex.soloLetras)) {
+                    JOptionPane.showMessageDialog(this, "Las observaciones deben ser solo letras");
                     return;
                 }
                 MovimientoSalidaDTO movimiento = new MovimientoSalidaDTO();

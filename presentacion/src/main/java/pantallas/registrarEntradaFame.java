@@ -33,6 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import pantallas.control.Coordinador;
+import validadores.validadoresRegex;
 
 /**
  *
@@ -53,7 +54,7 @@ public class registrarEntradaFame extends JFrame {
     private IControlNavegacion controlNav;
 
     public registrarEntradaFame(IControlNavegacion controlNav) {
-        this.controlNav=controlNav;
+        this.controlNav = controlNav;
         this.coordinador = new Coordinador();
         setTitle("Registrar entrada");
         setSize(1350, 820);
@@ -223,6 +224,10 @@ public class registrarEntradaFame extends JFrame {
                     JOptionPane.showMessageDialog(this, "La solicitud ya fue utilizada o no existe");
                     return;
                 }
+                if (!solicitud.getCodigoSolicitud().matches(validadoresRegex.codigo)) {
+                    JOptionPane.showMessageDialog(this, "El código es invalido, solo letras y numeros");
+                    return;
+                }
                 cargarDetallesSolicitud(solicitud);
             } catch (NegocioException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -231,6 +236,10 @@ public class registrarEntradaFame extends JFrame {
 
         txtCodigoLote.addActionListener(e -> {
             try {
+                if (!txtCodigoLote.getText().matches(validadoresRegex.codigo)) {
+                    JOptionPane.showMessageDialog(this, "El código es invalido, solo letras y numeros");
+                    return;
+                }
                 LoteDTO lote = coordinador.obtenerLote(txtCodigoLote.getText());
                 if (lote != null) {
                     JOptionPane.showMessageDialog(this, "Este codigo ya fue utilizado");
@@ -249,6 +258,10 @@ public class registrarEntradaFame extends JFrame {
                 if (codigo == null || codigo.trim().isEmpty()) {
                     return;
                 }
+                if (!codigo.matches(validadoresRegex.codigo)) {
+                    JOptionPane.showMessageDialog(this, "El código es invalido, solo letras y numeros");
+                    return;
+                }
                 ProductoDTO producto = coordinador.ObtenerProductoPorCodigo(codigo).getFirst();
                 if (producto == null) {
                     JOptionPane.showMessageDialog(this, "No existe un producto con ese codigo");
@@ -265,7 +278,7 @@ public class registrarEntradaFame extends JFrame {
                     producto.getMarca(),
                     presentacion,
                     0,
-                    0,
+                    "",
                     ""
                 });
             } catch (Exception ex) {
@@ -282,15 +295,51 @@ public class registrarEntradaFame extends JFrame {
                 if (tabla.isEditing()) {
                     tabla.getCellEditor().stopCellEditing();
                 }
+                String codigoPedido = txtCodigoPedido.getText().trim();
+                String codigoLote = txtCodigoLote.getText().trim();
+                String proveedor = txtProveedor.getText().trim();
+                String observacionGeneral = txtObs.getText().trim();
+
+                if (codigoPedido.isEmpty() || !codigoPedido.matches(validadoresRegex.codigo)) {
+                    JOptionPane.showMessageDialog(this, "Código de pedido inválido");
+                    return;
+                }
+                if (codigoLote.isEmpty() || !codigoLote.matches(validadoresRegex.codigo)) {
+                    JOptionPane.showMessageDialog(this, "Código de lote inválido");
+                    return;
+                }
+                if (proveedor.isEmpty() || !proveedor.matches(validadoresRegex.soloLetras)) {
+                    JOptionPane.showMessageDialog(this, "El proveedor solo debe contener letras");
+                    return;
+                }
+                if (!observacionGeneral.matches(validadoresRegex.soloLetras)) {
+                    JOptionPane.showMessageDialog(this, "Las observaciones solo deben contener letras");
+                    return;
+                }
+
+                for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                    String cantidadRecibida = modeloTabla.getValueAt(i, 5).toString();
+                    String observacionDetalle = modeloTabla.getValueAt(i, 6).toString();
+                    if (!cantidadRecibida.matches(validadoresRegex.soloNumeros)) {
+                        JOptionPane.showMessageDialog(this,"La cantidad recibida de la fila " + (i + 1) + " es inválida");
+                        return;
+                    }
+                    if (!observacionDetalle.isEmpty()&&!observacionDetalle.matches(validadoresRegex.soloLetras)) {
+                        JOptionPane.showMessageDialog(this, "La observación de la fila " + (i + 1) + " es inválida");
+                        return;
+                    }
+                }
+
                 MovimientoEntradaDTO movimiento = new MovimientoEntradaDTO();
                 movimiento.setFechaHora(LocalDateTime.now());
                 movimiento.setIdEmpleado("123");
                 //movimiento.setIdEmpleado(coordinador.obtenerSesionActual().getIdEmpleado()
-                movimiento.setCodigoSolicitud(txtCodigoPedido.getText().trim());
+                movimiento.setCodigoSolicitud(codigoPedido);
                 LoteDTO lote = new LoteDTO();
-                lote.setCodigoLote(txtCodigoLote.getText().trim());
-                lote.setProveedor(txtProveedor.getText().trim());
-                lote.setObservacionGeneral(txtObs.getText().trim());
+                lote.setCodigoLote(codigoLote);
+                lote.setProveedor(proveedor);
+                lote.setObservacionGeneral(observacionGeneral);
+
                 List<DetalleLoteDTO> detalles = new ArrayList<>();
                 for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                     DetalleLoteDTO detalle = new DetalleLoteDTO();
@@ -322,15 +371,7 @@ public class registrarEntradaFame extends JFrame {
             }
         });
 
-        btnCancelar.addActionListener(e -> {
-            txtCodigoLote.setText("");
-            txtCodigoPedido.setText("");
-            txtObs.setText("");
-            txtProveedor.setText("");
-            modeloTabla.setRowCount(0);
-        });
-        
-        btnSalir.addActionListener(e->{
+        btnSalir.addActionListener(e -> {
             controlNav.abrirMenuMovimientos();
         });
 
