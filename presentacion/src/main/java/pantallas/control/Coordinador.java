@@ -14,6 +14,7 @@ import DTO.MovimientoEntradaDTO;
 import DTO.MovimientoSalidaDTO;
 import DTO.SesionActualDTO;
 import DTO.SolicitudDTO;
+import IBO.IInsertBO;
 import Ingreso.FachadaIngreso;
 import Ingreso.IFachadaIngreso;
 import Inventario.FachadaInventario;
@@ -31,6 +32,7 @@ import javax.swing.JFrame;
 import pantallas.menuPuntosFrame;
 import pantallas.VentaPuntosFrame;
 import Inventario.IFachadaInventario;
+import com.mycompany.objetos_negocio.InsertBO;
 import java.util.logging.Logger;
 
 /**
@@ -58,6 +60,7 @@ public class Coordinador implements ICoordinador {
     private menuFrame menuJFrame;
     private menuPuntosFrame menuPuntos;
     private IFachadaInventario fachadaInventario;
+    private IInsertBO insertBO;
     
     /**
      * Constructor del coordinador. Inicializa el acceso al subsistema de ventas
@@ -69,6 +72,7 @@ public class Coordinador implements ICoordinador {
         this.fachadaSesion = new FachadaSesion();
         this.ingreso = new FachadaIngreso();
         this.fachadaInventario=new FachadaInventario();
+        this.insertBO=new InsertBO();
     }
 
     @Override
@@ -495,6 +499,11 @@ public class Coordinador implements ICoordinador {
     @Override
     public LoteDTO obtenerLote(String codigoLote) throws NegocioException {
         return fachadaInventario.obtenerLote(codigoLote);
+    }
+
+    @Override
+    public void cargarDatos() {
+        insertBO.cargarDatos();
     }
 
 }

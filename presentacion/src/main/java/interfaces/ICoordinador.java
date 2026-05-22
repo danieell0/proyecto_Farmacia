@@ -51,4 +51,5 @@ public interface ICoordinador {
     public Boolean registrarMovimientoEntrada(MovimientoEntradaDTO movimiento) throws NegocioException;
     public Boolean registrarMovimientoSalida(MovimientoSalidaDTO movimiento) throws NegocioException;
     public LoteDTO obtenerLote(String codigoLote) throws NegocioException;
+    public void cargarDatos();
 }

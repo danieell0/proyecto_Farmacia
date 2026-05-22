@@ -16,7 +16,7 @@ public class NewMain {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-
+                Coordinador.getCoordinador().cargarDatos();
                 //se abre el login primero para que no se pueda interactuar con el sistema sin tener sesion iniciada
                 controlNavegacion.getControlNavegacion().abrirLogin();
                 
