@@ -18,8 +18,7 @@ import java.util.List;
  */
 public class ControlFinalizarVenta {
 
-    private final IVentaBO ventaBO;
-    private IVentaStrategy ventaStrategy;    
+    private final IVentaBO ventaBO;  
 
     /**
      * Contructor de la clase.

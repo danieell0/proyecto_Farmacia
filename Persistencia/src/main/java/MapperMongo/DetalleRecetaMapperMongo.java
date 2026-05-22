@@ -4,11 +4,16 @@ import Entidades.DetalleReceta;
 import EntidadesMongo.DetalleRecetaMongo;
 
 /**
- *
+ * Clase Mapper para convertir un DetalleReceta a mongo.
  * @author Dario
  */
 public class DetalleRecetaMapperMongo {
     
+    /**
+     * Convierte un DetalleRecetaMongo a una entidad DetalleReceta.
+     * @param mongo DetalleRecetaMongo a convertir.
+     * @return DetalleReceta.
+     */
     public static DetalleReceta entityToDomain(DetalleRecetaMongo mongo) {
         if (mongo == null) {
             return null;
@@ -25,6 +30,11 @@ public class DetalleRecetaMapperMongo {
         return detalle;
     }
     
+    /**
+     * Convierte una entidad DetalleReceta a un DetalleRecetaMongo.
+     * @param detalle  detalleReceta a convertir.
+     * @return DetalleRecetaMongo.
+     */
     public static DetalleRecetaMongo domainToEntity(DetalleReceta detalle) {
         if (detalle == null) {
             return null;

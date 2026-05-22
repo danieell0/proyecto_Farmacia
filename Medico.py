@@ -5,6 +5,52 @@ from mysql.connector import Error
 app = Flask(__name__)
 password = input("Ingresa la contraseña de MySQL: ")
 
+def inicializar_base_de_datos():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            port=3306,
+            user="root",
+            password=password
+        )
+
+        cursor = conexion.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS medicos")
+        cursor.execute("USE medicos")
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS medicos (
+                cedula VARCHAR(20) PRIMARY KEY,
+                nombre VARCHAR(100),
+                especialidad VARCHAR(50),
+                permisos BOOLEAN
+            )
+        """)
+
+        cursor.execute("DELETE FROM medicos")
+        query_insertar = "INSERT INTO medicos (cedula, nombre, especialidad, permisos) VALUES (%s, %s, %s, %s)"
+
+        medicos = [
+            ("MG01", "Dr. Juan Perez", "MEDICOGENERAL", True),
+            ("MG02", "Dra. Ana Gomez", "MEDICOGENERAL", True),
+            ("MG03", "Dr. Luis Garcia", "MEDICOGENERAL", False),
+            ("CA01", "Dr. Roberto Sanchez", "CARDIOLOGIA", True),
+            ("PS03", "Dra. Fernanda Lopez", "PSIQUIATRIA", True),
+            ("ON01", "Dr. Miguel Torres", "ONCOLOGIA", True),
+            ("PD01", "Dra. Sofia Martinez", "PEDIATRIA", True)
+        ]
+
+        cursor.executemany(query_insertar, medicos)
+        conexion.commit()
+
+        print("-> [SISTEMA] Base de datos e inserts de Médicos cargados correctamente.")
+        
+        cursor.close()
+        conexion.close()
+
+    except Error as e:
+        print(f"CRITICAL: Error al inicializar la base de datos: {e}")
+        exit(1)
+
 # Configuración directa a la DB de Médicos
 def get_db_connection():
     return mysql.connector.connect(
@@ -61,5 +107,6 @@ def validar_especialidad():
             conn.close()
 
 if __name__ == "__main__":
+    inicializar_base_de_datos()
     app.run(debug=False, port=5001)
 

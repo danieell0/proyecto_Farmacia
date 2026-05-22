@@ -8,10 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Clase Mapper para convertir una receta a mongo.
  * @author Dario
  */
 public class RecetaMapperMongo {
+    
+    /**
+     * Convierte una RecetaMongo a una entidad Receta.
+     * @param mongo RecetaMongo a convertir.
+     * @return Receta.
+     */
     public static Receta entityToDomain(RecetaMongo mongo) {
         if (mongo == null) {
             return null;
@@ -37,6 +43,11 @@ public class RecetaMapperMongo {
         return receta;
     }
     
+    /**
+     * Convierte una entidad Cliente a un RecetaMongo.
+     * @param receta receta a convertir.
+     * @return RecetaMongo.
+     */
     public static RecetaMongo domainToEntity(Receta receta) {
         if (receta == null) {
             return null;

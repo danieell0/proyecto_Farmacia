@@ -32,7 +32,6 @@ import pantallas.menuPuntosFrame;
 import pantallas.VentaPuntosFrame;
 import Inventario.IFachadaInventario;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  *
@@ -461,7 +460,7 @@ public class Coordinador implements ICoordinador {
     @Override
     public Boolean setClientePorId(String idCliente) {
         if (idCliente == null || idCliente.trim().isEmpty() || idCliente.trim().equals("0")) {
-            return false; // Retorna falso inmediatamente si intentan buscar un cliente nulo o Público General
+            return false; //
         }
         
         ClienteDTO cliente = ingreso.ingresarCliente(idCliente.trim());

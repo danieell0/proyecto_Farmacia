@@ -39,7 +39,7 @@ import interfaces.IControlNavegacion;
  * @author Dario
  */
 public class menuPuntosFrame extends JFrame {
-private DefaultListModel<String> modeloCarrito;
+    private DefaultListModel<String> modeloCarrito;
     private JList<String> listaCarrito;
     private JLabel lblTotal;
     private JLabel lblInformacionCliente;

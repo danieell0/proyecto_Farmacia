@@ -23,7 +23,6 @@ public class FVentas implements IVenta {
     private final ControlFinalizarVenta controlFinalizar;
     private final IFachadaSubsistemaRecetas fachadaReceta;
     private final IFachadaSesion fachadaSesion;
-    private IVentaStrategy ventaStrategy;
     private String folioRecetaActual;
 
     public FVentas() {
@@ -36,10 +35,6 @@ public class FVentas implements IVenta {
     @Override
     public void setFolioRecetaActual(String folio) {
         this.folioRecetaActual = folio;
-    }
-    
-    public void setVentaStrategy(IVentaStrategy strategy) {
-        this.ventaStrategy = strategy;
     }
 
      /**
@@ -179,14 +174,8 @@ public class FVentas implements IVenta {
     @Override
     public Double finalizarVenta(String tipoPago, Double monto, String idEmpleado, String idCliente) {
         try {
-            if ("PUNTOS".equalsIgnoreCase(tipoPago)) {
-                this.ventaStrategy = new VentaPuntosStrategy();
-            } else if ("EFECTIVO".equalsIgnoreCase(tipoPago)) {
-                this.ventaStrategy = new VentaNormalStrategy();
-            } else {
-                throw new IllegalArgumentException("Tipo de pago no soportado: " + tipoPago);
-            }
-
+            IVentaStrategy ventaStrategy = VentaStrategyFactory.crear(tipoPago);
+            
             CarritoDTO carrito = this.controlCarrito.obtenerCarrito();
             VentaDTO ventaPreparada = this.controlFinalizar.prepararVenta(carrito, idEmpleado, idCliente, tipoPago);
             boolean exito = this.controlFinalizar.registrarVenta(ventaPreparada);
@@ -195,15 +184,14 @@ public class FVentas implements IVenta {
                 throw new RuntimeException("No se pudo registrar la venta en la base de datos.");
             }
             
-            Double resultadoOperacion = this.ventaStrategy.finalizarVenta(monto, idCliente, carrito);
+            Double resultadoOperacion = ventaStrategy.finalizarVenta(monto, idCliente, carrito);
             
-            if (this.ventaStrategy.requiereConfirmarReceta()) {
+            if (ventaStrategy.requiereConfirmarReceta()) {
                 this.fachadaReceta.confirmarDescuentoReceta();
             }
             
             this.controlCarrito.limpiarCarrito();
             this.folioRecetaActual = null;
-            this.ventaStrategy = null;
             return resultadoOperacion;
         } catch (Exception e) {
             throw new RuntimeException("Error critico al procesar la transacción: " + e.getMessage());

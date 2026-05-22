@@ -4,11 +4,16 @@ import Entidades.Cliente;
 import EntidadesMongo.ClienteMongo;
 
 /**
- *
+ * Clase Mapper para convertir un cliente a mongo.
  * @author Dario
  */
 public class ClienteMapperMongo {
     
+    /**
+     * Convierte un ClienteMongo a una entidad Cliente.
+     * @param mongo ClienteMongo a convertir.
+     * @return Cliente.
+     */
     public static Cliente entityToDomain(ClienteMongo mongo){
         if (mongo == null) {
             return null;
@@ -23,6 +28,11 @@ public class ClienteMapperMongo {
         return cliente;
     }
     
+    /**
+     * Convierte una entidad Cliente a un ClienteMongo.
+     * @param cliente cliente a convertir.
+     * @return ClienteMongo.
+     */
     public static ClienteMongo domainToEntity(Cliente cliente) {
         if (cliente == null) {
             return null;

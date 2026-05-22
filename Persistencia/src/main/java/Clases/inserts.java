@@ -19,11 +19,6 @@ import Enums.Medida;
 import Enums.RolPuesto;
 import Enums.TipoProducto;
 import com.mongodb.client.MongoCollection;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -112,95 +107,6 @@ public class inserts {
         coleccionClientes.insertOne(new ClienteMongo("1", "nombre", "6441000665", 10000.0, LocalDate.of(2000, 5, 2)));
         coleccionClientes.insertOne(new ClienteMongo("2", "pepe", "6442134730", 5000.0, LocalDate.of(2006, 6, 27)));
         coleccionClientes.insertOne(new ClienteMongo("3", "juanito", "6441000664", 2000.0, LocalDate.of(2000, 8, 2)));
-
-        try {
-            //aqui creamos la conexion con la base de datos 
-            //aqui cambien el usuario y contraseña no se les olvide
-            Connection conexion = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/",
-                    "root",
-                    "357642"
-            );
-
-            // Creamos el statemen que se usa para ejecutar los comandos directos, el create o el delate el que sea
-            Statement statement = conexion.createStatement();
-            //si no existe la base de datos la crea 
-            statement.execute("CREATE DATABASE IF NOT EXISTS medicos");
-            //usamos la base de datos de los medicos
-            statement.execute("USE medicos");
-
-            //aqui creamos la tabla con sus especificaciones 
-            statement.execute("""
-                CREATE TABLE IF NOT EXISTS medicos (
-                    cedula VARCHAR(20) PRIMARY KEY,
-                    nombre VARCHAR(100),
-                    especialidad VARCHAR(50),
-                    permisos BOOLEAN
-                )
-            """);
-
-            //limpiamos la tabla si es que tiene algo
-            statement.execute("DELETE FROM medicos");
-
-            // con esto le decimos que vamos a insertar algo pero todavia no le decimos que 
-            PreparedStatement ps = conexion.prepareStatement(
-                    "INSERT INTO medicos VALUES (?, ?, ?, ?)"
-            );
-
-            //aqui estan los insert y especificamos que va en cada campo y ejecutamos el insert
-            //General
-            ps.setString(1, "MG01");
-            ps.setString(2, "Dr. Juan Perez");
-            ps.setString(3, "MEDICOGENERAL");
-            ps.setBoolean(4, true);
-            ps.executeUpdate();
-
-            ps.setString(1, "MG02");
-            ps.setString(2, "Dra. Ana Gomez");
-            ps.setString(3, "MEDICOGENERAL");
-            ps.setBoolean(4, true);
-            ps.executeUpdate();
-
-            ps.setString(1, "MG03");
-            ps.setString(2, "Dr. Luis Garcia");
-            ps.setString(3, "MEDICOGENERAL");
-            ps.setBoolean(4, false);
-            ps.executeUpdate();
-
-            // CARDIOLOGIA
-            ps.setString(1, "CA01");
-            ps.setString(2, "Dr. Roberto Sanchez");
-            ps.setString(3, "CARDIOLOGIA");
-            ps.setBoolean(4, true);
-            ps.executeUpdate();
-
-            // PSIQUIATRIA
-            ps.setString(1, "PS03");
-            ps.setString(2, "Dra. Fernanda Lopez");
-            ps.setString(3, "PSIQUIATRIA");
-            ps.setBoolean(4, true);
-            ps.executeUpdate();
-
-            // ONCOLOGIA
-            ps.setString(1, "ON01");
-            ps.setString(2, "Dr. Miguel Torres");
-            ps.setString(3, "ONCOLOGIA");
-            ps.setBoolean(4, true);
-            ps.executeUpdate();
-
-            // PEDIATRIA
-            ps.setString(1, "PD01");
-            ps.setString(2, "Dra. Sofia Martinez");
-            ps.setString(3, "PEDIATRIA");
-            ps.setBoolean(4, true);
-            ps.executeUpdate();
-
-            System.out.println("Medicos insertados correctamente");
-            //cerramos la conexion 
-            conexion.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
 
         //estas son las solicitudes de entrada 
         MongoCollection<SolicitudMongo> coleccionSolicitudes = ManejadorConexiones.obtenerColeccionSolicitudes();
